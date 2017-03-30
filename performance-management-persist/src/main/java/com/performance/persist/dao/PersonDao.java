@@ -1,5 +1,7 @@
 package com.performance.persist.dao;
 
+import java.util.Map;
+
 import com.performance.persist.domain.Person;
 
 public interface PersonDao {
@@ -11,6 +13,8 @@ public interface PersonDao {
     int insertSelective(Person record);
 
     Person selectByPrimaryKey(Long id);
+
+    Person selectByParams(Map<String, Object> map);
 
     int updateByPrimaryKeySelective(Person record);
 
