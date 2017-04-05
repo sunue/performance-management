@@ -1,5 +1,7 @@
 package com.performance.persist.dao;
 
+import java.util.Map;
+
 import com.performance.persist.domain.TeacherPerformance;
 
 public interface TeacherPerformanceDao {
@@ -11,6 +13,8 @@ public interface TeacherPerformanceDao {
     int insertSelective(TeacherPerformance record);
 
     TeacherPerformance selectByPrimaryKey(Long id);
+
+    int selectCount(Map<String, Object> map);
 
     int updateByPrimaryKeySelective(TeacherPerformance record);
 

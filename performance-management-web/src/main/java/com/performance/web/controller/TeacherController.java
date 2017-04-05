@@ -1,6 +1,7 @@
 package com.performance.web.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -11,12 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
+import com.performance.persist.common.JsonPage;
 import com.performance.persist.common.JsonResult;
 import com.performance.persist.domain.Person;
+import com.performance.persist.domain.TeacherPerformance;
 import com.performance.service.TeacherService;
 
 @Controller
-@RequestMapping(value = "/person")
+@RequestMapping(value = "/teacher")
 public class TeacherController {
 
     private static Pattern NAME_PATTERN = Pattern.compile("[A-Za-z0-9()\\-\\+\\*_\u4e00-\u9fa5]*");
@@ -138,20 +141,115 @@ public class TeacherController {
     /**
      * 修改密码
      * */
-    @RequestMapping("updatePassword")
+    @RequestMapping("/updatePassword")
     public ResponseEntity<JsonResult<Boolean>> updatePassword(Long id, String password) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-
-        return null;
-
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("password", password);
+        try {
+            String result = teacherService.updatePassword(map);
+            if (result.equals("修改成功")) {
+                jr.setData(true);
+                jr.setMsg(result);
+                jr.setStatus(0);
+            } else if (result.equals("该用户不存在")) {
+                jr.setData(false);
+                jr.setMsg(result);
+                jr.setStatus(3);
+            } else {
+                jr.setData(false);
+                jr.setMsg(result);
+                jr.setStatus(1);
+            }
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
 
     /**
      * 修改教师信息
      * */
-    @RequestMapping("updateTeacherInfo")
-    public ResponseEntity<JsonResult<Boolean>> updateTeacherInfo() {
+    @RequestMapping("/updateTeacherInfo")
+    public ResponseEntity<JsonResult<Boolean>> updateTeacherInfo(Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        try {
+            String result = teacherService.updateTeacherInfo(person);
+            if (result.equals("修改成功")) {
+                jr.setData(true);
+                jr.setMsg(result);
+                jr.setStatus(0);
+            } else if (result.equals("该用户不存在")) {
+                jr.setData(false);
+                jr.setMsg(result);
+                jr.setStatus(3);
+            } else {
+                jr.setData(false);
+                jr.setMsg(result);
+                jr.setStatus(1);
+            }
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 教师录入绩效
+     * */
+    @RequestMapping(value = "/entryPerformance")
+    public ResponseEntity<JsonResult<Boolean>> entryPerformance(TeacherPerformance teacherPerformance) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (null == teacherPerformance) {
+            jr.setData(false);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                Boolean result = teacherService.saveTeacherPerformance(teacherPerformance);
+                if (true == result) {
+                    jr.setData(true);
+                    jr.setMsg("绩效录入成功，待审核");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("绩效录入失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 总分排名
+     * */
+    @RequestMapping(value = "/totalRank")
+    public ResponseEntity<JsonPage<List<Person>>> totalRank(Long id, Integer pageSize,
+                                                            Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        if (null == id) {
+            jp.setData_list(null);
+            jp.setMsg("参数为空");
+            jp.setStatus(3);
+        } else {
+            int pSize = pageSize == null ? 20 : pageSize;
+            int pNum = pageNum == null ? 1 : pageNum;
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", id);
+            map.put("pSize", pSize);
+            map.put("pNum", pNum);
+        }
         return null;
     }
+
 }
