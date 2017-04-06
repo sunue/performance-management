@@ -13,6 +13,11 @@ public interface TeacherService {
     public Boolean saveRegisterPerson(Person person);
 
     /**
+     * 验证注册id是否已存在
+     * */
+    public Person idVilidate(Long id);
+
+    /**
      * 教师登录
      * */
     public Person teacherLogin(Map<String, Object> map);
@@ -36,5 +41,25 @@ public interface TeacherService {
      * 教师绩效录入
      * */
     public Boolean saveTeacherPerformance(TeacherPerformance teacherPerformance);
+
+    /**
+     * 教师查看待审核绩效
+     * */
+    public Map<String, Object> getCheckPerformance(Long id);
+
+    /**
+     * 按总分排名
+     * */
+    public Map<String, Object> totalRank(Long id, int pageSize, int pageNum);
+
+    /**
+     * 按科研总分排名
+     * */
+    public Map<String, Object> scientificResearchRank(Long id, int pageSize, int pageNum);
+
+    /**
+     * 按教研总分排名
+     * */
+    public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum);
 
 }

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.performance.persist.domain.Person;
+import com.performance.persist.domain.ScientificResearch;
 import com.performance.persist.domain.TeacherPerformance;
+import com.performance.persist.domain.TeachingResearch;
 
 public interface AdministratorService {
 
@@ -77,4 +79,55 @@ public interface AdministratorService {
      * 待审核教师绩效
      * */
     public List<TeacherPerformance> teacherPerformanceCheck();
+
+    /**
+     * 同意教师绩效录入
+     * */
+    public int teacherPerformanceAgree(Long id);
+
+    /**
+     * 拒绝教师绩效录入
+     * */
+    public int teacherPerformanceFail(Long id);
+
+    /**
+     * 增加科研基础选项
+     * */
+    public int addScientificResearchPerformance(ScientificResearch scientificResearch);
+
+    /**
+     * 增加教研基础选项
+     * */
+    public int addTeachingResearchPerformance(TeachingResearch teachingResearch);
+
+    /**
+     * 删除科研基础选项
+     * */
+    public int deleteScientificResearchPerformance(List<Long> idList);
+
+    /**
+     * 删除教研基础选项
+     * */
+    public int deteleTeachingResearchPerformance(List<Long> idList);
+
+    /**
+     * 修改科研基础选项
+     * */
+    public int updateScientificResearchPerformance(ScientificResearch scientificResearch);
+
+    /**
+     * 修改教研基础选项
+     * */
+    public int updateTeachingResearchPerformance(TeachingResearch teachingResearch);
+
+    /**
+     * 获取科研基础选项
+     * */
+    public Map<String, Object> getScientificResearchPerformance(int pageSize, int pageNum);
+
+    /**
+     * 获取教研基础选项
+     * */
+    public Map<String, Object> getTeachingResearchPerformance(int pageSize, int pageNum);
+
 }

@@ -21,9 +21,19 @@ public interface PersonDao {
 
     List<Person> selectListByParams(Map<String, Object> map);
 
-    int selectCount(Map<String, Object> map);
+    List<Person> selectListByTotalRank(Map<String, Object> map);
 
-    List<Person> selectAllOrderByTotalRank(Map<String, Object> map);
+    List<Person> selectListByScientificResearch(Map<String, Object> map);
+
+    List<Person> selectListByTeachingResearch(Map<String, Object> map);
+
+    int selectRankByTotal(Long id);
+
+    int selectRankByScientificResearch(Long id);
+
+    int selectRankByTeachingResearch(Long id);
+
+    int selectCount(Map<String, Object> map);
 
     int updateByPrimaryKeySelective(Person record);
 

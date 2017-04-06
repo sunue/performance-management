@@ -1,5 +1,7 @@
 package com.performance.service.impl;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,12 @@ public class TeacherServiceImpl implements TeacherService {
 
         }
         return false;
+    }
+
+    @Override
+    public Person idVilidate(Long id) {
+        Person person = personDao.selectByPrimaryKey(id);
+        return person;
     }
 
     @Override
@@ -97,4 +105,68 @@ public class TeacherServiceImpl implements TeacherService {
         }
         return false;
     }
+
+    @Override
+    public Map<String, Object> totalRank(Long id, int pageSize, int pageNum) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("firstdata", (pageSize - 1) * pageNum);
+        map.put("nums", pageNum);
+        List<Person> personList = personDao.selectListByTotalRank(map);
+        int rank = personDao.selectRankByTotal(id);
+        int count = personDao.selectCount(map);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("personList", personList);
+        resultMap.put("rank", rank);
+        resultMap.put("count", count);
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> scientificResearchRank(Long id, int pageSize, int pageNum) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("firstdata", (pageSize - 1) * pageNum);
+        map.put("nums", pageNum);
+        List<Person> personList = personDao.selectListByScientificResearch(map);
+        int rank = personDao.selectRankByScientificResearch(id);
+        int count = personDao.selectCount(map);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("personList", personList);
+        resultMap.put("rank", rank);
+        resultMap.put("count", count);
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("firstdata", (pageSize - 1) * pageNum);
+        map.put("nums", pageNum);
+        List<Person> personList = personDao.selectListByTeachingResearch(map);
+        int rank = personDao.selectRankByTeachingResearch(id);
+        int count = personDao.selectCount(map);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("personList", personList);
+        resultMap.put("rank", rank);
+        resultMap.put("count", count);
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> getCheckPerformance(Long id) {
+        Map map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("status", "2");
+        List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
+            .selectListByParams(map);
+        int count = teacherPerformanceDao.selectCount(map);
+
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("teacherPerformanceList", teacherPerformanceList);
+        resultMap.put("count", count);
+        return resultMap;
+    }
+
 }

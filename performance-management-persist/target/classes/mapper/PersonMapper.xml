@@ -82,17 +82,6 @@
   	</foreach> 
   </delete>
   
-  <select id="selectAllOrderByTotalRank" resultMap="BaseResultMap" parameterType="java.util.Map">
-  	select 
-  	<include refid="Base_Column_List" />
-  	from person
-  	where status = '0'
-  	order by scientific_research_score+teaching_research_score desc
-  	<if test=" firstdata !=null and nums != null">
-    	limit ${firstdata},${nums}
-    </if>
-  </select>
-  
   <select id="selectCount" resultMap="java.lang.Integer" parameterType="java.util.Map">
   	select 
   	count(*)
@@ -108,6 +97,60 @@
   	<if test=" firstdata !=null and nums != null">
     	limit ${firstdata},${nums}
     </if>
+  </select>
+  
+  <select id="selectListByTotalRank" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from person
+  	<include refid="selectByParamsWhere"></include>
+  	order by scientific_research_score+teaching_research_score desc
+  	<if test=" firstdata !=null and nums != null">
+    	limit ${firstdata},${nums}
+    </if>
+  </select>
+  
+  <select id="selectListByScientificResearch" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from person
+  	<include refid="selectByParamsWhere"></include>
+  	order by scientific_research_score desc
+  	<if test=" firstdata !=null and nums != null">
+    	limit ${firstdata},${nums}
+    </if>
+  </select>
+  
+  <select id="selectListByTeachingResearch" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from person
+  	<include refid="selectByParamsWhere"></include>
+  	order by teaching_research_score desc
+  	<if test=" firstdata !=null and nums != null">
+    	limit ${firstdata},${nums}
+    </if>
+  </select>
+  
+  <select id="selectRankByTotal" parameterType="java.lang.Long" resultMap="java.lang.Integer">
+  	select count(*)
+  	from person 
+  	where scientific_research_score+teaching_research_score >
+	(SELECT scientific_research_score+teaching_research_score from person where id=#{id,jdbcType=BIGINT})
+  </select>
+  
+  <select id="selectRankByScientificResearch" parameterType="java.lang.Long" resultMap="java.lang.Integer">
+  	select count(*)
+  	from person 
+  	where scientific_research_score >
+	(SELECT scientific_research_score from person where id=#{id,jdbcType=BIGINT})
+  </select>
+  
+  <select id="selectRankByTeachingResearch" parameterType="java.lang.Long" resultMap="java.lang.Integer">
+  	select count(*)
+  	from person 
+  	where teaching_research_score >
+	(SELECT teaching_research_score from person where id=#{id,jdbcType=BIGINT})
   </select>
   
   <insert id="insert" parameterType="com.performance.persist.domain.Person" >

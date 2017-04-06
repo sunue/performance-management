@@ -34,7 +34,6 @@ public class TeacherController {
     @RequestMapping("/teacherRegister")
     public ResponseEntity<JsonResult<Boolean>> teacherRegister(String teacherJSON) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-
         if (teacherJSON == null) {
             jr.setStatus(3); //3-参数为空
             jr.setMsg("参数为空");
@@ -68,6 +67,37 @@ public class TeacherController {
                 jr.setData(false);
             }
 
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 验证注册id是否已存在
+     * */
+    @RequestMapping("/idValidate")
+    public ResponseEntity<JsonResult<Boolean>> idValidate(Long id) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (null == id) {
+            jr.setData(false);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                Person person = teacherService.idVilidate(id);
+                if (null == person) {
+                    jr.setData(true);
+                    jr.setMsg("该id可用");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("用户已存在");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
@@ -231,8 +261,57 @@ public class TeacherController {
     }
 
     /**
+     * 教师查看待审核绩效
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/getCheckPerformance")
+    public ResponseEntity<JsonPage<List<TeacherPerformance>>> getCheckPerformance(Long id,
+                                                                                  Integer pageSize,
+                                                                                  Integer pageNum) {
+        JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
+        if (null == id) {
+            jp.setData_list(null);
+            jp.setMsg("参数为空");
+            jp.setPageNum(pageNum);
+            jp.setPageSize(pageSize);
+            jp.setStatus(3);
+            jp.setTotal(0);
+        } else {
+            int pSize = pageSize == null ? 20 : pageSize;
+            int pNum = pageNum == null ? 1 : pageNum;
+            try {
+                Map<String, Object> map = teacherService.getCheckPerformance(id);
+                if (null == map.get("teacherPerformanceList")) {
+                    jp.setData_list(null);
+                    jp.setMsg("无待审核绩效");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(1);
+                    jp.setTotal(0);
+                } else {
+                    jp.setData_list((List<TeacherPerformance>) map.get("teacherPerformanceList"));
+                    jp.setMsg("查询待审核绩效成功");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("count"));
+                }
+            } catch (Exception e) {
+                jp.setData_list(null);
+                jp.setMsg("系统异常");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(2);
+                jp.setTotal(0);
+            }
+        }
+        return new ResponseEntity<JsonPage<List<TeacherPerformance>>>(jp, HttpStatus.OK);
+    }
+
+    /**
      * 总分排名
      * */
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/totalRank")
     public ResponseEntity<JsonPage<List<Person>>> totalRank(Long id, Integer pageSize,
                                                             Integer pageNum) {
@@ -241,15 +320,132 @@ public class TeacherController {
             jp.setData_list(null);
             jp.setMsg("参数为空");
             jp.setStatus(3);
+            jp.setPageNum(pageNum);
+            jp.setPageSize(pageSize);
+            jp.setTotal(0);
         } else {
             int pSize = pageSize == null ? 20 : pageSize;
             int pNum = pageNum == null ? 1 : pageNum;
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("id", id);
-            map.put("pSize", pSize);
-            map.put("pNum", pNum);
+            try {
+                Map<String, Object> map = teacherService.totalRank(id, pSize, pNum);
+                if (null == map.get("personList")) {
+                    jp.setData_list(null);
+                    jp.setMsg("查询失败");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(1);
+                    jp.setTotal(0);
+                } else {
+                    jp.setData_list((List<Person>) map.get("personList"));
+                    jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("count"));
+                }
+            } catch (Exception e) {
+                jp.setData_list(null);
+                jp.setMsg("系统异常");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(2);
+                jp.setTotal(0);
+            }
         }
-        return null;
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
     }
 
+    /**
+     * 按科研总分排名
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/scientificResearchRank")
+    public ResponseEntity<JsonPage<List<Person>>> scientificResearchRank(Long id, Integer pageSize,
+                                                                         Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        if (null == id) {
+            jp.setData_list(null);
+            jp.setMsg("参数为空");
+            jp.setPageNum(pageNum);
+            jp.setPageSize(pageSize);
+            jp.setStatus(3);
+            jp.setTotal(0);
+        } else {
+            int pSize = pageSize == null ? 20 : pageSize;
+            int pNum = pageNum == null ? 1 : pageNum;
+            try {
+                Map<String, Object> map = teacherService.scientificResearchRank(id, pSize, pNum);
+                if (null == map.get("personList")) {
+                    jp.setData_list(null);
+                    jp.setMsg("查询失败");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(1);
+                    jp.setTotal(0);
+                } else {
+                    jp.setData_list((List<Person>) map.get("personList"));
+                    jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("count"));
+                }
+            } catch (Exception e) {
+                jp.setData_list(null);
+                jp.setMsg("系统异常");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(2);
+                jp.setTotal(0);
+            }
+        }
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 按科研总分排名
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/teachingResearchRank")
+    public ResponseEntity<JsonPage<List<Person>>> teachingResearchRank(Long id, Integer pageSize,
+                                                                       Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        if (null == id) {
+            jp.setData_list(null);
+            jp.setMsg("参数为空");
+            jp.setPageNum(pageNum);
+            jp.setPageSize(pageSize);
+            jp.setStatus(3);
+            jp.setTotal(0);
+        } else {
+            int pSize = pageSize == null ? 20 : pageSize;
+            int pNum = pageNum == null ? 1 : pageNum;
+            try {
+                Map<String, Object> map = teacherService.teachingResearchRank(id, pSize, pNum);
+                if (null == map.get("personList")) {
+                    jp.setData_list(null);
+                    jp.setMsg("查询失败");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(1);
+                    jp.setTotal(0);
+                } else {
+                    jp.setData_list((List<Person>) map.get("personList"));
+                    jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("count"));
+                }
+            } catch (Exception e) {
+                jp.setData_list(null);
+                jp.setMsg("系统异常");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(2);
+                jp.setTotal(0);
+            }
+        }
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
+    }
 }

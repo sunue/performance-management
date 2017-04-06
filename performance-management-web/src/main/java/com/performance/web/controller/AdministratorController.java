@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.performance.persist.common.JsonPage;
 import com.performance.persist.common.JsonResult;
 import com.performance.persist.domain.Person;
+import com.performance.persist.domain.ScientificResearch;
 import com.performance.persist.domain.TeacherPerformance;
+import com.performance.persist.domain.TeachingResearch;
 import com.performance.service.AdministratorService;
 
 @Controller
@@ -399,11 +401,334 @@ public class AdministratorController {
         return new ResponseEntity<JsonResult<Integer>>(jr, HttpStatus.OK);
     }
 
+    /**
+     * 待审核教师绩效
+     * */
+    @RequestMapping("/teacherPerformanceCheck")
     public ResponseEntity<JsonResult<List<TeacherPerformance>>> teacherPerformanceCheck() {
         JsonResult<List<TeacherPerformance>> jr = new JsonResult<List<TeacherPerformance>>();
-        List<TeacherPerformance> teacherPerformanceList = administratorService
-            .teacherPerformanceCheck();
-        return null;
+        try {
+            List<TeacherPerformance> teacherPerformanceList = administratorService
+                .teacherPerformanceCheck();
+            if (null == teacherPerformanceList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(teacherPerformanceList);
+                jr.setMsg("查询待审核绩效成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<TeacherPerformance>>>(jr, HttpStatus.OK);
     }
 
+    /**
+     * 同意教师绩效录入
+     * */
+    @RequestMapping(value = "teacherPerformanceAgree")
+    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long id) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        int result = administratorService.teacherPerformanceAgree(id);
+        try {
+            if (1 == result) {
+                jr.setData(true);
+                jr.setMsg("同意教师绩效录入成功");
+                jr.setStatus(0);
+            } else {
+                jr.setData(false);
+                jr.setMsg("同意教师绩效录入失败");
+                jr.setStatus(1);
+            }
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 拒绝教师绩效录入
+     * */
+    @RequestMapping(value = "teachersPerformanceFail")
+    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceFail(Long id) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        int result = administratorService.teacherPerformanceFail(id);
+        try {
+            if (1 == result) {
+                jr.setData(true);
+                jr.setMsg("拒绝教师绩效录入成功");
+                jr.setStatus(0);
+            } else {
+                jr.setData(false);
+                jr.setMsg("拒绝教师绩效录入失败");
+                jr.setStatus(1);
+            }
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 增加科研基础选项
+     * */
+    @RequestMapping("/addScientificResearchPerformance")
+    public ResponseEntity<JsonResult<Boolean>> addScientificResearchPerformance(ScientificResearch scientificResearch) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (null == scientificResearch) {
+            jr.setData(false);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService
+                    .addScientificResearchPerformance(scientificResearch);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("增加科研基础选项成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("增加科研基础选项失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 增加教研基础选项
+     * */
+    @RequestMapping("/addTeachingResearchPerformance")
+    public ResponseEntity<JsonResult<Boolean>> addTeachingResearchPerformance(TeachingResearch teachingResearch) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (teachingResearch == null) {
+            jr.setData(false);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService.addTeachingResearchPerformance(teachingResearch);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("增加教研基础选项成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("增加教研基础选项失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 删除科研基础选项
+     * */
+    @RequestMapping("/deleteScientificResearchPerformance")
+    public ResponseEntity<JsonResult<Boolean>> deleteScientificResearchPerformance(List<Long> idList) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (null == idList) {
+            jr.setData(false);
+            jr.setMsg("未选择要删除的项");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService.deleteScientificResearchPerformance(idList);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("删除科研基础选项成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("删除科研基础选项失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 删除教研基础选项
+     * */
+    @RequestMapping("/deteleTeachingResearchPerformance")
+    public ResponseEntity<JsonResult<Boolean>> deteleTeachingResearchPerformance(List<Long> idList) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (null == idList) {
+            jr.setData(false);
+            jr.setMsg("未选择要删除的项");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService.deteleTeachingResearchPerformance(idList);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("删除教研基础选项成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("删除教研基础选项失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 修改科研基础选项
+     * */
+    @RequestMapping("/updateScientificResearchPerformance")
+    public ResponseEntity<JsonResult<Boolean>> updateScientificResearchPerformance(ScientificResearch scientificResearch) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        try {
+            int result = administratorService
+                .updateScientificResearchPerformance(scientificResearch);
+            if (1 == result) {
+                jr.setData(true);
+                jr.setMsg("修改科研基础选项成功");
+                jr.setStatus(0);
+            } else {
+                jr.setData(false);
+                jr.setMsg("修改科研基础选项失败");
+                jr.setStatus(1);
+            }
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 修改教研基础选项
+     * */
+    @RequestMapping("/updateTeachingResearchPerformance")
+    public ResponseEntity<JsonResult<Boolean>> updateTeachingResearchPerformance(TeachingResearch teachingResearch) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        try {
+            int result = administratorService.updateTeachingResearchPerformance(teachingResearch);
+            if (1 == result) {
+                jr.setData(true);
+                jr.setMsg("修改教研基础选项成功");
+                jr.setStatus(0);
+            } else {
+                jr.setData(false);
+                jr.setMsg("修改教研基础选项失败");
+                jr.setStatus(1);
+            }
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 获取科研基础选项
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/getScientificResearchPerformance")
+    public ResponseEntity<JsonPage<List<ScientificResearch>>> getScientificResearchPerformance(Integer pageSize,
+                                                                                               Integer pageNum) {
+        JsonPage<List<ScientificResearch>> jp = new JsonPage<List<ScientificResearch>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        try {
+            Map<String, Object> resultMap = administratorService
+                .getScientificResearchPerformance(pSize, pNum);
+            if (null == resultMap.get("scientificResearchList")) {
+                jp.setData_list(null);
+                jp.setMsg("查无科研基础选项");
+                jp.setStatus(1);
+                jp.setTotal(0);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+            } else {
+                jp.setData_list((List<ScientificResearch>) resultMap.get("scientificResearchList"));
+                jp.setMsg("查询科研基础选项成功");
+                jp.setStatus(0);
+                jp.setTotal((int) resultMap.get("count"));
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+            }
+        } catch (Exception e) {
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setTotal(0);
+            jp.setStatus(2);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+        }
+        return new ResponseEntity<JsonPage<List<ScientificResearch>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 获取教研基础选项
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/getTeachingResearchPerformance")
+    public ResponseEntity<JsonPage<List<TeachingResearch>>> getTeachingResearchPerformance(Integer pageSize,
+                                                                                           Integer pageNum) {
+        JsonPage<List<TeachingResearch>> jp = new JsonPage<List<TeachingResearch>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        try {
+            Map<String, Object> resultMap = administratorService
+                .getTeachingResearchPerformance(pSize, pNum);
+            if (null == resultMap.get("teachingResearchList")) {
+                jp.setData_list(null);
+                jp.setMsg("查无教研基础选项");
+                jp.setStatus(1);
+                jp.setTotal(0);
+                jp.setPageSize(pSize);
+                jp.setPageNum(pNum);
+            } else {
+                jp.setData_list((List<TeachingResearch>) resultMap.get("teachingResearchList"));
+                jp.setMsg("查询教研基础选项成功");
+                jp.setTotal((int) resultMap.get("count"));
+                jp.setStatus(0);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+            }
+        } catch (Exception e) {
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setStatus(2);
+            jp.setTotal(0);
+        }
+        return new ResponseEntity<JsonPage<List<TeachingResearch>>>(jp, HttpStatus.OK);
+    }
 }
