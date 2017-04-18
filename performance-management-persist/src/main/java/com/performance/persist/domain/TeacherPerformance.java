@@ -1,6 +1,8 @@
 package com.performance.persist.domain;
 
 public class TeacherPerformance {
+    private Long virtualId;
+
     /**
      * This field corresponds to the database column teacher_performance.id
      */
@@ -31,6 +33,14 @@ public class TeacherPerformance {
      * 0-正常；1-删除；2-审核中；3-未通过
      */
     private String status;
+
+    public Long getVirtualId() {
+        return virtualId;
+    }
+
+    public void setVirtualId(Long virtualId) {
+        this.virtualId = virtualId;
+    }
 
     /**
      * This method returns the value of the database column teacher_performance.id

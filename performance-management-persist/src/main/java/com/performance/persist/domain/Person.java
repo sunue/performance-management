@@ -27,7 +27,7 @@ public class Person {
     /**
      * This field corresponds to the database column person.age
      */
-    private int age;
+    private Integer age;
 
     /**
      * This field corresponds to the database column person.title
@@ -43,7 +43,7 @@ public class Person {
      * This field corresponds to the database column person.grade
      * 等级（管理员=1，教师=2）
      */
-    private int grade;
+    private Integer grade;
 
     /**
      * This field corresponds to the database column person.scientific_research_score
@@ -119,7 +119,7 @@ public class Person {
      *
      * @mbggenerated
      */
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
@@ -131,7 +131,7 @@ public class Person {
      *
      * @mbggenerated
      */
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -191,7 +191,7 @@ public class Person {
      *
      * @mbggenerated
      */
-    public int getGrade() {
+    public Integer getGrade() {
         return grade;
     }
 
@@ -203,7 +203,7 @@ public class Person {
      *
      * @mbggenerated
      */
-    public void setGrade(int grade) {
+    public void setGrade(Integer grade) {
         this.grade = grade;
     }
 

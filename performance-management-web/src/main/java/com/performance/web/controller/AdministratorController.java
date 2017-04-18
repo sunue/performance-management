@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.performance.persist.common.JsonPage;
 import com.performance.persist.common.JsonResult;
@@ -28,8 +30,9 @@ public class AdministratorController {
     /**
      * 管理员登录
      * */
-    @RequestMapping(value = "/administratorLogin")
-    public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String name) {
+    @RequestMapping(value = "/administratorLogin", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<Boolean>> administratorLogin(@RequestParam Long id,
+                                                                  @RequestParam String name) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Map<String, Object> map = new HashMap<String, Object>();
         if (null == id || name == null) {
@@ -62,7 +65,7 @@ public class AdministratorController {
     /**
      * 职工注册待审核人数
      * */
-    @RequestMapping("/teacherRegisterCheckSum")
+    @RequestMapping(value = "/teacherRegisterCheckSum", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Integer>> teacherRegisterCheckSum() {
         JsonResult<Integer> jr = new JsonResult<Integer>();
         try {
@@ -87,7 +90,7 @@ public class AdministratorController {
     /**
      * 职工注册信息审核
      * */
-    @RequestMapping(value = "/teacherRegisterCheck")
+    @RequestMapping(value = "/teacherRegisterCheck", method = RequestMethod.GET)
     public ResponseEntity<List<Person>> teacherRegisterCheck() {
         JsonResult<List<Person>> jr = new JsonResult<>();
         List<Person> personList = administratorService.teacherRegisterCheck();
@@ -112,7 +115,7 @@ public class AdministratorController {
     /**
      * 同意职工注册
      * */
-    @RequestMapping(value = "teacherRegisterAgree")
+    @RequestMapping(value = "teacherRegisterAgree", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherRegisterAgree(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         int result = administratorService.teacherRegisterAgree(id);
@@ -137,7 +140,7 @@ public class AdministratorController {
     /**
      * 拒绝员工注册
      * */
-    @RequestMapping(value = "teachersRegisterFail")
+    @RequestMapping(value = "teachersRegisterFail", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherRegisterFail(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         int result = administratorService.teacherRegisterFail(id);
@@ -162,7 +165,7 @@ public class AdministratorController {
     /**
      * 增加教师 
      **/
-    @RequestMapping("/addTeacher")
+    @RequestMapping(value = "/addTeacher", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> addTeacher(Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == person) {
@@ -193,7 +196,7 @@ public class AdministratorController {
     /**
      * 删除教师
      * */
-    @RequestMapping("/deleteTeacher")
+    @RequestMapping(value = "/deleteTeacher", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> deleteTeacher(List<Long> idList) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == idList) {
@@ -225,7 +228,7 @@ public class AdministratorController {
      * 查询教师
      * */
     @SuppressWarnings("unchecked")
-    @RequestMapping("/getTeacher")
+    @RequestMapping(value = "/getTeacher", method = RequestMethod.GET)
     public ResponseEntity<JsonPage<List<Person>>> getTeacher(Long id, String name, Integer pageSize,
                                                              Integer pageNum) {
         JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
@@ -267,7 +270,7 @@ public class AdministratorController {
     /**
      * 修改教师信息
      * */
-    @RequestMapping("/updateTeacher")
+    @RequestMapping(value = "/updateTeacher", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updateTeacher(Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
@@ -292,7 +295,7 @@ public class AdministratorController {
     /**
      * 获取管理员信息
      * */
-    @RequestMapping("/getAdministratorInfo")
+    @RequestMapping(value = "/getAdministratorInfo", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Person>> getAdministratorInfo(Long id) {
         JsonResult<Person> jr = new JsonResult<Person>();
         if (null == id) {
@@ -323,7 +326,7 @@ public class AdministratorController {
     /**
      * 修改管理员信息 
      * */
-    @RequestMapping("/updateAdministratorInfo")
+    @RequestMapping(value = "/updateAdministratorInfo", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updateAdministratorInfo(Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
@@ -348,7 +351,7 @@ public class AdministratorController {
     /**
      * 修改密码
      * */
-    @RequestMapping("/updatePassword")
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updatePassword(Long id, String password) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == id || null == password) {
@@ -379,7 +382,7 @@ public class AdministratorController {
     /**
      * 教师绩效待审核数
      * */
-    @RequestMapping("/teacherPerformanceCheckInfo")
+    @RequestMapping(value = "/teacherPerformanceCheckInfo", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Integer>> teacherPerformanceCheckSum() {
         JsonResult<Integer> jr = new JsonResult<Integer>();
         try {
@@ -404,7 +407,7 @@ public class AdministratorController {
     /**
      * 待审核教师绩效
      * */
-    @RequestMapping("/teacherPerformanceCheck")
+    @RequestMapping(value = "/teacherPerformanceCheck", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<List<TeacherPerformance>>> teacherPerformanceCheck() {
         JsonResult<List<TeacherPerformance>> jr = new JsonResult<List<TeacherPerformance>>();
         try {
@@ -430,7 +433,7 @@ public class AdministratorController {
     /**
      * 同意教师绩效录入
      * */
-    @RequestMapping(value = "teacherPerformanceAgree")
+    @RequestMapping(value = "teacherPerformanceAgree", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         int result = administratorService.teacherPerformanceAgree(id);
@@ -455,7 +458,7 @@ public class AdministratorController {
     /**
      * 拒绝教师绩效录入
      * */
-    @RequestMapping(value = "teachersPerformanceFail")
+    @RequestMapping(value = "teachersPerformanceFail", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherPerformanceFail(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         int result = administratorService.teacherPerformanceFail(id);
@@ -480,7 +483,7 @@ public class AdministratorController {
     /**
      * 增加科研基础选项
      * */
-    @RequestMapping("/addScientificResearchPerformance")
+    @RequestMapping(value = "/addScientificResearchPerformance", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> addScientificResearchPerformance(ScientificResearch scientificResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == scientificResearch) {
@@ -512,7 +515,7 @@ public class AdministratorController {
     /**
      * 增加教研基础选项
      * */
-    @RequestMapping("/addTeachingResearchPerformance")
+    @RequestMapping(value = "/addTeachingResearchPerformance", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> addTeachingResearchPerformance(TeachingResearch teachingResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (teachingResearch == null) {
@@ -543,7 +546,7 @@ public class AdministratorController {
     /**
      * 删除科研基础选项
      * */
-    @RequestMapping("/deleteScientificResearchPerformance")
+    @RequestMapping(value = "/deleteScientificResearchPerformance", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> deleteScientificResearchPerformance(List<Long> idList) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == idList) {
@@ -574,7 +577,7 @@ public class AdministratorController {
     /**
      * 删除教研基础选项
      * */
-    @RequestMapping("/deteleTeachingResearchPerformance")
+    @RequestMapping(value = "/deteleTeachingResearchPerformance", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> deteleTeachingResearchPerformance(List<Long> idList) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == idList) {
@@ -606,7 +609,7 @@ public class AdministratorController {
     /**
      * 修改科研基础选项
      * */
-    @RequestMapping("/updateScientificResearchPerformance")
+    @RequestMapping(value = "/updateScientificResearchPerformance", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updateScientificResearchPerformance(ScientificResearch scientificResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
@@ -632,7 +635,7 @@ public class AdministratorController {
     /**
      * 修改教研基础选项
      * */
-    @RequestMapping("/updateTeachingResearchPerformance")
+    @RequestMapping(value = "/updateTeachingResearchPerformance", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updateTeachingResearchPerformance(TeachingResearch teachingResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
@@ -658,7 +661,7 @@ public class AdministratorController {
      * 获取科研基础选项
      * */
     @SuppressWarnings("unchecked")
-    @RequestMapping("/getScientificResearchPerformance")
+    @RequestMapping(value = "/getScientificResearchPerformance", method = RequestMethod.GET)
     public ResponseEntity<JsonPage<List<ScientificResearch>>> getScientificResearchPerformance(Integer pageSize,
                                                                                                Integer pageNum) {
         JsonPage<List<ScientificResearch>> jp = new JsonPage<List<ScientificResearch>>();
@@ -697,7 +700,7 @@ public class AdministratorController {
      * 获取教研基础选项
      * */
     @SuppressWarnings("unchecked")
-    @RequestMapping("/getTeachingResearchPerformance")
+    @RequestMapping(value = "/getTeachingResearchPerformance", method = RequestMethod.GET)
     public ResponseEntity<JsonPage<List<TeachingResearch>>> getTeachingResearchPerformance(Integer pageSize,
                                                                                            Integer pageNum) {
         JsonPage<List<TeachingResearch>> jp = new JsonPage<List<TeachingResearch>>();

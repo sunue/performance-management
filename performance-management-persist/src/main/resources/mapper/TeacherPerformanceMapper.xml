@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.performance.persist.dao.TeacherPerformanceDao" >
   <resultMap id="BaseResultMap" type="com.performance.persist.domain.TeacherPerformance" >
+  	<id column="virtual_id" property="virtualId" jdbcType="BIGINT" />
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="category" property="category" jdbcType="VARCHAR" />
     <result column="content" property="content" jdbcType="VARCHAR" />
@@ -11,6 +12,9 @@
   </resultMap>
   <sql id="selectByParamsWhere">
   	<where>
+  		<if test="virtualId!=null">
+  			virtual_id=#{virtualId,jdbcType=BIGINT} and
+  		</if>
   		<if test="id!=null">
   			id=#{id,jdbcType=BIGINT} and
   		</if>
@@ -33,15 +37,15 @@
   	</where>
   </sql>
   <sql id="Base_Column_List" >
-    id, category, content, project, pro_grade, status
+    virtual_id,id, category, content, project, pro_grade, status
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from teacher_performance
-    where id = #{id,jdbcType=BIGINT}
+    where virtual_id = #{virtualId,jdbcType=BIGINT}
   </select>
-  <select id="selectCount" parameterType="java.util.Map" resultMap="java.lang.Integer">
+  <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
   	select 
   	<include refid="Base_Column_List" />
     from teacher_performance
@@ -55,19 +59,22 @@
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from teacher_performance
-    where id = #{id,jdbcType=BIGINT}
+    where virtual_id = #{virtualId,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.performance.persist.domain.TeacherPerformance" >
-    insert into teacher_performance (id, category, content, 
+    insert into teacher_performance (virtual_id, id, category, content, 
       project, pro_grade, status
       )
-    values (#{id,jdbcType=BIGINT}, #{category,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+    values (#{virtualId,jdbcType=BIGINT}, #{id,jdbcType=BIGINT}, #{category,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
       #{project,jdbcType=VARCHAR}, #{proGrade,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.performance.persist.domain.TeacherPerformance" >
     insert into teacher_performance
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="virtualId != null" >
+        virtual_id,
+      </if>
       <if test="id != null" >
         id,
       </if>
@@ -88,6 +95,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="virtualId != null" >
+        #{virtualId,jdbcType=BIGINT},
+      </if>
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
@@ -111,6 +121,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.performance.persist.domain.TeacherPerformance" >
     update teacher_performance
     <set >
+      <if test="id != null" >
+        id = #{id,jdbcType=BIGINT},
+      </if>
       <if test="category != null" >
         category = #{category,jdbcType=VARCHAR},
       </if>
@@ -127,15 +140,16 @@
         status = #{status,jdbcType=CHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where virtual_id = #{virtualId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.performance.persist.domain.TeacherPerformance" >
     update teacher_performance
-    set category = #{category,jdbcType=VARCHAR},
+    set id = #{id,jdbcType=BIGINT},
+      category = #{category,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       project = #{project,jdbcType=VARCHAR},
       pro_grade = #{proGrade,jdbcType=VARCHAR},
       status = #{status,jdbcType=CHAR}
-    where id = #{id,jdbcType=BIGINT}
+    where virtual_id = #{virtualId,jdbcType=BIGINT}
   </update>
 </mapper>

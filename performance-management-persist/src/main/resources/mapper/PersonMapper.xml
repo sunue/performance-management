@@ -82,7 +82,7 @@
   	</foreach> 
   </delete>
   
-  <select id="selectCount" resultMap="java.lang.Integer" parameterType="java.util.Map">
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="java.util.Map">
   	select 
   	count(*)
   	from person
@@ -132,21 +132,21 @@
     </if>
   </select>
   
-  <select id="selectRankByTotal" parameterType="java.lang.Long" resultMap="java.lang.Integer">
+  <select id="selectRankByTotal" parameterType="java.lang.Long" resultType="java.lang.Integer">
   	select count(*)
   	from person 
   	where scientific_research_score+teaching_research_score >
 	(SELECT scientific_research_score+teaching_research_score from person where id=#{id,jdbcType=BIGINT})
   </select>
   
-  <select id="selectRankByScientificResearch" parameterType="java.lang.Long" resultMap="java.lang.Integer">
+  <select id="selectRankByScientificResearch" parameterType="java.lang.Long" resultType="java.lang.Integer">
   	select count(*)
   	from person 
   	where scientific_research_score >
 	(SELECT scientific_research_score from person where id=#{id,jdbcType=BIGINT})
   </select>
   
-  <select id="selectRankByTeachingResearch" parameterType="java.lang.Long" resultMap="java.lang.Integer">
+  <select id="selectRankByTeachingResearch" parameterType="java.lang.Long" resultType="java.lang.Integer">
   	select count(*)
   	from person 
   	where teaching_research_score >

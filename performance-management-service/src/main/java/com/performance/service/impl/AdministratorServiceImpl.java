@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.performance.persist.dao.PersonDao;
 import com.performance.persist.dao.ScientificResearchDao;
@@ -16,6 +17,7 @@ import com.performance.persist.domain.TeacherPerformance;
 import com.performance.persist.domain.TeachingResearch;
 import com.performance.service.AdministratorService;
 
+@Service
 public class AdministratorServiceImpl implements AdministratorService {
 
     @Autowired
@@ -32,12 +34,17 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Boolean administratorLogin(Map<String, Object> map) {
-        map.put("status", "0");
-        Person person = personDao.selectByParams(map);
-        if (null == person) {
-            return false;
+        map.put("status", "0"); //正常
+        map.put("grade", 1); //管理员
+        try {
+            Person person = personDao.selectByParams(map);
+            if (null != person) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -45,7 +52,12 @@ public class AdministratorServiceImpl implements AdministratorService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("grade", 2); //教师
         map.put("status", "2"); //审核中
-        int sum = personDao.selectCount(map);
+        int sum = 0;
+        try {
+            sum = personDao.selectCount(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return sum;
     }
 
@@ -54,8 +66,14 @@ public class AdministratorServiceImpl implements AdministratorService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("grade", 2); //教师
         map.put("status", "2"); //审核中
-        List<Person> teacherList = personDao.selectListByParams(map);
-        return teacherList;
+        try {
+            List<Person> teacherList = personDao.selectListByParams(map);
+            return teacherList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     @Override
@@ -63,8 +81,13 @@ public class AdministratorServiceImpl implements AdministratorService {
         Person person = new Person();
         person.setId(id);
         person.setStatus("0"); //职工状态：正常
-        int result = personDao.updateByPrimaryKeySelective(person);
-        return result;
+        try {
+            int result = personDao.updateByPrimaryKeySelective(person);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -72,38 +95,63 @@ public class AdministratorServiceImpl implements AdministratorService {
         Person person = new Person();
         person.setId(id);
         person.setStatus("3"); //职工状态:未通过
-        int result = personDao.updateByPrimaryKeySelective(person);
-        return result;
+        try {
+            int result = personDao.updateByPrimaryKeySelective(person);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int addTeacher(Person person) {
         person.setGrade(2); //教师
         person.setStatus("0"); //正常
-        int result = personDao.insertSelective(person);
-        return result;
+        try {
+            int result = personDao.insertSelective(person);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int deleteTeacher(List<Long> idList) {
-        int result = personDao.deleteByIdList(idList);
-        return result;
+        try {
+            int result = personDao.deleteByIdList(idList);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public Map<String, Object> getTeacher(Map<String, Object> map) {
-        List<Person> personList = personDao.selectListByParams(map);
-        int count = personDao.selectCount(map);
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("personList", personList);
-        resultMap.put("count", count);
-        return resultMap;
+        try {
+            List<Person> personList = personDao.selectListByParams(map);
+            int count = personDao.selectCount(map);
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("personList", personList);
+            resultMap.put("count", count);
+            return resultMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public int updateTeacher(Person person) {
-        int result = personDao.updateByPrimaryKeySelective(person);
-        return result;
+        try {
+            int result = personDao.updateByPrimaryKeySelective(person);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -112,14 +160,24 @@ public class AdministratorServiceImpl implements AdministratorService {
         map.put("id", id);
         map.put("grade", 1);
         map.put("status", "0");
-        Person person = personDao.selectByParams(map);
-        return person;
+        try {
+            Person person = personDao.selectByParams(map);
+            return person;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public int updateAdministratorInfo(Person person) {
-        int result = personDao.updateByPrimaryKeySelective(person);
-        return result;
+        try {
+            int result = personDao.updateByPrimaryKeySelective(person);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -127,15 +185,25 @@ public class AdministratorServiceImpl implements AdministratorService {
         Person person = new Person();
         person.setId(id);
         person.setPassword(password);
-        int result = personDao.updateByPrimaryKeySelective(person);
-        return result;
+        try {
+            int result = personDao.updateByPrimaryKeySelective(person);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int teacherPerformanceCheckSum() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "2");
-        int sum = teacherPerformanceDao.selectCount(map);
+        int sum = 0;
+        try {
+            sum = teacherPerformanceDao.selectCount(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return sum;
     }
 
@@ -143,9 +211,14 @@ public class AdministratorServiceImpl implements AdministratorService {
     public List<TeacherPerformance> teacherPerformanceCheck() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "2");
-        List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
-            .selectListByParams(map);
-        return teacherPerformanceList;
+        try {
+            List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
+                .selectListByParams(map);
+            return teacherPerformanceList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -153,8 +226,13 @@ public class AdministratorServiceImpl implements AdministratorService {
         TeacherPerformance teacherPerformance = new TeacherPerformance();
         teacherPerformance.setId(id);
         teacherPerformance.setStatus("0");
-        int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
-        return result;
+        try {
+            int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -162,44 +240,79 @@ public class AdministratorServiceImpl implements AdministratorService {
         TeacherPerformance teacherPerformance = new TeacherPerformance();
         teacherPerformance.setId(id);
         teacherPerformance.setStatus("3"); //未通过
-        int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
-        return result;
+        try {
+            int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int addScientificResearchPerformance(ScientificResearch scientificResearch) {
-        int result = scientificResearchDao.insertSelective(scientificResearch);
-        return result;
+        try {
+            int result = scientificResearchDao.insertSelective(scientificResearch);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int addTeachingResearchPerformance(TeachingResearch teachingResearch) {
-        int result = teachingResearchDao.insertSelective(teachingResearch);
-        return result;
+        try {
+            int result = teachingResearchDao.insertSelective(teachingResearch);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int deleteScientificResearchPerformance(List<Long> idList) {
-        int result = scientificResearchDao.deleteByIdList(idList);
-        return result;
+        try {
+            int result = scientificResearchDao.deleteByIdList(idList);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int deteleTeachingResearchPerformance(List<Long> idList) {
-        int result = teachingResearchDao.deleteByIdList(idList);
-        return result;
+        try {
+            int result = teachingResearchDao.deleteByIdList(idList);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int updateScientificResearchPerformance(ScientificResearch scientificResearch) {
-        int result = scientificResearchDao.updateByPrimaryKeySelective(scientificResearch);
-        return result;
+        try {
+            int result = scientificResearchDao.updateByPrimaryKeySelective(scientificResearch);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
     public int updateTeachingResearchPerformance(TeachingResearch teachingResearch) {
-        int result = teachingResearchDao.updateByPrimaryKeySelective(teachingResearch);
-        return result;
+        try {
+            int result = teachingResearchDao.updateByPrimaryKeySelective(teachingResearch);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -208,14 +321,20 @@ public class AdministratorServiceImpl implements AdministratorService {
         map.put("status", "0");
         map.put("firstdata", (pageSize - 1) * pageNum);
         map.put("nums", pageNum);
-        List<ScientificResearch> scientificResearchList = scientificResearchDao
-            .selectListByParams(map);
-        int count = scientificResearchDao.selectCount(map);
+        try {
+            List<ScientificResearch> scientificResearchList = scientificResearchDao
+                .selectListByParams(map);
+            int count = scientificResearchDao.selectCount(map);
 
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("scientificResearchList", scientificResearchList);
-        resultMap.put("count", count);
-        return resultMap;
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("scientificResearchList", scientificResearchList);
+            resultMap.put("count", count);
+            return resultMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     @Override
@@ -224,13 +343,19 @@ public class AdministratorServiceImpl implements AdministratorService {
         map.put("status", "0");
         map.put("firstdata", (pageSize - 1) * pageNum);
         map.put("nums", pageNum);
-        List<TeachingResearch> teachingResearchList = teachingResearchDao.selectListByParams(map);
-        int count = teachingResearchDao.selectCount(map);
+        try {
+            List<TeachingResearch> teachingResearchList = teachingResearchDao
+                .selectListByParams(map);
+            int count = teachingResearchDao.selectCount(map);
 
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        resultMap.put("teachingResearchList", teachingResearchList);
-        map.put("count", count);
-        return resultMap;
+            Map<String, Object> resultMap = new HashMap<String, Object>();
+            resultMap.put("teachingResearchList", teachingResearchList);
+            map.put("count", count);
+            return resultMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

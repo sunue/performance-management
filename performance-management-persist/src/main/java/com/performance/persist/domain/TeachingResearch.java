@@ -4,7 +4,7 @@ public class TeachingResearch {
     /**
      * This field corresponds to the database column teaching_research.id
      */
-    private Long id;
+    private Long virtualId;
 
     /**
      * This field corresponds to the database column teaching_research.tea_content
@@ -31,20 +31,12 @@ public class TeachingResearch {
      */
     private String status;
 
-    /**
-     * This method returns the value of the database column teaching_research.id
-     * @return the value of teaching_research.id
-     */
-    public Long getId() {
-        return id;
+    public Long getVirtualId() {
+        return virtualId;
     }
 
-    /**
-     * This method sets the value of the database column teaching_research.id
-     * @param id the value for teaching_research.id
-     */
-    public void setId(Long id) {
-        this.id = id;
+    public void setVirtualId(Long virtualId) {
+        this.virtualId = virtualId;
     }
 
     /**
