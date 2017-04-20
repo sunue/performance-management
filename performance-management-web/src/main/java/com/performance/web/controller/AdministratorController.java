@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.performance.persist.common.JsonPage;
 import com.performance.persist.common.JsonResult;
@@ -31,11 +32,12 @@ public class AdministratorController {
      * 管理员登录
      * */
     @RequestMapping(value = "/administratorLogin", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> administratorLogin(@RequestParam Long id,
-                                                                  @RequestParam String name) {
+    public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String name) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Map<String, Object> map = new HashMap<String, Object>();
-        if (null == id || name == null) {
+        System.out.println(id);
+        System.out.println(name);
+        if (null == id || StringUtils.isEmpty(name)) {
             jr.setData(false);
             jr.setMsg("参数为空");
             jr.setStatus(3);
@@ -69,11 +71,15 @@ public class AdministratorController {
     public ResponseEntity<JsonResult<Integer>> teacherRegisterCheckSum() {
         JsonResult<Integer> jr = new JsonResult<Integer>();
         try {
-            int sum = administratorService.teacherRegisterCheckSum();
-            if (sum >= 0) {
+            Integer sum = administratorService.teacherRegisterCheckSum();
+            if (sum > 0) {
                 jr.setData(sum);
                 jr.setMsg("查询待审核教师人数成功");
                 jr.setStatus(0);
+            } else if (sum == 0) {
+                jr.setData(sum);
+                jr.setMsg("无待审核教师");
+                jr.setStatus(3);
             } else {
                 jr.setData(sum);
                 jr.setMsg("查询失败");
@@ -91,7 +97,7 @@ public class AdministratorController {
      * 职工注册信息审核
      * */
     @RequestMapping(value = "/teacherRegisterCheck", method = RequestMethod.GET)
-    public ResponseEntity<List<Person>> teacherRegisterCheck() {
+    public ResponseEntity<JsonResult<List<Person>>> teacherRegisterCheck() {
         JsonResult<List<Person>> jr = new JsonResult<>();
         List<Person> personList = administratorService.teacherRegisterCheck();
         try {
@@ -109,30 +115,36 @@ public class AdministratorController {
             jr.setMsg("系统异常");
             jr.setStatus(2);
         }
-        return new ResponseEntity<List<Person>>(personList, HttpStatus.OK);
+        return new ResponseEntity<JsonResult<List<Person>>>(jr, HttpStatus.OK);
     }
 
     /**
      * 同意职工注册
      * */
-    @RequestMapping(value = "teacherRegisterAgree", method = RequestMethod.GET)
+    @RequestMapping(value = "/teacherRegisterAgree", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherRegisterAgree(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        int result = administratorService.teacherRegisterAgree(id);
-        try {
-            if (1 == result) {
-                jr.setData(true);
-                jr.setMsg("同意职工注册成功");
-                jr.setStatus(0);
-            } else {
-                jr.setData(false);
-                jr.setMsg("同意职工注册失败");
-                jr.setStatus(1);
-            }
-        } catch (Exception e) {
+        if (null == id) {
             jr.setData(false);
-            jr.setMsg("系统异常");
-            jr.setStatus(2);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService.teacherRegisterAgree(id);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("同意职工注册成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("同意职工注册失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
@@ -140,24 +152,43 @@ public class AdministratorController {
     /**
      * 拒绝员工注册
      * */
-    @RequestMapping(value = "teachersRegisterFail", method = RequestMethod.GET)
+    @RequestMapping(value = "/teachersRegisterFail", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherRegisterFail(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        int result = administratorService.teacherRegisterFail(id);
-        try {
-            if (1 == result) {
-                jr.setData(true);
-                jr.setMsg("拒绝职工注册成功");
-                jr.setStatus(0);
-            } else {
-                jr.setData(false);
-                jr.setMsg("拒绝职工注册失败");
-                jr.setStatus(1);
-            }
-        } catch (Exception e) {
+        if (null == id) {
             jr.setData(false);
-            jr.setMsg("系统异常");
-            jr.setStatus(2);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService.teacherRegisterFail(id);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("拒绝职工注册成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("拒绝职工注册失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+    }
+
+    @RequestMapping("/add")
+    public ResponseEntity<JsonResult<Boolean>> add(@RequestBody Person person) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        System.out.println(person.getId());
+        int result = administratorService.addTeacher(person);
+        if (1 == result) {
+            jr.setData(true);
+            jr.setMsg("增加教师成功");
+            jr.setStatus(0);
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
@@ -166,8 +197,11 @@ public class AdministratorController {
      * 增加教师 
      **/
     @RequestMapping(value = "/addTeacher", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> addTeacher(Person person) {
+    public ResponseEntity<JsonResult<Boolean>> addTeacher(@RequestBody Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        System.out.println(person);
+        System.out.println(person.getId());
+        System.out.println(person.getName());
         if (null == person) {
             jr.setData(false);
             jr.setMsg("参数为空");

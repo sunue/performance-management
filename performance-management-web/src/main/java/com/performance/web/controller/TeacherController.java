@@ -404,7 +404,7 @@ public class TeacherController {
     }
 
     /**
-     * 按科研总分排名
+     * 按教研总分排名
      * */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/teachingResearchRank", method = RequestMethod.GET)

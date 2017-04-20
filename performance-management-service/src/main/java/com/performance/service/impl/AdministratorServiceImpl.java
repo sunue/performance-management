@@ -52,7 +52,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("grade", 2); //教师
         map.put("status", "2"); //审核中
-        int sum = 0;
+        Integer sum = null;
         try {
             sum = personDao.selectCount(map);
         } catch (Exception e) {
@@ -66,14 +66,16 @@ public class AdministratorServiceImpl implements AdministratorService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("grade", 2); //教师
         map.put("status", "2"); //审核中
+        List<Person> teacherList = null;
         try {
-            List<Person> teacherList = personDao.selectListByParams(map);
-            return teacherList;
+            teacherList = personDao.selectListByParams(map);
+            if (teacherList != null && teacherList.size() > 0) {
+                return teacherList;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-
     }
 
     @Override
@@ -81,6 +83,8 @@ public class AdministratorServiceImpl implements AdministratorService {
         Person person = new Person();
         person.setId(id);
         person.setStatus("0"); //职工状态：正常
+        person.setScientificResearchScore(0);
+        person.setTeachingResearchScore(0);
         try {
             int result = personDao.updateByPrimaryKeySelective(person);
             return result;
@@ -158,8 +162,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Person getAdministratorInfo(Long id) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
-        map.put("grade", 1);
-        map.put("status", "0");
+        map.put("grade", 1); //管理员
+        map.put("status", "0"); //正常
         try {
             Person person = personDao.selectByParams(map);
             return person;

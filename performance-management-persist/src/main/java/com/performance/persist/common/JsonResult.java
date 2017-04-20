@@ -10,7 +10,7 @@ public class JsonResult<T> implements Serializable {
 
     private T data;
 
-    private int status;
+    private Integer status;
 
     public String getMsg() {
         return msg;
@@ -28,11 +28,11 @@ public class JsonResult<T> implements Serializable {
         this.data = data;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 }
