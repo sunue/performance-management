@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>教师注册页面</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+    <div class="nav">
+            <nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                     <h1 class="navbar-brand">绩效管理系统——注册</h1>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                             <a href="index.html" id="userName">返回首页</a>  
+                        </li>
+                    </ul>
+                </div>
+            </nav>           
+    </div>
+    <div class="container" style="margin: 0 auto">
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="id" class="col-sm-2 control-label">
+                            <em>*</em>
+                            工号
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control idNum"  name="idNum" placeholder="请输入工号" required>
+                        </div>
+                        <div class="col-sm-4 idTip"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">
+                            <em>*</em>
+                            姓名
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control name" name="name"  placeholder="请输入姓名" required>
+                        </div>
+                        <div class="col-sm-4 nameTip"></div>
+                    </div>
+                    
+
+                    <div class="form-group">
+                        <label for="sex" class="col-sm-2 control-label">
+                            <em>*</em>
+                            性别
+                        </label>
+                        <div class="col-sm-6">
+                            <select name="sex" class="input-xlarge form-control sex" required>
+                                    <option value="男">男</option>
+                                    <option value="女">女</option>     
+                            </select>   
+                        </div>
+                        <div class="col-sm-4 sexTip"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age" class="col-sm-2 control-label">
+                            <em>*</em>
+                            年龄
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control age" name="age"  placeholder="请输入年龄" required>
+                        </div>
+                        <div class="col-sm-4 ageTip"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">
+                            <em>*</em>
+                            职称
+                        </label>
+                        <div class="col-sm-6">
+                            <select name="title" class="input-xlarge form-control title" required>
+                                    <option value="01">教授</option>
+                                    <option value="02">副教授</option>
+                                    <option value="03">讲师</option>
+                                    <option value="04">助教</option>     
+                            </select> 
+                        </div>
+                        <div class="col-sm-4 titleTip"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="admissionTime" class="col-sm-2 control-label">
+                            <em>*</em>
+                            入教时间
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="date" class="form-control admissionTime" name="admissionTime"  placeholder="请输入入教时间" required>
+
+                        </div>
+                        <div class="col-sm-4 admissionTimeTip"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 control-label">
+                            <em>*</em>
+                            密码
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control password" name="password"  placeholder="请输入密码" required>
+                        </div>
+                        <div class="col-sm-4 passwordTip"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2" class="col-sm-2 control-label">
+                            <em>*</em>
+                            确认密码
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control password2" name="password2"  placeholder="请再次输入密码" required>
+                        </div>
+                        <div class="col-sm-4 passwordTip2"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2" class="col-sm-2 control-label">
+                            <em>*</em>
+                            验证码
+                        </label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control " name="password2"  placeholder="输入验证码" required>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                         <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary " id="sub">
+                                提交
+                            </button>
+                         </div>
+                        
+                    </div>
+
+                    
+                </form>
+            </div>
+        </div>
+    </div>  
+   
+	
+</body>
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <script src="js/register.js"></script>
+
+</html>

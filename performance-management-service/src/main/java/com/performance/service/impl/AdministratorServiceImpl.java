@@ -112,7 +112,13 @@ public class AdministratorServiceImpl implements AdministratorService {
     public int addTeacher(Person person) {
         person.setGrade(2); //教师
         person.setStatus("0"); //正常
+        person.setScientificResearchScore(0);
+        person.setTeachingResearchScore(0);
         try {
+            Person temp = personDao.selectByPrimaryKey(person.getId());
+            if (null != temp) {
+                return -1;
+            }
             int result = personDao.insertSelective(person);
             return result;
         } catch (Exception e) {

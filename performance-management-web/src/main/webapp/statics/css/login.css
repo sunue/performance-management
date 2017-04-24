@@ -1,0 +1,53 @@
+body {
+	/*background:url(../img/login_bg_0.jpg) #f8f6e9;*/
+  padding: 0;
+  margin: 0;
+  background-color: #428bca;
+}
+.signin {
+	position: absolute;
+  width:400px;
+  height:200px;
+  left:50%;
+  top:50%; 
+  margin-left:-200px;
+  margin-top:-160px;
+}
+.signin-head {
+	margin:0 auto;
+	padding-top:30px;
+	width:400px;
+  color:#FFF;
+}
+.form-signin {
+  max-width: 330px;
+  padding: 43px 15px 15px 15px;
+  margin: 0 auto;
+}
+
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+
+.form-signin .input-group{
+  margin-bottom: 14px;
+}
+#logoBtn{
+  width: 340px;
+  margin-left: 30px;
+}
+.reg{
+
+  float: right;
+  padding:10px;
+
+}

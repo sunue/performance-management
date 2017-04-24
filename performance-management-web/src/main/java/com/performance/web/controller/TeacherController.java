@@ -41,8 +41,9 @@ public class TeacherController {
             jr.setData(false);
         } else {
             Person person = JSON.parseObject("teacherJSON", Person.class);
+
             if (!Number_PATTERN.matcher(person.getId().toString()).matches()) {
-                throw new RuntimeException("ID不符合格式要求");
+                throw new RuntimeException("工号不符合格式要求");
             }
 
             if (!NAME_PATTERN.matcher(person.getName()).matches() || person.getName().length() < 0
@@ -50,7 +51,24 @@ public class TeacherController {
                 throw new RuntimeException("名字不符合格式要求");
             }
 
-            //if()
+            if (!NAME_PATTERN.matcher(person.getPassword()).matches()
+                || person.getPassword().length() < 0 || person.getPassword().length() > 20) {
+                throw new RuntimeException("密码不符合格式要求");
+            }
+
+            if (!person.getSex().equals("女") && !person.getSex().equals("男")) {
+                throw new RuntimeException("性别不符合要求");
+            }
+
+            if (person.getAge() < 0 || person.getAge() > 120) {
+                throw new RuntimeException("年龄不符合要求");
+            }
+
+            if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
+                && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
+                throw new RuntimeException("职称不符合要求");
+            }
+
             try {
                 Boolean result = teacherService.saveRegisterPerson(person);
                 if (true == result) {

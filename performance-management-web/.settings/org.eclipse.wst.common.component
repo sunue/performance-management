@@ -7,6 +7,9 @@
         <dependent-module archiveName="performance-management-service-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/performance-management-service/performance-management-service">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="performance-management-persist-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/performance-management-persist/performance-management-persist">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="performance-management-web"/>
         <property name="java-output-path" value="/performance-management-web/target/classes"/>
     </wb-module>

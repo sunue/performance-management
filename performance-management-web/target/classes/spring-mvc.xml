@@ -15,7 +15,19 @@
     
     <context:annotation-config />
     
-    <mvc:annotation-driven />   
+    <mvc:annotation-driven /> 
+    
+    <!-- 允许对静态资源文件的访问 -->
+    <mvc:default-servlet-handler />  
+    
+    <!-- 静态资源处理，css，js，imgs -->
+    <mvc:resources mapping="/WEB-INF/pages/**" location="/WEB-INF/pages/" />
+    
+    <mvc:resources mapping="/statics/**" location="/statics/" />
+	<mvc:resources mapping="/js/**" location="/statics/js/"/>
+	<mvc:resources mapping="/css/**" location="/statics/css/"/>
+	<mvc:resources mapping="/img/**" location="/statics/img/"/>
+	<mvc:resources mapping="/fonts/**" location="/statics/fonts/"/>  
     
     <!--  
     <bean id="mappingJacksonHttpMessageConverter"
@@ -40,8 +52,8 @@
                
     <!-- 定义跳转的文件的前后缀，视图模式  -->        
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    	<property name="prefix" value="/WEB-INF/jsp/"></property>
-    	<property name="suffix" value=".jsp"></property>
+    	<property name="prefix" value="/WEB-INF/pages/"></property>
+    	<property name="suffix" value=".html"></property>
     </bean>
     
     <!-- 配置文件长传 -->

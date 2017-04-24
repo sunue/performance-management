@@ -1,8 +1,10 @@
 package com.performance.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,35 +23,66 @@ import com.performance.persist.domain.TeacherPerformance;
 import com.performance.persist.domain.TeachingResearch;
 import com.performance.service.AdministratorService;
 
+import net.sf.json.JSONArray;
+
 @Controller
 @RequestMapping(value = "/administrator")
 public class AdministratorController {
 
+    private static Pattern NAME_PATTERN = Pattern.compile("[A-Za-z0-9()\\-\\+\\*_\u4e00-\u9fa5]*");
+    private static Pattern Number_PATTERN = Pattern.compile("[1-9][0-9]*");
+    //  private static Pattern Chinese_PATTERN = Pattern.compile("[\u4e00-\u9fa5]");
+
     @Autowired
     private AdministratorService administratorService;
+
+    @RequestMapping("/1")
+    public String change() {
+        return "1";
+    }
+
+    @RequestMapping(value = "/managePerformance")
+    public String managePerformance() {
+        return "managePerformance";
+    }
+
+    @RequestMapping(value = "/registerReview")
+    public String registerReview() {
+        return "registerReview";
+    }
+
+    @RequestMapping(value = "/performanceRulesManage")
+    public String performanceRulesManage() {
+        return "performanceRulesManage";
+    }
+
+    @RequestMapping(value = "userInfoManage")
+    public String userInfoManage() {
+        return "userInfoManage";
+    }
 
     /**
      * 管理员登录
      * */
     @RequestMapping(value = "/administratorLogin", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String name) {
+    //public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String password) {
+    public String administratorLogin(Long id, String password) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Map<String, Object> map = new HashMap<String, Object>();
-        System.out.println(id);
-        System.out.println(name);
-        if (null == id || StringUtils.isEmpty(name)) {
+        if (null == id || StringUtils.isEmpty(password)) {
             jr.setData(false);
             jr.setMsg("参数为空");
             jr.setStatus(3);
         } else {
             try {
                 map.put("id", id);
-                map.put("name", name);
+                map.put("password", password);
                 Boolean result = administratorService.administratorLogin(map);
                 if (true == result) {
                     jr.setData(true);
                     jr.setMsg("登录成功");
                     jr.setStatus(0);
+                    return "managePerformance";
                 } else {
                     jr.setData(false);
                     jr.setMsg("该用户不存在");
@@ -61,7 +94,7 @@ public class AdministratorController {
                 jr.setStatus(2);
             }
         }
-        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+        return "adminLogin.html";
     }
 
     /**
@@ -199,20 +232,48 @@ public class AdministratorController {
     @RequestMapping(value = "/addTeacher", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> addTeacher(@RequestBody Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        System.out.println(person);
-        System.out.println(person.getId());
-        System.out.println(person.getName());
-        if (null == person) {
+        if (null == person.getId() || null == person.getName() || null == person.getPassword()) {
             jr.setData(false);
             jr.setMsg("参数为空");
             jr.setStatus(3);
         } else {
+            if (!Number_PATTERN.matcher(person.getId().toString()).matches()) {
+                throw new RuntimeException("工号不符合格式要求");
+            }
+
+            if (!NAME_PATTERN.matcher(person.getName()).matches() || person.getName().length() < 0
+                || person.getName().length() > 20) {
+                throw new RuntimeException("名字不符合格式要求");
+            }
+
+            if (!NAME_PATTERN.matcher(person.getPassword()).matches()
+                || person.getPassword().length() < 0 || person.getPassword().length() > 20) {
+                throw new RuntimeException("密码不符合格式要求");
+            }
+
+            if (!person.getSex().equals("女") && !person.getSex().equals("男")) {
+                throw new RuntimeException("性别不符合要求");
+            }
+
+            if (person.getAge() < 0 || person.getAge() > 120) {
+                throw new RuntimeException("年龄不符合要求");
+            }
+
+            if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
+                && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
+                throw new RuntimeException("职称不符合要求");
+            }
+
             try {
                 int result = administratorService.addTeacher(person);
                 if (1 == result) {
                     jr.setData(true);
                     jr.setMsg("增加教师成功");
                     jr.setStatus(0);
+                } else if (-1 == result) {
+                    jr.setData(false);
+                    jr.setMsg("工号已存在");
+                    jr.setStatus(4);
                 } else {
                     jr.setData(false);
                     jr.setMsg("增加教师失败");
@@ -230,10 +291,16 @@ public class AdministratorController {
     /**
      * 删除教师
      * */
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/deleteTeacher", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> deleteTeacher(List<Long> idList) {
+    public ResponseEntity<JsonResult<Boolean>> deleteTeacher(String idListJson) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        if (null == idList) {
+        List<Long> idList = new ArrayList<Long>();
+        JSONArray jsonArray = JSONArray.fromObject(idListJson); //String转换为json
+        idList = JSONArray.toList(jsonArray, Long.class);
+        System.out.println(idListJson);
+        System.out.println(idList);
+        if (null == idListJson || idListJson.equals("")) {
             jr.setData(false);
             jr.setMsg("未选择要删除的教师");
             jr.setStatus(3);
