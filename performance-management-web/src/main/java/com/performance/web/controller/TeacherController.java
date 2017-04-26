@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -223,7 +224,7 @@ public class TeacherController {
      * 修改教师信息
      * */
     @RequestMapping(value = "/updateTeacherInfo", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updateTeacherInfo(Person person) {
+    public ResponseEntity<JsonResult<Boolean>> updateTeacherInfo(@RequestBody Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
             String result = teacherService.updateTeacherInfo(person);
@@ -252,7 +253,7 @@ public class TeacherController {
      * 教师录入绩效
      * */
     @RequestMapping(value = "/entryPerformance", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> entryPerformance(TeacherPerformance teacherPerformance) {
+    public ResponseEntity<JsonResult<Boolean>> entryPerformance(@RequestBody TeacherPerformance teacherPerformance) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == teacherPerformance) {
             jr.setData(false);

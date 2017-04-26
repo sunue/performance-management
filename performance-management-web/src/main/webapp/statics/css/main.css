@@ -13,6 +13,10 @@ h1.navbar-brand{
 
 
 }
+.infoChose{
+    border:5px solid #666;
+    box-shadow: 6px 6px 5px #666;
+}
 .navbar-inverse .navbar-brand {
 	color: #fff;
 }
@@ -93,4 +97,12 @@ em {
  /*scientificResearch*/
 .scientificResearch, .teachingResearch{
 	display: none;
+}
+
+.waitReviewNum{
+    color: #428bca;
+}
+
+.toCenter{
+    text-align: center;
 }

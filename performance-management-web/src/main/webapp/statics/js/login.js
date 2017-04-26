@@ -1,40 +1,44 @@
 $(function(){
 	var namePass= false;
 	var pwdPass = false;
-	$("#userId").blur(function(){//用户名文本框失去焦点触发验证事件
+	$("#id").blur(function(){//用户名文本框失去焦点触发验证事件
 
-		if(/[a-zA-Z0-9]{3,16}/.test($(this).val())){
-        	$("#userTip").html("<span style='color:green'>输入正确</span>");
+		if(/^[0-9]{6,20}$/.test($(this).val())){
+        	$("#userTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span>输入正确</span>");
         	namePass = true;
         	
         }else{
 
-            $("#userTip").html("<span style='color:red'>请输入3到16位的由字母数字组成的字符串</span>"); 
+            $("#userTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请输入6到20位的数字</span>"); 
 
         }
     });  
     $("#password").blur(function(){//用户密码框失去焦点触发验证事件  
-        if(/[a-zA-Z0-9]{6,16}/.test($(this).val())){
-        	 $("#pswTip").html("<span style='color:green'>输入正确</span>");
+        if(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test($(this).val())){
+        	 $("#pswTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span>输入正确</span>");
         	 pwdPass =true;
 
         }else{
 
-            $("#pswTip").html("<span style='color:red'>请输入6到16位的由字母数字组成的字符串</span>");  
+            $("#pswTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请输入6到20位字母数字的密码，不能为纯英文或者数字</span>");  
 
         }
   
     });
 
 	$("#logoBtn").on("click", function(){
-		$formData={};
+		var $formData={};
+		$("#logoForm").submit(function(event) {
+            return false;
+		});
 		$("#logoForm").find('input').each(function(){$formData[this.name]=this.value});
 	    console.log($formData); 
 	    if(namePass&&pwdPass){
 	    	alert('send ajax!');    	
 	    } 
 	    else{
-	    	alert('no'); 
+	    	$("#tip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>"+请检查您的输入+"</span>"); 
+
 	    }
 		// $.ajax({
 		// 	url:"/gateway_admin/user/login",
@@ -58,6 +62,17 @@ $(function(){
 
 		// 	}
 		// });
+
+	});
+
+	$("#adminLogoBtn").on("click", function(){
+		$("#logoForm").submit(function(event) {
+			if(!namePass&&pwdPass ){
+				$("#tip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请检查您的输入</span>"); 
+				return false;
+			}
+            return true;
+		});
 
 	});
 

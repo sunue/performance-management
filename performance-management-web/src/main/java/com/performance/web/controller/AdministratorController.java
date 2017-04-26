@@ -56,9 +56,19 @@ public class AdministratorController {
         return "performanceRulesManage";
     }
 
-    @RequestMapping(value = "userInfoManage")
+    @RequestMapping(value = "/userInfoManage")
     public String userInfoManage() {
         return "userInfoManage";
+    }
+
+    @RequestMapping(value = "/showTeacherRank")
+    public String showTeacherRank() {
+        return "showTeacherRank";
+    }
+
+    @RequestMapping(value = "/manageCenter")
+    public String manageCenter() {
+        return "manageCenter";
     }
 
     /**
@@ -129,26 +139,41 @@ public class AdministratorController {
     /**
      * 职工注册信息审核
      * */
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/teacherRegisterCheck", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<List<Person>>> teacherRegisterCheck() {
-        JsonResult<List<Person>> jr = new JsonResult<>();
-        List<Person> personList = administratorService.teacherRegisterCheck();
+    public ResponseEntity<JsonPage<List<Person>>> teacherRegisterCheck(Integer pageSize,
+                                                                       Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+
+        Map<String, Object> resultMap = administratorService.teacherRegisterCheck(pSize, pNum);
         try {
-            if (null == personList) {
-                jr.setData(null);
-                jr.setMsg("无待审核教师");
-                jr.setStatus(1);
+            if (null == ((List<Person>) resultMap.get("personList"))) {
+                jp.setData_list((List<Person>) resultMap.get("personList"));
+                jp.setMsg("无待审核教师");
+                jp.setStatus(1);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setTotal((int) resultMap.get("total"));
             } else {
-                jr.setData(personList);
-                jr.setMsg("查询待审核教师成功");
-                jr.setStatus(0);
+                jp.setData_list((List<Person>) resultMap.get("personList"));
+                jp.setMsg("查询待审核教师成功");
+                jp.setStatus(0);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setTotal((int) resultMap.get("toatal"));
             }
         } catch (Exception e) {
-            jr.setData(null);
-            jr.setMsg("系统异常");
-            jr.setStatus(2);
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setStatus(2);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setTotal(0);
         }
-        return new ResponseEntity<JsonResult<List<Person>>>(jr, HttpStatus.OK);
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
     }
 
     /**
@@ -372,7 +397,7 @@ public class AdministratorController {
      * 修改教师信息
      * */
     @RequestMapping(value = "/updateTeacher", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updateTeacher(Person person) {
+    public ResponseEntity<JsonResult<Boolean>> updateTeacher(@RequestBody Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
             int result = administratorService.updateTeacher(person);
@@ -428,7 +453,7 @@ public class AdministratorController {
      * 修改管理员信息 
      * */
     @RequestMapping(value = "/updateAdministratorInfo", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updateAdministratorInfo(Person person) {
+    public ResponseEntity<JsonResult<Boolean>> updateAdministratorInfo(@RequestBody Person person) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
             int result = administratorService.updateAdministratorInfo(person);
@@ -508,27 +533,40 @@ public class AdministratorController {
     /**
      * 待审核教师绩效
      * */
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "/teacherPerformanceCheck", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<List<TeacherPerformance>>> teacherPerformanceCheck() {
-        JsonResult<List<TeacherPerformance>> jr = new JsonResult<List<TeacherPerformance>>();
+    public ResponseEntity<JsonPage<List<TeacherPerformance>>> teacherPerformanceCheck(Integer pageSize,
+                                                                                      Integer pageNum) {
+        JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
         try {
-            List<TeacherPerformance> teacherPerformanceList = administratorService
-                .teacherPerformanceCheck();
-            if (null == teacherPerformanceList) {
-                jr.setData(null);
-                jr.setMsg("查无数据");
-                jr.setStatus(1);
+            Map<String, Object> resultMap = administratorService.teacherPerformanceCheck(pSize,
+                pNum);
+            if (null == (List<TeacherPerformance>) resultMap.get("teacherPerformanceList")) {
+                jp.setData_list(null);
+                jp.setMsg("查无数据");
+                jp.setStatus(1);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setTotal((int) resultMap.get("total"));
             } else {
-                jr.setData(teacherPerformanceList);
-                jr.setMsg("查询待审核绩效成功");
-                jr.setStatus(0);
+                jp.setData_list((List<TeacherPerformance>) resultMap.get("teacherPerformanceList"));
+                jp.setMsg("查询待审核绩效成功");
+                jp.setStatus(0);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setTotal((int) resultMap.get("total"));
             }
         } catch (Exception e) {
-            jr.setData(null);
-            jr.setMsg("系统异常");
-            jr.setStatus(2);
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setStatus(2);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setTotal(0);
         }
-        return new ResponseEntity<JsonResult<List<TeacherPerformance>>>(jr, HttpStatus.OK);
+        return new ResponseEntity<JsonPage<List<TeacherPerformance>>>(jp, HttpStatus.OK);
     }
 
     /**
@@ -585,7 +623,7 @@ public class AdministratorController {
      * 增加科研基础选项
      * */
     @RequestMapping(value = "/addScientificResearchPerformance", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> addScientificResearchPerformance(ScientificResearch scientificResearch) {
+    public ResponseEntity<JsonResult<Boolean>> addScientificResearchPerformance(@RequestBody ScientificResearch scientificResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == scientificResearch) {
             jr.setData(false);
@@ -617,7 +655,7 @@ public class AdministratorController {
      * 增加教研基础选项
      * */
     @RequestMapping(value = "/addTeachingResearchPerformance", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> addTeachingResearchPerformance(TeachingResearch teachingResearch) {
+    public ResponseEntity<JsonResult<Boolean>> addTeachingResearchPerformance(@RequestBody TeachingResearch teachingResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (teachingResearch == null) {
             jr.setData(false);
@@ -711,7 +749,7 @@ public class AdministratorController {
      * 修改科研基础选项
      * */
     @RequestMapping(value = "/updateScientificResearchPerformance", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updateScientificResearchPerformance(ScientificResearch scientificResearch) {
+    public ResponseEntity<JsonResult<Boolean>> updateScientificResearchPerformance(@RequestBody ScientificResearch scientificResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
             int result = administratorService
@@ -737,7 +775,7 @@ public class AdministratorController {
      * 修改教研基础选项
      * */
     @RequestMapping(value = "/updateTeachingResearchPerformance", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updateTeachingResearchPerformance(TeachingResearch teachingResearch) {
+    public ResponseEntity<JsonResult<Boolean>> updateTeachingResearchPerformance(@RequestBody TeachingResearch teachingResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
             int result = administratorService.updateTeachingResearchPerformance(teachingResearch);

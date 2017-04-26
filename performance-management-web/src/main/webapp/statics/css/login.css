@@ -5,7 +5,7 @@ body {
   background-color: #428bca;
 }
 .signin {
-	position: absolute;
+  position: absolute;
   width:400px;
   height:200px;
   left:50%;
@@ -43,11 +43,14 @@ body {
 }
 #logoBtn{
   width: 340px;
-  margin-left: 30px;
+  margin-left: -14px;;
 }
 .reg{
 
   float: right;
   padding:10px;
 
+}
+div#tip {
+    margin-left: 48px;
 }

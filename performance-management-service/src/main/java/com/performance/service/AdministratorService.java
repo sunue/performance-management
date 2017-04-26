@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.performance.persist.domain.Person;
 import com.performance.persist.domain.ScientificResearch;
-import com.performance.persist.domain.TeacherPerformance;
 import com.performance.persist.domain.TeachingResearch;
 
 public interface AdministratorService {
@@ -23,7 +22,7 @@ public interface AdministratorService {
     /**
      * 教师注册审核
      * */
-    public List<Person> teacherRegisterCheck();
+    public Map<String, Object> teacherRegisterCheck(int pageSize, int pageNum);
 
     /**
      * 同意职工注册
@@ -78,7 +77,7 @@ public interface AdministratorService {
     /**
      * 待审核教师绩效
      * */
-    public List<TeacherPerformance> teacherPerformanceCheck();
+    public Map<String, Object> teacherPerformanceCheck(int pageSize, int pageNum);
 
     /**
      * 同意教师绩效录入

@@ -41,29 +41,36 @@
 					<li class="active"><a href="registerReview.html">注册审核</a></li>	
 					<li><a href="performanceRulesManage.html">绩效规则管理</a></li>
 					<li><a href="userInfoManage.html">教职工信息管理</a></li>	
-
+					<li><a href="showTeacherRank.html">查看绩效排名</a></li>
+					<li><a href="manageCenter.html">管理员中心</a></li>	
 				</ul>
 			</div>
 			<div class="col-md-10 column">
+				<div class="foot" id="foot">
+				    <label class="fl select-all">待审核人数：</label>
+				    <span class="waitReviewNum"></span>
+				</div>
 				<div class="infoPart">
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th><input class="check_all check" type="checkbox" />&nbsp;全选</th>
-								<th>类别</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
+								<th>工号</th>
+								<th>姓名</th>
+								<th>性别</th>			
+								<th>年纪</th>
+								<th>职称</th>
+								<th>入教时间</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<td><input class='check_one check' type='checkbox'/></td>
-								<td></td>
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
+							<!-- <tr>
+								<td>12344</td>
+								<td>名字</td>
+								<td>女</td>
+								<td>18</td>
+								<td>讲师</td>
+								<td>2017-03-09</td>
 								<td>
 									<button type='button' class='btn btn-danger btnDeny' >
 										<span class='glyphicon glyphicon-remove' aria-hidden='true'></span> 拒绝
@@ -72,107 +79,22 @@
 										<span class='glyphicon glyphicon-ok' aria-hidden='true'></span> 通过
 									</button>
 								</td>
-							</tr>	
+							</tr> -->
+							
 						</tbody>
 					</table>
 					<ul class="pagination" id="pages">
         
 			        </ul>
 				</div>
-				<div class="foot" id="foot">
-				    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
-				    <button class="btn btn-success frBtn" id="passAll">通过已选</button>
-				</div>
 			</div>
 
 		</div>
-	</div>
-
-
-	<!-- 修改 -->
-		    
-	<div class="modal fade" id="see" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	    <div class="modal-dialog">
-	        <div class="modal-content">
-	            <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-	                    &times;
-	                </button>
-	                <h4 class="modal-title" id="myModalLabel">
-	                    修改URI
-	                </h4>
-	            </div>
-	            <div class="modal-body">
-	                <form class="form-horizontal" role="form" id="editUriForm">
-	                   <div class="form-group">
-							<label for="editProjectId" class="col-sm-3 control-label">对应工程ID</label>	                            
-							<div class="col-sm-9">
-	                            <input type="text" class="form-control" name="editProjectId" id="editProjectId" readonly placeholder="请输入工程ID" required>
-	                        </div>
-	                    </div>
-
-	                    <div class="form-group">
-	                        <label for="editUriId" class="col-sm-3 control-label">uri的id</label>
-	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" name="editUriId" id="editUriId"
-	                                   placeholder="请输入uri的id" required readonly>
-	                        </div>
-	                    </div>
-	                   
-	                    <div class="form-group">
-	                        <label for="editUriAddress" class="col-sm-3 control-label">editUriAddress</label>
-	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" name="editUriAddress" id="editUriAddress"
-	                                   placeholder="请输入uri地址" required>
-	                        </div>
-	                    </div>
-	                    <div class="form-group">
-	                        <label for="editUriStatus" class="col-sm-3 control-label">uri状态</label>
-	                        <div class="col-sm-9">  
-	                            <select class="input-xlarge form-control" name="editUriStatus" id="editUriStatus" placeholder="请选择uri状态" required>
-							        <option value="01">启用</option>
-	                                <option value="02">未启用</option>
-							    </select>
-	                        </div>
-	                    </div>
-
-	                    <div class="form-group">
-	                        <label for="editMethod" class="col-sm-3 control-label">方法</label>
-	                        <div class="col-sm-9">
-	                 
-	                            <select class="input-xlarge form-control" name="editMethod" id="editMethod" placeholder="请选择方法" required>
-							      <option value="GET">GET</option>
-							      <option value="POST">POST</option>
-							      <option value="DELETE">DELETE</option>
-	                              <option value="PUT">PUT</option>
-							    </select>
-	                        </div>
-	                    </div>
-
-	                    <div class="form-group">
-	                        <label for="editTargetUri" class="col-sm-3 control-label">editTargetUri</label>
-	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" name="editTargetUri" id="editTargetUri"
-	                                   placeholder="请输入对应内部的uri" required>
-	                        </div>
-	                    </div>
-	                </form>
-	            </div>
-	            <div class="modal-footer">
-	    
-	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-	                </button>
-	                <button type="submit" class="btn btn-primary" id="editSub">
-	                    提交
-	                </button><span id="tip"> </span>
-	            </div>
-	        </div><!-- /.modal-content -->
-	    </div><!-- /.modal -->
 	</div>
    
 </body>
 	<script src="/statics/js/jquery-1.11.1.min.js"></script>
 	<script src="/statics/js/bootstrap.min.js"></script>
 	<script src="/statics/js/bootstrap-paginator.js"></script>
-	<script src="/statics/js/SubMyPerformance.js"></script>
+	<script src="/statics/js/registerReview.js"></script>
 </html>

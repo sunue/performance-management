@@ -62,15 +62,22 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public List<Person> teacherRegisterCheck() {
+    public Map<String, Object> teacherRegisterCheck(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("grade", 2); //教师
         map.put("status", "2"); //审核中
+        map.put("firstdata", (pageSize - 1) * pageNum);
+        map.put("nums", pageNum);
         List<Person> teacherList = null;
         try {
             teacherList = personDao.selectListByParams(map);
+            int total = personDao.selectCount(map);
+
+            Map<String, Object> resultMap = new HashMap<String, Object>();
             if (teacherList != null && teacherList.size() > 0) {
-                return teacherList;
+                resultMap.put("teacherList", teacherList);
+                resultMap.put("total", total);
+                return resultMap;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -218,13 +225,21 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public List<TeacherPerformance> teacherPerformanceCheck() {
+    public Map<String, Object> teacherPerformanceCheck(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "2");
+        map.put("firstdata", (pageSize - 1) * pageNum);
+        map.put("nums", pageNum);
         try {
             List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
                 .selectListByParams(map);
-            return teacherPerformanceList;
+
+            int total = teacherPerformanceDao.selectCount(map);
+
+            Map<String, Object> resultmap = new HashMap<String, Object>();
+            resultmap.put("teacherPerformanceList", teacherPerformanceList);
+            resultmap.put("total", total);
+            return resultmap;
         } catch (Exception e) {
             e.printStackTrace();
         }

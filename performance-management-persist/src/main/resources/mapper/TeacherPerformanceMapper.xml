@@ -56,6 +56,9 @@
   	<include refid="Base_Column_List" />
     from teacher_performance
     <include refid="selectByParamsWhere"></include>
+    <if test=" firstdata !=null and nums != null">
+    	limit ${firstdata},${nums}
+    </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from teacher_performance
