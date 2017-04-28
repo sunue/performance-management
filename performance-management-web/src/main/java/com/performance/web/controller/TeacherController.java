@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.performance.persist.common.JsonPage;
@@ -30,6 +31,16 @@ public class TeacherController {
     @Autowired
     private TeacherService teacherService;
 
+    @RequestMapping(value = "/showMyPerformance")
+    private String showMyPerformance() {
+        return "showMyPerformance";
+    }
+
+    @RequestMapping(value = "/editMyInfomation")
+    private String editMyInfomation() {
+        return "editMyInfomation";
+    }
+
     /**
      * 教师注册
      * */
@@ -42,35 +53,35 @@ public class TeacherController {
             jr.setData(false);
         } else {
             Person person = JSON.parseObject("teacherJSON", Person.class);
-
-            if (!Number_PATTERN.matcher(person.getId().toString()).matches()) {
-                throw new RuntimeException("工号不符合格式要求");
-            }
-
-            if (!NAME_PATTERN.matcher(person.getName()).matches() || person.getName().length() < 0
-                || person.getName().length() > 20) {
-                throw new RuntimeException("名字不符合格式要求");
-            }
-
-            if (!NAME_PATTERN.matcher(person.getPassword()).matches()
-                || person.getPassword().length() < 0 || person.getPassword().length() > 20) {
-                throw new RuntimeException("密码不符合格式要求");
-            }
-
-            if (!person.getSex().equals("女") && !person.getSex().equals("男")) {
-                throw new RuntimeException("性别不符合要求");
-            }
-
-            if (person.getAge() < 0 || person.getAge() > 120) {
-                throw new RuntimeException("年龄不符合要求");
-            }
-
-            if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
-                && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
-                throw new RuntimeException("职称不符合要求");
-            }
-
             try {
+
+                if (!Number_PATTERN.matcher(person.getId().toString()).matches()) {
+                    throw new RuntimeException("参数错误：工号不符合格式要求");
+                }
+
+                if (!NAME_PATTERN.matcher(person.getName()).matches()
+                    || person.getName().length() < 0 || person.getName().length() > 20) {
+                    throw new RuntimeException("参数错误：名字不符合格式要求");
+                }
+
+                if (!NAME_PATTERN.matcher(person.getPassword()).matches()
+                    || person.getPassword().length() < 0 || person.getPassword().length() > 20) {
+                    throw new RuntimeException("参数错误：密码不符合格式要求");
+                }
+
+                if (!person.getSex().equals("女") && !person.getSex().equals("男")) {
+                    throw new RuntimeException("参数错误：性别不符合要求");
+                }
+
+                if (person.getAge() < 0 || person.getAge() > 120) {
+                    throw new RuntimeException("参数错误：年龄不符合要求");
+                }
+
+                if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
+                    && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
+                    throw new RuntimeException("参数错误：职称不符合要求");
+                }
+
                 Boolean result = teacherService.saveRegisterPerson(person);
                 if (true == result) {
                     jr.setStatus(0);
@@ -82,8 +93,13 @@ public class TeacherController {
                     jr.setData(result);
                 }
             } catch (Exception e) {
-                jr.setStatus(2);
-                jr.setMsg("系统异常");
+                if (e.getMessage().startsWith("参数错误")) {
+                    jr.setStatus(4);
+                    jr.setMsg(e.getMessage());
+                } else {
+                    jr.setStatus(2);
+                    jr.setMsg("系统异常");
+                }
                 jr.setData(false);
             }
 
@@ -125,8 +141,14 @@ public class TeacherController {
     /**
      * 教师登录
      * */
-    @RequestMapping(value = "/teacherLogin", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password) {
+    @RequestMapping(value = "/teacherLogin", method = RequestMethod.GET)
+    //public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password) {
+    public ModelAndView teacherLogin(Long id, String password) {
+
+        ModelAndView mv = new ModelAndView();
+        //mv.setViewName("hhh");
+        //mv.addObject("msg", "从。。。传回视图的数据");
+
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == id || null == password) {
             jr.setData(false);
@@ -146,6 +168,8 @@ public class TeacherController {
                     jr.setStatus(0);
                     jr.setMsg("登录成功");
                     jr.setData(true);
+                    System.out.println("成功");
+                    mv.setViewName("SubMyPerformance");
                 }
             } catch (Exception e) {
                 jr.setStatus(2);
@@ -153,7 +177,8 @@ public class TeacherController {
                 jr.setData(false);
             }
         }
-        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+        // return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+        return mv;
     }
 
     /**
@@ -288,17 +313,18 @@ public class TeacherController {
     public ResponseEntity<JsonPage<List<TeacherPerformance>>> getCheckPerformance(Long id,
                                                                                   Integer pageSize,
                                                                                   Integer pageNum) {
+
         JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
         if (null == id) {
             jp.setData_list(null);
             jp.setMsg("参数为空");
-            jp.setPageNum(pageNum);
-            jp.setPageSize(pageSize);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
             jp.setStatus(3);
             jp.setTotal(0);
         } else {
-            int pSize = pageSize == null ? 20 : pageSize;
-            int pNum = pageNum == null ? 1 : pageNum;
             try {
                 Map<String, Object> map = teacherService.getCheckPerformance(id);
                 if (null == map.get("teacherPerformanceList")) {
@@ -307,14 +333,14 @@ public class TeacherController {
                     jp.setPageNum(pNum);
                     jp.setPageSize(pSize);
                     jp.setStatus(1);
-                    jp.setTotal(0);
+                    jp.setTotal((int) map.get("total"));
                 } else {
                     jp.setData_list((List<TeacherPerformance>) map.get("teacherPerformanceList"));
                     jp.setMsg("查询待审核绩效成功");
                     jp.setPageNum(pNum);
                     jp.setPageSize(pSize);
                     jp.setStatus(0);
-                    jp.setTotal((int) map.get("count"));
+                    jp.setTotal((int) map.get("total"));
                 }
             } catch (Exception e) {
                 jp.setData_list(null);
@@ -354,7 +380,7 @@ public class TeacherController {
                     jp.setPageNum(pNum);
                     jp.setPageSize(pSize);
                     jp.setStatus(1);
-                    jp.setTotal(0);
+                    jp.setTotal((int) map.get("count"));
                 } else {
                     jp.setData_list((List<Person>) map.get("personList"));
                     jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
@@ -401,7 +427,7 @@ public class TeacherController {
                     jp.setPageNum(pNum);
                     jp.setPageSize(pSize);
                     jp.setStatus(1);
-                    jp.setTotal(0);
+                    jp.setTotal((int) map.get("count"));
                 } else {
                     jp.setData_list((List<Person>) map.get("personList"));
                     jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
@@ -448,7 +474,7 @@ public class TeacherController {
                     jp.setPageNum(pNum);
                     jp.setPageSize(pSize);
                     jp.setStatus(1);
-                    jp.setTotal(0);
+                    jp.setTotal((int) map.get("count"));
                 } else {
                     jp.setData_list((List<Person>) map.get("personList"));
                     jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");

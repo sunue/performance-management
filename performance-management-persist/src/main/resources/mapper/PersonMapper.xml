@@ -75,7 +75,8 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByIdList" parameterType="java.util.List">
-  	delete from person
+  	update person
+  	set status="1"
   	where id in
   	<foreach collection="list" item="id" index="index" open="(" separator="," close=")">
   		#{id,jdbcType=BIGINT}

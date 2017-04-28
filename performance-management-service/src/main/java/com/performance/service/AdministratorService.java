@@ -82,12 +82,12 @@ public interface AdministratorService {
     /**
      * 同意教师绩效录入
      * */
-    public int teacherPerformanceAgree(Long id);
+    public int teacherPerformanceAgree(Long virtualId);
 
     /**
      * 拒绝教师绩效录入
      * */
-    public int teacherPerformanceFail(Long id);
+    public int teacherPerformanceFail(Long virtualId);
 
     /**
      * 增加科研基础选项
@@ -102,12 +102,12 @@ public interface AdministratorService {
     /**
      * 删除科研基础选项
      * */
-    public int deleteScientificResearchPerformance(List<Long> idList);
+    public int deleteScientificResearchPerformance(List<Long> virtualIdList);
 
     /**
      * 删除教研基础选项
      * */
-    public int deteleTeachingResearchPerformance(List<Long> idList);
+    public int deteleTeachingResearchPerformance(List<Long> virtualIdList);
 
     /**
      * 修改科研基础选项

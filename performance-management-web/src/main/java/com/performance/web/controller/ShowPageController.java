@@ -12,9 +12,4 @@ public class ShowPageController {
         return "1";
     }
 
-    @RequestMapping(value = "/index")
-    public String index() {
-        return "index";
-    }
-
 }

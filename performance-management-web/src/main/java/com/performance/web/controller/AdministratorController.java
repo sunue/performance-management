@@ -92,6 +92,7 @@ public class AdministratorController {
                     jr.setData(true);
                     jr.setMsg("登录成功");
                     jr.setStatus(0);
+                    System.out.println("成功");
                     return "managePerformance";
                 } else {
                     jr.setData(false);
@@ -150,20 +151,20 @@ public class AdministratorController {
 
         Map<String, Object> resultMap = administratorService.teacherRegisterCheck(pSize, pNum);
         try {
-            if (null == ((List<Person>) resultMap.get("personList"))) {
-                jp.setData_list((List<Person>) resultMap.get("personList"));
+            if (null == resultMap.get("teacherList")) {
+                jp.setData_list(null);
                 jp.setMsg("无待审核教师");
                 jp.setStatus(1);
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setTotal((int) resultMap.get("total"));
             } else {
-                jp.setData_list((List<Person>) resultMap.get("personList"));
+                jp.setData_list((List<Person>) resultMap.get("teacherList"));
                 jp.setMsg("查询待审核教师成功");
                 jp.setStatus(0);
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
-                jp.setTotal((int) resultMap.get("toatal"));
+                jp.setTotal((int) resultMap.get("total"));
             }
         } catch (Exception e) {
             jp.setData_list(null);
@@ -262,34 +263,34 @@ public class AdministratorController {
             jr.setMsg("参数为空");
             jr.setStatus(3);
         } else {
-            if (!Number_PATTERN.matcher(person.getId().toString()).matches()) {
-                throw new RuntimeException("工号不符合格式要求");
-            }
-
-            if (!NAME_PATTERN.matcher(person.getName()).matches() || person.getName().length() < 0
-                || person.getName().length() > 20) {
-                throw new RuntimeException("名字不符合格式要求");
-            }
-
-            if (!NAME_PATTERN.matcher(person.getPassword()).matches()
-                || person.getPassword().length() < 0 || person.getPassword().length() > 20) {
-                throw new RuntimeException("密码不符合格式要求");
-            }
-
-            if (!person.getSex().equals("女") && !person.getSex().equals("男")) {
-                throw new RuntimeException("性别不符合要求");
-            }
-
-            if (person.getAge() < 0 || person.getAge() > 120) {
-                throw new RuntimeException("年龄不符合要求");
-            }
-
-            if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
-                && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
-                throw new RuntimeException("职称不符合要求");
-            }
-
             try {
+                if (!Number_PATTERN.matcher(person.getId().toString()).matches()) {
+                    throw new RuntimeException("参数错误：工号不符合格式要求");
+                }
+
+                if (!NAME_PATTERN.matcher(person.getName()).matches()
+                    || person.getName().length() < 0 || person.getName().length() > 20) {
+                    throw new RuntimeException("参数错误：名字不符合格式要求");
+                }
+
+                if (!NAME_PATTERN.matcher(person.getPassword()).matches()
+                    || person.getPassword().length() < 0 || person.getPassword().length() > 20) {
+                    throw new RuntimeException("参数错误：密码不符合格式要求");
+                }
+
+                if (!person.getSex().equals("女") && !person.getSex().equals("男")) {
+                    throw new RuntimeException("参数错误：性别不符合要求");
+                }
+
+                if (person.getAge() < 0 || person.getAge() > 120) {
+                    throw new RuntimeException("参数错误：年龄不符合要求");
+                }
+
+                if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
+                    && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
+                    throw new RuntimeException("参数错误：职称不符合要求");
+                }
+
                 int result = administratorService.addTeacher(person);
                 if (1 == result) {
                     jr.setData(true);
@@ -305,9 +306,14 @@ public class AdministratorController {
                     jr.setStatus(1);
                 }
             } catch (Exception e) {
+                if (e.getMessage().startsWith("参数错误")) {
+                    jr.setStatus(4);
+                    jr.setMsg(e.getMessage());
+                } else {
+                    jr.setStatus(2);
+                    jr.setMsg("系统异常");
+                }
                 jr.setData(false);
-                jr.setMsg("系统异常");
-                jr.setStatus(2);
             }
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
@@ -321,18 +327,18 @@ public class AdministratorController {
     public ResponseEntity<JsonResult<Boolean>> deleteTeacher(String idListJson) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         List<Long> idList = new ArrayList<Long>();
-        JSONArray jsonArray = JSONArray.fromObject(idListJson); //String转换为json
-        idList = JSONArray.toList(jsonArray, Long.class);
         System.out.println(idListJson);
-        System.out.println(idList);
-        if (null == idListJson || idListJson.equals("")) {
+        if (null == idListJson || "".equals(idListJson)) {
             jr.setData(false);
             jr.setMsg("未选择要删除的教师");
             jr.setStatus(3);
         } else {
             try {
+                JSONArray jsonArray = JSONArray.fromObject(idListJson); //String转换为json
+                idList = JSONArray.toList(jsonArray, Long.class);
+                System.out.println(idList);
                 int result = administratorService.deleteTeacher(idList);
-                if (1 == result) {
+                if (idList.size() == result) {
                     jr.setData(true);
                     jr.setMsg("删除成功");
                     jr.setStatus(0);
@@ -371,7 +377,7 @@ public class AdministratorController {
                 jp.setData_list(null);
                 jp.setMsg("查无数据");
                 jp.setStatus(1);
-                jp.setTotal(0);
+                jp.setTotal((int) resultMap.get("total"));
                 jp.setPageSize(pSize);
                 jp.setPageNum(pNum);
             } else {
@@ -573,23 +579,33 @@ public class AdministratorController {
      * 同意教师绩效录入
      * */
     @RequestMapping(value = "teacherPerformanceAgree", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long id) {
+    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long virtualId) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        int result = administratorService.teacherPerformanceAgree(id);
-        try {
-            if (1 == result) {
-                jr.setData(true);
-                jr.setMsg("同意教师绩效录入成功");
-                jr.setStatus(0);
-            } else {
-                jr.setData(false);
-                jr.setMsg("同意教师绩效录入失败");
-                jr.setStatus(1);
-            }
-        } catch (Exception e) {
+        if (null == virtualId) {
             jr.setData(false);
-            jr.setMsg("系统异常");
-            jr.setStatus(2);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = administratorService.teacherPerformanceAgree(virtualId);
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("同意教师绩效录入成功");
+                    jr.setStatus(0);
+                } else if (-1 == result) {
+                    jr.setData(false);
+                    jr.setMsg("查询无该条绩效");
+                    jr.setStatus(4);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("同意教师绩效录入失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
@@ -597,24 +613,34 @@ public class AdministratorController {
     /**
      * 拒绝教师绩效录入
      * */
-    @RequestMapping(value = "teachersPerformanceFail", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceFail(Long id) {
+    @RequestMapping(value = "/teacherPerformanceFail", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceFail(Long virtualId) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        int result = administratorService.teacherPerformanceFail(id);
-        try {
-            if (1 == result) {
-                jr.setData(true);
-                jr.setMsg("拒绝教师绩效录入成功");
-                jr.setStatus(0);
-            } else {
-                jr.setData(false);
-                jr.setMsg("拒绝教师绩效录入失败");
-                jr.setStatus(1);
-            }
-        } catch (Exception e) {
+        if (null == virtualId) {
             jr.setData(false);
-            jr.setMsg("系统异常");
-            jr.setStatus(2);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            int result = administratorService.teacherPerformanceFail(virtualId);
+            try {
+                if (1 == result) {
+                    jr.setData(true);
+                    jr.setMsg("拒绝教师绩效录入成功");
+                    jr.setStatus(0);
+                } else if (-1 == result) {
+                    jr.setData(false);
+                    jr.setMsg("查询无该条绩效");
+                    jr.setStatus(4);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("拒绝教师绩效录入失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
@@ -686,16 +712,20 @@ public class AdministratorController {
      * 删除科研基础选项
      * */
     @RequestMapping(value = "/deleteScientificResearchPerformance", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> deleteScientificResearchPerformance(List<Long> idList) {
+    public ResponseEntity<JsonResult<Boolean>> deleteScientificResearchPerformance(String virtualIdListJson) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        if (null == idList) {
+        List<Long> virtualIdList = new ArrayList<Long>();
+        if (null == virtualIdListJson || "".equals(virtualIdListJson)) {
             jr.setData(false);
             jr.setMsg("未选择要删除的项");
             jr.setStatus(3);
         } else {
             try {
-                int result = administratorService.deleteScientificResearchPerformance(idList);
-                if (1 == result) {
+                JSONArray jsonArray = JSONArray.fromObject(virtualIdListJson); //String转换为json
+                virtualIdList = JSONArray.toList(jsonArray, Long.class);
+                int result = administratorService
+                    .deleteScientificResearchPerformance(virtualIdList);
+                if (virtualIdList.size() == result) {
                     jr.setData(true);
                     jr.setMsg("删除科研基础选项成功");
                     jr.setStatus(0);
@@ -717,16 +747,19 @@ public class AdministratorController {
      * 删除教研基础选项
      * */
     @RequestMapping(value = "/deteleTeachingResearchPerformance", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> deteleTeachingResearchPerformance(List<Long> idList) {
+    public ResponseEntity<JsonResult<Boolean>> deteleTeachingResearchPerformance(String virtualIdListJson) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        if (null == idList) {
+        List<Long> virtualIdList = new ArrayList<Long>();
+        if (null == virtualIdListJson || "".equals(virtualIdListJson)) {
             jr.setData(false);
             jr.setMsg("未选择要删除的项");
             jr.setStatus(3);
         } else {
             try {
-                int result = administratorService.deteleTeachingResearchPerformance(idList);
-                if (1 == result) {
+                JSONArray jsonArray = JSONArray.fromObject(virtualIdListJson); //String转换为json
+                virtualIdList = JSONArray.toList(jsonArray, Long.class);
+                int result = administratorService.deteleTeachingResearchPerformance(virtualIdList);
+                if (virtualIdList.size() == result) {
                     jr.setData(true);
                     jr.setMsg("删除教研基础选项成功");
                     jr.setStatus(0);
@@ -813,14 +846,14 @@ public class AdministratorController {
                 jp.setData_list(null);
                 jp.setMsg("查无科研基础选项");
                 jp.setStatus(1);
-                jp.setTotal(0);
+                jp.setTotal((int) resultMap.get("total"));
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
             } else {
                 jp.setData_list((List<ScientificResearch>) resultMap.get("scientificResearchList"));
                 jp.setMsg("查询科研基础选项成功");
                 jp.setStatus(0);
-                jp.setTotal((int) resultMap.get("count"));
+                jp.setTotal((int) resultMap.get("total"));
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
             }
@@ -852,13 +885,13 @@ public class AdministratorController {
                 jp.setData_list(null);
                 jp.setMsg("查无教研基础选项");
                 jp.setStatus(1);
-                jp.setTotal(0);
+                jp.setTotal((int) resultMap.get("total"));
                 jp.setPageSize(pSize);
                 jp.setPageNum(pNum);
             } else {
                 jp.setData_list((List<TeachingResearch>) resultMap.get("teachingResearchList"));
                 jp.setMsg("查询教研基础选项成功");
-                jp.setTotal((int) resultMap.get("count"));
+                jp.setTotal((int) resultMap.get("total"));
                 jp.setStatus(0);
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);

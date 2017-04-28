@@ -47,7 +47,7 @@
   </select>
   <select id="selectCount" parameterType="java.util.Map" resultType="java.lang.Integer">
   	select 
-  	<include refid="Base_Column_List" />
+  	count(*)
     from teacher_performance
     <include refid="selectByParamsWhere"></include>
   </select>

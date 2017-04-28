@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.performance.persist.dao.TeachingResearchMapper" >
+<mapper namespace="com.performance.persist.dao.TeachingResearchDao" >
   <resultMap id="BaseResultMap" type="com.performance.persist.domain.TeachingResearch" >
     <id column="virtual_id" property="virtualId" jdbcType="BIGINT" />
     <result column="tea_content" property="teaContent" jdbcType="VARCHAR" />
@@ -63,8 +63,8 @@
   	update teaching_research
   	set status="1"
   	where virtual_id in 
-  	<foreach collection="list" item="virtual_id" index="index" open="(" separator="," close=")">
-  		#{virtualId,jdbcType=BIGINT}
+  	<foreach collection="list" item="id" index="index" open="(" separator="," close=")">
+  		#{id,jdbcType=BIGINT}
   	</foreach> 
   </delete>
   <insert id="insert" parameterType="com.performance.persist.domain.TeachingResearch" >

@@ -66,23 +66,24 @@ public class AdministratorServiceImpl implements AdministratorService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("grade", 2); //教师
         map.put("status", "2"); //审核中
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
         List<Person> teacherList = null;
+        int total = 0;
         try {
             teacherList = personDao.selectListByParams(map);
-            int total = personDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            if (teacherList != null && teacherList.size() > 0) {
-                resultMap.put("teacherList", teacherList);
-                resultMap.put("total", total);
-                return resultMap;
-            }
+            total = personDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (teacherList != null && teacherList.size() > 0) {
+            resultMap.put("teacherList", teacherList);
+        } else {
+            resultMap.put("teacherList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
     @Override
@@ -137,7 +138,12 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public int deleteTeacher(List<Long> idList) {
         try {
-            int result = personDao.deleteByIdList(idList);
+            int result = personDao.deleteByIdList(idList); //删除教师
+
+            /**
+             * 删除该教师的绩效
+             * */
+
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,8 +234,8 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Map<String, Object> teacherPerformanceCheck(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "2");
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
         try {
             List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
                 .selectListByParams(map);
@@ -247,12 +253,20 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int teacherPerformanceAgree(Long id) {
+    public int teacherPerformanceAgree(Long virtualId) {
         TeacherPerformance teacherPerformance = new TeacherPerformance();
-        teacherPerformance.setId(id);
+        teacherPerformance.setVirtualId(virtualId);
         teacherPerformance.setStatus("0");
         try {
+            TeacherPerformance temp = teacherPerformanceDao.selectByPrimaryKey(virtualId);
+            if (null == temp) {
+                return -1;
+            }
             int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
+            /**
+             * 增加该教师相应的科研或教研分数
+             * */
+
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,11 +275,15 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int teacherPerformanceFail(Long id) {
+    public int teacherPerformanceFail(Long virtualId) {
         TeacherPerformance teacherPerformance = new TeacherPerformance();
-        teacherPerformance.setId(id);
+        teacherPerformance.setVirtualId(virtualId);
         teacherPerformance.setStatus("3"); //未通过
         try {
+            TeacherPerformance temp = teacherPerformanceDao.selectByPrimaryKey(virtualId);
+            if (null == temp) {
+                return -1;
+            }
             int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
             return result;
         } catch (Exception e) {
@@ -276,6 +294,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public int addScientificResearchPerformance(ScientificResearch scientificResearch) {
+        scientificResearch.setStatus("0");
         try {
             int result = scientificResearchDao.insertSelective(scientificResearch);
             return result;
@@ -287,6 +306,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public int addTeachingResearchPerformance(TeachingResearch teachingResearch) {
+        teachingResearch.setStatus("0");
         try {
             int result = teachingResearchDao.insertSelective(teachingResearch);
             return result;
@@ -297,9 +317,9 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int deleteScientificResearchPerformance(List<Long> idList) {
+    public int deleteScientificResearchPerformance(List<Long> virtualIdList) {
         try {
-            int result = scientificResearchDao.deleteByIdList(idList);
+            int result = scientificResearchDao.deleteByIdList(virtualIdList);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -308,9 +328,9 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int deteleTeachingResearchPerformance(List<Long> idList) {
+    public int deteleTeachingResearchPerformance(List<Long> virtualIdList) {
         try {
-            int result = teachingResearchDao.deleteByIdList(idList);
+            int result = teachingResearchDao.deleteByIdList(virtualIdList);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -344,43 +364,48 @@ public class AdministratorServiceImpl implements AdministratorService {
     public Map<String, Object> getScientificResearchPerformance(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "0");
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
+        List<ScientificResearch> scientificResearchList = null;
+        int total = 0;
         try {
-            List<ScientificResearch> scientificResearchList = scientificResearchDao
-                .selectListByParams(map);
-            int count = scientificResearchDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("scientificResearchList", scientificResearchList);
-            resultMap.put("count", count);
-            return resultMap;
+            scientificResearchList = scientificResearchDao.selectListByParams(map);
+            total = scientificResearchDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
-
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != scientificResearchList && scientificResearchList.size() > 0) {
+            resultMap.put("scientificResearchList", scientificResearchList);
+        } else {
+            resultMap.put("scientificResearchList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
     @Override
     public Map<String, Object> getTeachingResearchPerformance(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "0");
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
+        List<TeachingResearch> teachingResearchList = null;
+        int total = 0;
         try {
-            List<TeachingResearch> teachingResearchList = teachingResearchDao
-                .selectListByParams(map);
-            int count = teachingResearchDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("teachingResearchList", teachingResearchList);
-            map.put("count", count);
-            return resultMap;
+            teachingResearchList = teachingResearchDao.selectListByParams(map);
+            total = teachingResearchDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != teachingResearchList && teachingResearchList.size() > 0) {
+            resultMap.put("teachingResearchList", teachingResearchList);
+        } else {
+            resultMap.put("teachingResearchList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
 }

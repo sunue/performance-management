@@ -129,8 +129,8 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Map<String, Object> totalRank(Long id, int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
         try {
             List<Person> personList = personDao.selectListByTotalRank(map);
             int rank = personDao.selectRankByTotal(id);
@@ -150,8 +150,8 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Map<String, Object> scientificResearchRank(Long id, int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
         try {
             List<Person> personList = personDao.selectListByScientificResearch(map);
             int rank = personDao.selectRankByScientificResearch(id);
@@ -171,8 +171,8 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("firstdata", (pageSize - 1) * pageNum);
-        map.put("nums", pageNum);
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
         try {
             List<Person> personList = personDao.selectListByTeachingResearch(map);
             int rank = personDao.selectRankByTeachingResearch(id);
@@ -194,19 +194,22 @@ public class TeacherServiceImpl implements TeacherService {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("status", "2");
+        List<TeacherPerformance> teacherPerformanceList = null;
+        int total = 0;
         try {
-            List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
-                .selectListByParams(map);
-            int count = teacherPerformanceDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("teacherPerformanceList", teacherPerformanceList);
-            resultMap.put("count", count);
-            return resultMap;
+            teacherPerformanceList = teacherPerformanceDao.selectListByParams(map);
+            total = teacherPerformanceDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != teacherPerformanceList && teacherPerformanceList.size() > 0) {
+            resultMap.put("teacherPerformanceList", teacherPerformanceList);
+        } else {
+            resultMap.put("teacherPerformanceList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
 }
