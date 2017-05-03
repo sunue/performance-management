@@ -38,8 +38,8 @@
 			<div class="col-md-2 column leftNav">
 				<ul class="nav nav-pills nav-stacked">
 					<li class="active"><a href="SubMyPerformance.html">提交我的绩效</a></li>
-					<li><a href="showMyPerformance.html">查看我的绩效</a></li>	
-					<li><a href="editMyInfomation.html">修改我的信息</a></li>			
+					<li><a href="showMyPerformance.html">查看我的绩效</a></li>
+					<li><a href="editMyInfomation.html">修改我的信息</a></li>				
 				</ul>
 			</div>
 			<div class="col-md-10 column">
@@ -49,9 +49,9 @@
 							<thead>
 								<tr>
 									<th>类别</th>
-									<th>1</th>
-									<th>2</th>
-									<th>3</th>
+									<th>内容</th>
+									<th>具体工作</th>
+									<th>等级</th>
 									<th>操作</th>
 								</tr>
 							</thead>
@@ -63,23 +63,25 @@
 									</td>
 									<td>
 										<select id="status" name="status" class="input-xlarge form-control " >
-											<option value="01">启用</option>
-											<option value="02">未启用</option>
-											<option value="">全部</option>      
+											<option value="01">科研获奖</option>
+											<option value="02">科研项目与经费</option>
+											<option value="03">技术创新成果</option>
+											<option value="04">论文著作</option>  
+											<option value="05">技术创新成果</option>      
 										</select>
 									</td>
 									<td>
 										<select id="status" name="status" class="input-xlarge form-control " >
-											<option value="01">启用</option>
-											<option value="02">未启用</option>
-											<option value="">全部</option>      
+											<option value="01">国家自然科学奖/国家技术发明奖/国家科技进步奖/国际科学技术合作奖</option>
+											<option value="02">国家星火奖/教育部高等学校科学研究优秀成果奖</option>
+											<option value="">省科学技术奖（含军队科技进步奖/国防科技奖）</option>      
 										</select>
 									</td>
 									<td>
 										<select id="status" name="status" class="input-xlarge form-control " >
-											<option value="01">启用</option>
-											<option value="02">未启用</option>
-											<option value="">全部</option>      
+											<option value="01">特等奖</option>
+											<option value="02">一等奖</option>
+											<option value="">二等奖</option>      
 										</select>
 									</td>
 									<td>
@@ -129,16 +131,17 @@
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
-								<th><input class="check_all check" type="checkbox" />&nbsp;全选</th>
+								<!-- <th><input class="check_all check" type="checkbox" />&nbsp;全选</th> -->
 								<th>类别</th>
-								<th>1</th>
-								<th>2</th>
-								<th>3</th>
+								<th>内容</th>
+								<th>具体工作</th>
+								<th>等级</th>
+								<th>状态</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
+							<!-- <tr>
 								<td><input class='check_one check' type='checkbox'/></td>
 								<td></td>
 								<td>1</td>
@@ -146,13 +149,13 @@
 								<td>3</td>
 								<td>
 									<button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#editProject'>
-										<span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看并修改 
+										<span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看
 									</button> 
 									<button type='button' class='btn btn-danger btnDel' >
 										<span class='glyphicon glyphicon-minus' aria-hidden='true'></span> 删除 
 									</button>
 								</td>
-							</tr>	
+							</tr>	 -->
 						</tbody>
 					</table>
 					<ul class="pagination" id="pages">

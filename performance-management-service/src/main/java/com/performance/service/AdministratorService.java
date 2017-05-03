@@ -15,6 +15,11 @@ public interface AdministratorService {
     public Boolean administratorLogin(Map<String, Object> map);
 
     /**
+     * 获取管理员姓名
+     * */
+    public String getAdministratorName(Map<String, Object> map);
+
+    /**
      * 教师注册审核人数
      * */
     public int teacherRegisterCheckSum();
@@ -82,7 +87,7 @@ public interface AdministratorService {
     /**
      * 同意教师绩效录入
      * */
-    public int teacherPerformanceAgree(Long virtualId);
+    public int teacherPerformanceAgree(Long virtualId, Long id);
 
     /**
      * 拒绝教师绩效录入

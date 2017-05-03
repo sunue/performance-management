@@ -55,6 +55,11 @@
   	from scientific_research
   	<include refid="selectByParamsWhere"></include>
   </select>
+  <select id="getScore" parameterType="java.util.Map">
+  	select sci_score
+  	from scientific_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from scientific_research
     where virtual_id = #{virtualId,jdbcType=BIGINT}

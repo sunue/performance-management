@@ -1,8 +1,10 @@
 $(function(){
-	var passed =[false, false, false, false, false, false, false,false];
+	var passed =[false, false, false, false, false, false, false,false,false];
 	var sendData ={};
+    var codeNum =createCode(6);
+     $("#checkCode").html(codeNum );
 
-	$(".idNum").blur(function(){
+	$(".id").blur(function(){
 
 		if(/^[0-9]{6,20}$/.test($(this).val())){
         	$(".idTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
@@ -64,12 +66,12 @@ $(function(){
         }
     });
     $(".password").blur(function(){
-		if(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/.test($(this).val())){
+		if(/^[a-zA-Z0-9]{6,20}$/.test($(this).val())){
         	$(".passwordTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
         	passed[6] = true;
         }else{
 			passed[6] = false;
-            $(".passwordTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请输入6到20位的密码，不能为纯英文或者数字</span>"); 
+            $(".passwordTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请输入6到20位字母数字的密码</span>"); 
         }
     });
     $(".password2").blur(function(){
@@ -92,6 +94,27 @@ $(function(){
 		
     });
 
+     $("#checkCode").on("click", function(){
+        var showCode = createCode(6)
+        $(this).html(showCode );
+        $(this).attr("class","code");
+        codeNum = showCode;
+      
+    });
+    $(".testWord").blur(function(){
+        if($(".testWord").val() === codeNum){
+            passed[8] = true;
+            $(".testWordTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
+
+
+        }
+        else{
+             passed[8] = false;
+             $(".testWordTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>验证码输入错误</span>");
+        }
+    });
+
+
     $("#sub").on("click", function(){
     	var isTruePass = true;
     	// 取消
@@ -104,50 +127,64 @@ $(function(){
 	       	}
        }
        if (isTruePass) {
-       	// http://127.0.0.1:8080/performance-management-web/teacher/teacherRegister
-       	var askAddress ="http://127.0.0.1:8080/performance-management-web/teacher/teacherRegister";
+       	var askAddress ="http://localhost:8080/teacher/teacherRegister";
        	$("form").find('input,select').each(function(){sendData[this.name]=this.value});
        	console.log(sendData);
-       	// $.ajax(
-        //         {
-        //             url: askAddress,
-        //             type: "post",
-        //             data: JSON.stringify(sendData),
-        //             dataType:"json",
-        //             contentType: "application/json; charset=UTF-8",
-        //             success:function(result)
-        //             {
-        //                 if (result.status ==0) 
-        //                 {
-        //                     console.log("添加成功"+result.msg);
-        //                     alert(result.msg); 
-        //                     $('#addList').modal('hide');
-        //                     location.reload();                           
-        //                 }
-        //                 else
-        //                 {
-        //                     console.log(result.msg);
-        //                     alert(result.msg);
-        //                     $('#addList').modal('hide');
-        //                     location.reload();
-        //                 }
+        delete sendData.testWord;
+        delete sendData.password2;
+        delete sendData.admissionTime;
+        sendData.admissionTime ="";
+        
+        sendData.scientificResearchScore ="";
+        sendData.teachingResearchScore ="";
+        sendData.status="";
+        ssendData.grade = 1;
+       	$.ajax(
+                {
+                    url: askAddress,
+                    type: "post",
+                    data: JSON.stringify(data),
+                    dataType:"json",
+                    contentType: "application/json; charset=UTF-8",
+                    success:function(result)
+                    {
+                        if (result.status ==0) 
+                        {
+                            console.log("添加成功"+result.msg);
+                                               
+                        }
+                        else
+                        {
+                            console.log(result.msg);
+                        }
          
-        //             },
+                    },
                     
-        //             error:function(XMLHttpRequest, textStatus, errorThrown)
-        //             {
-        //                 console.log('错误'+errorThrown);
-        //             }
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }
                     
-        // });
+        });
        }
        else{
-       	alert("有不通过的 ");
+       	alert("有不通过的，请检查输入 ");
        }
 
 
 
     });
+
+
+    function createCode(n){
+        var rdm ="";
+        for(var i=0; i<n; i++){
+            rdm += Math.floor(Math.random() * 10);
+
+        }
+        return rdm;
+
+    }
 
 
 

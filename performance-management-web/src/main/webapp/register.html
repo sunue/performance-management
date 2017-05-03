@@ -32,7 +32,7 @@
                             工号
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control idNum"  name="idNum" placeholder="请输入工号" required>
+                            <input type="text" class="form-control id"  name="id" placeholder="请输入工号" required>
                         </div>
                         <div class="col-sm-4 idTip"></div>
                     </div>
@@ -79,10 +79,10 @@
                         </label>
                         <div class="col-sm-6">
                             <select name="title" class="input-xlarge form-control title" required>
-                                    <option value="教授">教授</option>
-                                    <option value="副教授">副教授</option>
-                                    <option value="讲师">讲师</option>
-                                    <option value="助教">助教</option>     
+                                    <option value="01">教授</option>
+                                    <option value="02">副教授</option>
+                                    <option value="03">讲师</option>
+                                    <option value="04">助教</option>     
                             </select> 
                         </div>
                         <div class="col-sm-4 titleTip"></div>
@@ -90,10 +90,10 @@
                     <div class="form-group">
                         <label for="admissionTime" class="col-sm-2 control-label">
                             <em>*</em>
-                            入职时间
+                            入教时间
                         </label>
                         <div class="col-sm-6">
-                            <input type="date" class="form-control admissionTime" name="admissionTime"  placeholder="请输入入职时间" required>
+                            <input type="date" class="form-control admissionTime" name="admissionTime"  placeholder="请输入入教时间" required>
 
                         </div>
                         <div class="col-sm-4 admissionTimeTip"></div>
@@ -119,14 +119,18 @@
                         <div class="col-sm-4 passwordTip2"></div>
                     </div>
                     <div class="form-group">
-                        <label for="password2" class="col-sm-2 control-label">
+                        <label for="testWord" class="col-sm-2 control-label">
                             <em>*</em>
                             验证码
                         </label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control " name="password2"  placeholder="输入验证码" required>
+                            <input type="text" class="form-control testWord" name="testWord"  placeholder="输入验证码" required>
                         </div>
-                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                             <span id="checkCode" >
+                             </span>
+                             <div class="testWordTip"></div>
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -136,7 +140,6 @@
                                 提交
                             </button>
                          </div>
-                        
                     </div>
 
                     

@@ -106,3 +106,29 @@ em {
 .toCenter{
     text-align: center;
 }
+
+/*注册*/
+#checkCode {
+    width: 80px;
+    height: 34px;
+    line-height: 34px;
+    color: #fff;
+    background-color: #3071a9;
+    border-color: #285e8e;
+    display: block;
+    font-family: Arial;
+    font-style: italic;
+    padding: 2px 3px;
+    letter-spacing: 3px;
+    font-weight: bolder
+}
+ .code
+{
+  
+  border: 0;
+ 
+}
+.unchanged
+{
+    border: 0;
+}

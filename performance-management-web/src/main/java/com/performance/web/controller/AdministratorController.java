@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,7 +78,7 @@ public class AdministratorController {
      * */
     @RequestMapping(value = "/administratorLogin", method = RequestMethod.GET)
     //public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String password) {
-    public String administratorLogin(Long id, String password) {
+    public String administratorLogin(Long id, String password, HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Map<String, Object> map = new HashMap<String, Object>();
         if (null == id || StringUtils.isEmpty(password)) {
@@ -93,6 +95,7 @@ public class AdministratorController {
                     jr.setMsg("登录成功");
                     jr.setStatus(0);
                     System.out.println("成功");
+                    request.getSession().setAttribute("id", id);
                     return "managePerformance";
                 } else {
                     jr.setData(false);
@@ -106,6 +109,42 @@ public class AdministratorController {
             }
         }
         return "adminLogin.html";
+    }
+
+    /**
+     * 获取管理员姓名
+     * */
+    @RequestMapping(value = "/getAdministratorName", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<String>> getAdministratorName(HttpServletRequest request) {
+        JsonResult<String> jr = new JsonResult<String>();
+        Long id = (Long) request.getSession().getAttribute("id");
+        if (null == id) {
+            jr.setData(null);
+            jr.setMsg("未获取管理员工号");
+            jr.setStatus(3);
+        } else {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", id);
+            map.put("grade", 1);
+            map.put("status", "0");
+            try {
+                String name = administratorService.getAdministratorName(map);
+                if (null == name || "".equals(name)) {
+                    jr.setData(null);
+                    jr.setMsg("该管理员不存在");
+                    jr.setStatus(1);
+                } else {
+                    jr.setData(name);
+                    jr.setMsg("查询成功");
+                    jr.setStatus(0);
+                }
+            } catch (Exception e) {
+                jr.setData(null);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<String>>(jr, HttpStatus.OK);
     }
 
     /**
@@ -578,8 +617,8 @@ public class AdministratorController {
     /**
      * 同意教师绩效录入
      * */
-    @RequestMapping(value = "teacherPerformanceAgree", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long virtualId) {
+    @RequestMapping(value = "/teacherPerformanceAgree", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long virtualId, Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == virtualId) {
             jr.setData(false);
@@ -587,7 +626,7 @@ public class AdministratorController {
             jr.setStatus(3);
         } else {
             try {
-                int result = administratorService.teacherPerformanceAgree(virtualId);
+                int result = administratorService.teacherPerformanceAgree(virtualId, id);
                 if (1 == result) {
                     jr.setData(true);
                     jr.setMsg("同意教师绩效录入成功");
@@ -596,6 +635,14 @@ public class AdministratorController {
                     jr.setData(false);
                     jr.setMsg("查询无该条绩效");
                     jr.setStatus(4);
+                } else if (-2 == result) {
+                    jr.setData(false);
+                    jr.setMsg("该教师不存在");
+                    jr.setStatus(5);
+                } else if (-3 == result) {
+                    jr.setData(false);
+                    jr.setMsg("该绩效基础选项不存在或已删除");
+                    jr.setStatus(6);
                 } else {
                     jr.setData(false);
                     jr.setMsg("同意教师绩效录入失败");

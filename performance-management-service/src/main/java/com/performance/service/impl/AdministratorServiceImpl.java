@@ -140,9 +140,8 @@ public class AdministratorServiceImpl implements AdministratorService {
         try {
             int result = personDao.deleteByIdList(idList); //删除教师
 
-            /**
-             * 删除该教师的绩效
-             * */
+            // 删除该教师的绩效
+            teacherPerformanceDao.deleteByIdList(idList);
 
             return result;
         } catch (Exception e) {
@@ -253,19 +252,59 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int teacherPerformanceAgree(Long virtualId) {
+    public int teacherPerformanceAgree(Long virtualId, Long id) {
         TeacherPerformance teacherPerformance = new TeacherPerformance();
         teacherPerformance.setVirtualId(virtualId);
         teacherPerformance.setStatus("0");
         try {
+            //查询是否有该教师存在
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", id);
+            map.put("grade", 2); //教师
+            map.put("status", "0"); //正常
+            Person personTemp = personDao.selectByParams(map);
+            if (null == personTemp) {
+                return -2;
+            }
+
+            //查询是否存在该条绩效
             TeacherPerformance temp = teacherPerformanceDao.selectByPrimaryKey(virtualId);
             if (null == temp) {
                 return -1;
             }
+
+            //修改绩效状态为0：正常
             int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
-            /**
-             * 增加该教师相应的科研或教研分数
-             * */
+
+            //查询该绩效对应的分值
+            int score = -1;
+            Map<String, Object> getScoreMap = new HashMap<String, Object>();
+            if (temp.getCategory().equals("科研")) {
+                getScoreMap.put("sciContent", temp.getContent());
+                getScoreMap.put("sciProject", temp.getProject());
+                getScoreMap.put("sciGrade", temp.getProGrade());
+                getScoreMap.put("status", "0"); //正常
+                score = scientificResearchDao.getScore(getScoreMap);
+            } else if (temp.getCategory().equals("教研")) {
+                getScoreMap.put("teaContent", temp.getContent());
+                getScoreMap.put("teaProject", temp.getProject());
+                getScoreMap.put("teaGrade", temp.getProGrade());
+                getScoreMap.put("status", "0"); //正常
+                score = teachingResearchDao.getScore(getScoreMap);
+            }
+            if (-1 == score) {
+                return -3;
+            }
+
+            //增加该教师相应的科研或教研分数
+            if (temp.getCategory().equals("科研")) {
+                personTemp
+                    .setScientificResearchScore(personTemp.getScientificResearchScore() + score);
+                personDao.updateByPrimaryKeySelective(personTemp);
+            } else if (temp.getCategory().equals("教研")) {
+                personTemp.setTeachingResearchScore(personTemp.getTeachingResearchScore() + score);
+                personDao.updateByPrimaryKeySelective(personTemp);
+            }
 
             return result;
         } catch (Exception e) {
@@ -406,6 +445,19 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
         resultMap.put("total", total);
         return resultMap;
+    }
+
+    @Override
+    public String getAdministratorName(Map<String, Object> map) {
+        try {
+            Person person = personDao.selectByParams(map);
+            if (null != person) {
+                return person.getName();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

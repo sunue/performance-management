@@ -24,7 +24,7 @@
   			tea_grade=#{teaGrade,jdbcType=VARCHAR} and
   		</if>
   		<if test="teaScore!=null">
-  			teaScore=#{teaScore,jdbcType=INTEGER} and
+  			tea_score=#{teaScore,jdbcType=INTEGER} and
   		</if>
   		<if test="status!=null">
   			status=#{status,jdbcType=CHAR} and
@@ -54,6 +54,11 @@
   	select count(*)
   	from teaching_research
     <include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getScore" parameterType="java.util.Map">
+  	select tea_score
+  	from teaching_research
+  	<include refid="selectByParamsWhere"></include>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from teaching_research

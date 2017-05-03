@@ -24,4 +24,6 @@ public interface TeachingResearchDao {
     int updateByPrimaryKeySelective(TeachingResearch record);
 
     int updateByPrimaryKey(TeachingResearch record);
+
+    int getScore(Map<String, Object> map);
 }
