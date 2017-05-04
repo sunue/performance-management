@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -143,7 +145,7 @@ public class TeacherController {
      * */
     @RequestMapping(value = "/teacherLogin", method = RequestMethod.GET)
     //public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password) {
-    public ModelAndView teacherLogin(Long id, String password) {
+    public ModelAndView teacherLogin(Long id, String password, HttpServletRequest request) {
 
         ModelAndView mv = new ModelAndView();
         //mv.setViewName("hhh");
@@ -168,6 +170,7 @@ public class TeacherController {
                     jr.setStatus(0);
                     jr.setMsg("登录成功");
                     jr.setData(true);
+                    request.getSession().setAttribute("id", id);
                     System.out.println("成功");
                     mv.setViewName("SubMyPerformance");
                 }
@@ -185,8 +188,9 @@ public class TeacherController {
      * 查看教师信息
      * */
     @RequestMapping(value = "/getTeacherInfo", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Person>> getTeacherInfo(Long id) {
+    public ResponseEntity<JsonResult<Person>> getTeacherInfo(HttpServletRequest request) {
         JsonResult<Person> jr = new JsonResult<Person>();
+        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id) {
             jr.setStatus(3);
             jr.setMsg("参数为空");
@@ -217,8 +221,10 @@ public class TeacherController {
      * 修改密码
      * */
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updatePassword(Long id, String password) {
+    public ResponseEntity<JsonResult<Boolean>> updatePassword(HttpServletRequest request,
+                                                              String password) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        Long id = (Long) request.getSession().getAttribute("id");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("password", password);
@@ -310,11 +316,12 @@ public class TeacherController {
      * */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/getCheckPerformance", method = RequestMethod.GET)
-    public ResponseEntity<JsonPage<List<TeacherPerformance>>> getCheckPerformance(Long id,
+    public ResponseEntity<JsonPage<List<TeacherPerformance>>> getCheckPerformance(HttpServletRequest request,
                                                                                   Integer pageSize,
                                                                                   Integer pageNum) {
 
         JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
+        Long id = (Long) request.getSession().getAttribute("id");
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
         if (null == id) {
@@ -362,16 +369,16 @@ public class TeacherController {
     public ResponseEntity<JsonPage<List<Person>>> totalRank(Long id, Integer pageSize,
                                                             Integer pageNum) {
         JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
         if (null == id) {
             jp.setData_list(null);
             jp.setMsg("参数为空");
             jp.setStatus(3);
-            jp.setPageNum(pageNum);
-            jp.setPageSize(pageSize);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
             jp.setTotal(0);
         } else {
-            int pSize = pageSize == null ? 20 : pageSize;
-            int pNum = pageNum == null ? 1 : pageNum;
             try {
                 Map<String, Object> map = teacherService.totalRank(id, pSize, pNum);
                 if (null == map.get("personList")) {

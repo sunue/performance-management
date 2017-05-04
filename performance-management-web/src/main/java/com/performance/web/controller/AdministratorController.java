@@ -94,7 +94,6 @@ public class AdministratorController {
                     jr.setData(true);
                     jr.setMsg("登录成功");
                     jr.setStatus(0);
-                    System.out.println("成功");
                     request.getSession().setAttribute("id", id);
                     return "managePerformance";
                 } else {
@@ -116,8 +115,10 @@ public class AdministratorController {
      * */
     @RequestMapping(value = "/getAdministratorName", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<String>> getAdministratorName(HttpServletRequest request) {
+        System.out.println("调用获取管理员名称方法");
         JsonResult<String> jr = new JsonResult<String>();
         Long id = (Long) request.getSession().getAttribute("id");
+        System.out.println(id);
         if (null == id) {
             jr.setData(null);
             jr.setMsg("未获取管理员工号");
@@ -134,6 +135,7 @@ public class AdministratorController {
                     jr.setMsg("该管理员不存在");
                     jr.setStatus(1);
                 } else {
+                    System.out.println(name);
                     jr.setData(name);
                     jr.setMsg("查询成功");
                     jr.setStatus(0);
@@ -204,6 +206,12 @@ public class AdministratorController {
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setTotal((int) resultMap.get("total"));
+
+                //  DateFormat df = DateFormat.getDateInstance();
+                //  System.out.println(df.format(
+                //      ((List<Person>) resultMap.get("teacherList")).get(0).getAdmissionTime()));
+                System.out.println(
+                    ((List<Person>) resultMap.get("teacherList")).get(0).getAdmissionTime());
             }
         } catch (Exception e) {
             jp.setData_list(null);
@@ -220,8 +228,9 @@ public class AdministratorController {
      * 同意职工注册
      * */
     @RequestMapping(value = "/teacherRegisterAgree", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherRegisterAgree(Long id) {
+    public ResponseEntity<JsonResult<Boolean>> teacherRegisterAgree(HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id) {
             jr.setData(false);
             jr.setMsg("参数为空");
@@ -251,8 +260,9 @@ public class AdministratorController {
      * 拒绝员工注册
      * */
     @RequestMapping(value = "/teachersRegisterFail", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherRegisterFail(Long id) {
+    public ResponseEntity<JsonResult<Boolean>> teacherRegisterFail(HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id) {
             jr.setData(false);
             jr.setMsg("参数为空");
@@ -279,11 +289,16 @@ public class AdministratorController {
     }
 
     @RequestMapping("/add")
-    public ResponseEntity<JsonResult<Boolean>> add(@RequestBody Person person) {
+    public ResponseEntity<JsonResult<Boolean>> add() {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        System.out.println(person.getId());
-        int result = administratorService.addTeacher(person);
-        if (1 == result) {
+        List<Integer> arr = new ArrayList<Integer>();
+        int a = 1;
+        arr.add(a);
+        System.out.println(arr);
+        Map map = new HashMap<>();
+        map.put(a, "hh");
+        System.out.println(map);
+        if (true) {
             jr.setData(true);
             jr.setMsg("增加教师成功");
             jr.setStatus(0);
@@ -406,10 +421,16 @@ public class AdministratorController {
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", id);
-        map.put("name", name);
-        map.put("firstdata", (pSize - 1) * pNum);
-        map.put("nums", pNum);
+        if (null != id) {
+            map.put("id", id);
+        }
+        if (!StringUtils.isEmpty(name)) {
+            map.put("name", name);
+        }
+        map.put("grade", 2); //教师
+        map.put("status", "0"); //正常
+        map.put("firstdata", (pNum - 1) * pSize);
+        map.put("nums", pSize);
         try {
             Map<String, Object> resultMap = administratorService.getTeacher(map);
             if (null == resultMap.get("personList")) {
@@ -467,8 +488,9 @@ public class AdministratorController {
      * 获取管理员信息
      * */
     @RequestMapping(value = "/getAdministratorInfo", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Person>> getAdministratorInfo(Long id) {
+    public ResponseEntity<JsonResult<Person>> getAdministratorInfo(HttpServletRequest request) {
         JsonResult<Person> jr = new JsonResult<Person>();
+        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id) {
             jr.setData(null);
             jr.setMsg("参数为空");
@@ -523,8 +545,10 @@ public class AdministratorController {
      * 修改密码
      * */
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> updatePassword(Long id, String password) {
+    public ResponseEntity<JsonResult<Boolean>> updatePassword(HttpServletRequest request,
+                                                              String password) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id || null == password) {
             jr.setData(false);
             jr.setMsg("参数为空");
@@ -952,5 +976,11 @@ public class AdministratorController {
             jp.setTotal(0);
         }
         return new ResponseEntity<JsonPage<List<TeachingResearch>>>(jp, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request) {
+        request.getSession().removeAttribute("id");
+        return null;
     }
 }

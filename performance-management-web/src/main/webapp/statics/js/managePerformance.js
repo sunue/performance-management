@@ -4,11 +4,13 @@ $(function(){
     var askList ="http://localhost:8080/administrator/teacherPerformanceCheck";
     var askAgree  ="http://localhost:8080/administrator/teacherPerformanceAgree";
     var askDeny ="http://localhost:8080/administrator/teachersPerformanceFail";
+    var askName ="http://localhost:8080/administrator/getAdministratorName";
     var $searchData ={
         pageNum:1,
         pageSize:3
     }
   
+    getAdministratorName();
     getAllPages();
 
     function getAllPages()
@@ -98,6 +100,26 @@ $(function(){
             }
         });
     }
+    
+    function getAdministratorName(){
+    	$.ajax({
+            url:askName,
+            contentType: "charset=UTF-8",
+            type:"get",
+            success:function(data){
+                if(data.status ==0){
+                    var data =data.data;
+                    $(".getAdministratorName").html(data);                   
+                }                  
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown)
+            {
+                console.log('错误'+errorThrown);
+
+            }
+        });
+    }
+    
     function initThePage(results){
         $.each(results,function(index, ele){
             $(".infoPart").find("tbody").append(

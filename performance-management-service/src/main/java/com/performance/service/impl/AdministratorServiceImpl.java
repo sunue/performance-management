@@ -1,5 +1,6 @@
 package com.performance.service.impl;
 
+import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,6 +79,14 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
         Map<String, Object> resultMap = new HashMap<String, Object>();
         if (teacherList != null && teacherList.size() > 0) {
+            DateFormat df = DateFormat.getDateInstance();
+            for (int i = 0; i < teacherList.size(); i++) {
+                if (null != teacherList.get(i).getAdmissionTime()) {
+                    //     teacherList.get(i)
+                    //         .setAdmissionTime(df.format(teacherList.get(i).getAdmissionTime()));
+                    System.out.println(teacherList.get(i).getAdmissionTime());
+                }
+            }
             resultMap.put("teacherList", teacherList);
         } else {
             resultMap.put("teacherList", null);
@@ -152,17 +161,22 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     public Map<String, Object> getTeacher(Map<String, Object> map) {
+        List<Person> personList = null;
+        int total = 0;
         try {
-            List<Person> personList = personDao.selectListByParams(map);
-            int count = personDao.selectCount(map);
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("personList", personList);
-            resultMap.put("count", count);
-            return resultMap;
+            personList = personDao.selectListByIdAndName(map);
+            total = personDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != personList && personList.size() > 0) {
+            resultMap.put("personList", personList);
+        } else {
+            resultMap.put("personList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
     @Override

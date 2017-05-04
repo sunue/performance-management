@@ -100,6 +100,30 @@
     </if>
   </select>
   
+  <select id="selectListByIdAndName" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from person
+  	<where>
+  		<if test="id != null">
+  			id like concat(concat('%',#{id,jdbcType=BIGINT}),'%')   and
+  		</if>
+  		<if test="name != null">
+  			name like concat(concat('%',#{name,jdbcType=VARCHAR}),'%')  and
+  		</if>
+  		<if test="grade!=null">
+  			grade=#{grade,jdbcType=INTEGER} and
+  		</if>
+  		<if test="status!=null">
+  			status=#{status,jdbcType=CHAR} and
+  		</if>
+  			1 = 1
+  	</where>
+  	<if test=" firstdata !=null and nums != null">
+    	limit ${firstdata},${nums}
+    </if>
+  </select>
+  
   <select id="selectListByTotalRank" resultMap="BaseResultMap" parameterType="java.util.Map">
   	select 
   	<include refid="Base_Column_List" />

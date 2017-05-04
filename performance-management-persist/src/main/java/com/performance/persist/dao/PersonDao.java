@@ -21,6 +21,8 @@ public interface PersonDao {
 
     List<Person> selectListByParams(Map<String, Object> map);
 
+    List<Person> selectListByIdAndName(Map<String, Object> map);
+
     List<Person> selectListByTotalRank(Map<String, Object> map);
 
     List<Person> selectListByScientificResearch(Map<String, Object> map);
