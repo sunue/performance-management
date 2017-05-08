@@ -25,8 +25,6 @@ import com.performance.persist.domain.TeacherPerformance;
 import com.performance.persist.domain.TeachingResearch;
 import com.performance.service.AdministratorService;
 
-import net.sf.json.JSONArray;
-
 @Controller
 @RequestMapping(value = "/administrator")
 public class AdministratorController {
@@ -369,20 +367,15 @@ public class AdministratorController {
     /**
      * 删除教师
      * */
-    @SuppressWarnings("unchecked")
-    @RequestMapping(value = "/deleteTeacher", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> deleteTeacher(String idListJson) {
+    @RequestMapping(value = "/deleteTeacher", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<Boolean>> deleteTeacher(@RequestBody List<Long> idList) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        List<Long> idList = new ArrayList<Long>();
-        System.out.println(idListJson);
-        if (null == idListJson || "".equals(idListJson)) {
+        if (null == idList) {
             jr.setData(false);
             jr.setMsg("未选择要删除的教师");
             jr.setStatus(3);
         } else {
             try {
-                JSONArray jsonArray = JSONArray.fromObject(idListJson); //String转换为json
-                idList = JSONArray.toList(jsonArray, Long.class);
                 System.out.println(idList);
                 int result = administratorService.deleteTeacher(idList);
                 if (idList.size() == result) {
@@ -574,11 +567,15 @@ public class AdministratorController {
     public ResponseEntity<JsonResult<Integer>> teacherPerformanceCheckSum() {
         JsonResult<Integer> jr = new JsonResult<Integer>();
         try {
-            int sum = administratorService.teacherPerformanceCheckSum();
-            if (sum >= 0) {
+            Integer sum = administratorService.teacherPerformanceCheckSum();
+            if (sum > 0) {
                 jr.setData(sum);
                 jr.setMsg("查询待审核绩效成功");
                 jr.setStatus(0);
+            } else if (0 == sum) {
+                jr.setData(sum);
+                jr.setMsg("无待审核教师绩效");
+                jr.setStatus(4);
             } else {
                 jr.setData(sum);
                 jr.setMsg("查询失败");
@@ -605,7 +602,7 @@ public class AdministratorController {
         try {
             Map<String, Object> resultMap = administratorService.teacherPerformanceCheck(pSize,
                 pNum);
-            if (null == (List<TeacherPerformance>) resultMap.get("teacherPerformanceList")) {
+            if (null == resultMap.get("teacherPerformanceList")) {
                 jp.setData_list(null);
                 jp.setMsg("查无数据");
                 jp.setStatus(1);
@@ -637,7 +634,7 @@ public class AdministratorController {
     @RequestMapping(value = "/teacherPerformanceAgree", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> teacherPerformanceAgree(Long virtualId, Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        if (null == virtualId) {
+        if (null == virtualId || id == null) {
             jr.setData(false);
             jr.setMsg("参数为空");
             jr.setStatus(3);
@@ -650,7 +647,7 @@ public class AdministratorController {
                     jr.setStatus(0);
                 } else if (-1 == result) {
                     jr.setData(false);
-                    jr.setMsg("查询无该条绩效");
+                    jr.setMsg("查询无该条待审核绩效");
                     jr.setStatus(4);
                 } else if (-2 == result) {
                     jr.setData(false);
@@ -660,6 +657,10 @@ public class AdministratorController {
                     jr.setData(false);
                     jr.setMsg("该绩效基础选项不存在或已删除");
                     jr.setStatus(6);
+                } else if (-4 == result) {
+                    jr.setData(false);
+                    jr.setMsg("修改教师分数失败");
+                    jr.setStatus(7);
                 } else {
                     jr.setData(false);
                     jr.setMsg("同意教师绩效录入失败");
@@ -693,7 +694,7 @@ public class AdministratorController {
                     jr.setStatus(0);
                 } else if (-1 == result) {
                     jr.setData(false);
-                    jr.setMsg("查询无该条绩效");
+                    jr.setMsg("查询无该条待审核绩效");
                     jr.setStatus(4);
                 } else {
                     jr.setData(false);
@@ -727,6 +728,10 @@ public class AdministratorController {
                     jr.setData(true);
                     jr.setMsg("增加科研基础选项成功");
                     jr.setStatus(0);
+                } else if (-1 == result) {
+                    jr.setData(false);
+                    jr.setMsg("该科研基础选项已存在");
+                    jr.setStatus(4);
                 } else {
                     jr.setData(false);
                     jr.setMsg("增加科研基础选项失败");
@@ -758,6 +763,10 @@ public class AdministratorController {
                     jr.setData(true);
                     jr.setMsg("增加教研基础选项成功");
                     jr.setStatus(0);
+                } else if (-1 == result) {
+                    jr.setData(false);
+                    jr.setMsg("该教研基础选项已存在");
+                    jr.setStatus(4);
                 } else {
                     jr.setData(false);
                     jr.setMsg("增加教研基础选项失败");
@@ -775,18 +784,18 @@ public class AdministratorController {
     /**
      * 删除科研基础选项
      * */
-    @RequestMapping(value = "/deleteScientificResearchPerformance", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> deleteScientificResearchPerformance(String virtualIdListJson) {
+    @RequestMapping(value = "/deleteScientificResearchPerformance", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<Boolean>> deleteScientificResearchPerformance(@RequestBody List<Long> virtualIdList) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        List<Long> virtualIdList = new ArrayList<Long>();
-        if (null == virtualIdListJson || "".equals(virtualIdListJson)) {
+        //List<Long> virtualIdList = new ArrayList<Long>();
+        if (null == virtualIdList) {
             jr.setData(false);
             jr.setMsg("未选择要删除的项");
             jr.setStatus(3);
         } else {
             try {
-                JSONArray jsonArray = JSONArray.fromObject(virtualIdListJson); //String转换为json
-                virtualIdList = JSONArray.toList(jsonArray, Long.class);
+                // JSONArray jsonArray = JSONArray.fromObject(virtualIdListJson); //String转换为json
+                // virtualIdList = JSONArray.toList(jsonArray, Long.class);
                 int result = administratorService
                     .deleteScientificResearchPerformance(virtualIdList);
                 if (virtualIdList.size() == result) {
@@ -810,18 +819,15 @@ public class AdministratorController {
     /**
      * 删除教研基础选项
      * */
-    @RequestMapping(value = "/deteleTeachingResearchPerformance", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> deteleTeachingResearchPerformance(String virtualIdListJson) {
+    @RequestMapping(value = "/deteleTeachingResearchPerformance", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<Boolean>> deteleTeachingResearchPerformance(@RequestBody List<Long> virtualIdList) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        List<Long> virtualIdList = new ArrayList<Long>();
-        if (null == virtualIdListJson || "".equals(virtualIdListJson)) {
+        if (null == virtualIdList) {
             jr.setData(false);
             jr.setMsg("未选择要删除的项");
             jr.setStatus(3);
         } else {
             try {
-                JSONArray jsonArray = JSONArray.fromObject(virtualIdListJson); //String转换为json
-                virtualIdList = JSONArray.toList(jsonArray, Long.class);
                 int result = administratorService.deteleTeachingResearchPerformance(virtualIdList);
                 if (virtualIdList.size() == result) {
                     jr.setData(true);
@@ -975,8 +981,18 @@ public class AdministratorController {
      * 退出
      * */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(HttpServletRequest request) {
-        request.getSession().removeAttribute("id");
-        return "adminLogin";
+    public ResponseEntity<JsonResult<Boolean>> logout(HttpServletRequest request) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        try {
+            request.getSession().removeAttribute("id");
+            jr.setData(true);
+            jr.setMsg("成功退出");
+            jr.setStatus(0);
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
 }

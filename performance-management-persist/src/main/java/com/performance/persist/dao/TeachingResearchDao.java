@@ -21,6 +21,8 @@ public interface TeachingResearchDao {
 
     int selectCount(Map<String, Object> map);
 
+    TeachingResearch selectByParams(Map<String, Object> map);
+
     int updateByPrimaryKeySelective(TeachingResearch record);
 
     int updateByPrimaryKey(TeachingResearch record);

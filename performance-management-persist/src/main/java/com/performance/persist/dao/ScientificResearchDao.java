@@ -19,6 +19,8 @@ public interface ScientificResearchDao {
 
     int selectCount(Map<String, Object> map);
 
+    ScientificResearch selectByParams(Map<String, Object> map);
+
     List<ScientificResearch> selectListByParams(Map<String, Object> map);
 
     int updateByPrimaryKeySelective(ScientificResearch record);

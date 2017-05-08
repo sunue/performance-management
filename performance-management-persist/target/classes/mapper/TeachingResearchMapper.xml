@@ -55,8 +55,14 @@
   	from teaching_research
     <include refid="selectByParamsWhere"></include>
   </select>
-  <select id="getScore" parameterType="java.util.Map">
-  	select tea_score
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	select
+  	<include refid="Base_Column_List" />
+    from teaching_research
+    <include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getScore" parameterType="java.util.Map" resultType="java.lang.Integer">
+  	select IFNULL(MAX(tea_score),-1) AS tea_score 
   	from teaching_research
   	<include refid="selectByParamsWhere"></include>
   </select>

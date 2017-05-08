@@ -51,6 +51,12 @@
     from teacher_performance
     <include refid="selectByParamsWhere"></include>
   </select>
+  <select id="selectByParams" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+    from teacher_performance
+    <include refid="selectByParamsWhere"></include>
+  </select>
   <select id="selectListByParams" parameterType="java.util.Map" resultMap="BaseResultMap">
   	select 
   	<include refid="Base_Column_List" />

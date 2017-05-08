@@ -55,8 +55,14 @@
   	from scientific_research
   	<include refid="selectByParamsWhere"></include>
   </select>
-  <select id="getScore" parameterType="java.util.Map">
-  	select sci_score
+  <select id="selectByParams" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List"></include>
+  	from scientific_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getScore" parameterType="java.util.Map" resultType="java.lang.Integer">
+  	select IFNULL(MAX(sci_score),-1) AS sci_score
   	from scientific_research
   	<include refid="selectByParamsWhere"></include>
   </select>

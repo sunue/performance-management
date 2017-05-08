@@ -726,8 +726,18 @@ public class TeacherController {
      * 退出
      * */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logout(HttpServletRequest request) {
-        request.getSession().removeAttribute("id");
-        return "index";
+    public ResponseEntity<JsonResult<Boolean>> logout(HttpServletRequest request) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        try {
+            request.getSession().removeAttribute("id");
+            jr.setData(true);
+            jr.setMsg("成功退出");
+            jr.setStatus(0);
+        } catch (Exception e) {
+            jr.setData(false);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
 }

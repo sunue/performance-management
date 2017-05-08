@@ -77,7 +77,7 @@ public interface AdministratorService {
     /**
      * 教师绩效待审核数
      * */
-    public int teacherPerformanceCheckSum();
+    public Integer teacherPerformanceCheckSum();
 
     /**
      * 待审核教师绩效

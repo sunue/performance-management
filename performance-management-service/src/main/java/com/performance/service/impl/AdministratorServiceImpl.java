@@ -149,7 +149,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         try {
             int result = personDao.deleteByIdList(idList); //删除教师
 
-            // 删除该教师的绩效
+            // 绩效表中删除该教师的绩效
             teacherPerformanceDao.deleteByIdList(idList);
 
             return result;
@@ -231,10 +231,10 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public int teacherPerformanceCheckSum() {
+    public Integer teacherPerformanceCheckSum() {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("status", "2");
-        int sum = 0;
+        Integer sum = null;
         try {
             sum = teacherPerformanceDao.selectCount(map);
         } catch (Exception e) {
@@ -246,23 +246,25 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public Map<String, Object> teacherPerformanceCheck(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("status", "2");
+        map.put("status", "2"); //待审核
         map.put("firstdata", (pageNum - 1) * pageSize);
         map.put("nums", pageSize);
+        List<TeacherPerformance> teacherPerformanceList = null;
+        int total = 0;
         try {
-            List<TeacherPerformance> teacherPerformanceList = teacherPerformanceDao
-                .selectListByParams(map);
-
-            int total = teacherPerformanceDao.selectCount(map);
-
-            Map<String, Object> resultmap = new HashMap<String, Object>();
-            resultmap.put("teacherPerformanceList", teacherPerformanceList);
-            resultmap.put("total", total);
-            return resultmap;
+            teacherPerformanceList = teacherPerformanceDao.selectListByParams(map);
+            total = teacherPerformanceDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultmap = new HashMap<String, Object>();
+        if (null != teacherPerformanceList && teacherPerformanceList.size() > 0) {
+            resultmap.put("teacherPerformanceList", teacherPerformanceList);
+        } else {
+            resultmap.put("teacherPerformanceList", null);
+        }
+        resultmap.put("total", total);
+        return resultmap;
     }
 
     @Override
@@ -287,11 +289,8 @@ public class AdministratorServiceImpl implements AdministratorService {
                 return -1;
             }
 
-            //修改绩效状态为0：正常
-            int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
-
             //查询该绩效对应的分值
-            int score = -1;
+            Integer score = null;
             Map<String, Object> getScoreMap = new HashMap<String, Object>();
             if (temp.getCategory().equals("科研")) {
                 getScoreMap.put("sciContent", temp.getContent());
@@ -310,15 +309,26 @@ public class AdministratorServiceImpl implements AdministratorService {
                 return -3;
             }
 
+            System.out.println(score);
+
             //增加该教师相应的科研或教研分数
+            int updateScore = 0;
             if (temp.getCategory().equals("科研")) {
                 personTemp
                     .setScientificResearchScore(personTemp.getScientificResearchScore() + score);
-                personDao.updateByPrimaryKeySelective(personTemp);
+                updateScore = personDao.updateByPrimaryKeySelective(personTemp);
             } else if (temp.getCategory().equals("教研")) {
                 personTemp.setTeachingResearchScore(personTemp.getTeachingResearchScore() + score);
-                personDao.updateByPrimaryKeySelective(personTemp);
+                updateScore = personDao.updateByPrimaryKeySelective(personTemp);
             }
+            if (1 != updateScore) {
+                return -4;
+            }
+
+            System.out.println(updateScore);
+
+            //修改绩效状态为0：正常
+            int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
 
             return result;
         } catch (Exception e) {
@@ -333,7 +343,10 @@ public class AdministratorServiceImpl implements AdministratorService {
         teacherPerformance.setVirtualId(virtualId);
         teacherPerformance.setStatus("3"); //未通过
         try {
-            TeacherPerformance temp = teacherPerformanceDao.selectByPrimaryKey(virtualId);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("virtualId", virtualId);
+            map.put("status", "2"); //审核中
+            TeacherPerformance temp = teacherPerformanceDao.selectByParams(map);
             if (null == temp) {
                 return -1;
             }
@@ -349,6 +362,16 @@ public class AdministratorServiceImpl implements AdministratorService {
     public int addScientificResearchPerformance(ScientificResearch scientificResearch) {
         scientificResearch.setStatus("0");
         try {
+            //查询该绩效是否已存在
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("sciContent", scientificResearch.getSciContent());
+            map.put("sciProject", scientificResearch.getSciProject());
+            map.put("sciGrade", scientificResearch.getSciGrade());
+            ScientificResearch temp = scientificResearchDao.selectByParams(map);
+            if (null != temp) {
+                return -1;
+            }
+
             int result = scientificResearchDao.insertSelective(scientificResearch);
             return result;
         } catch (Exception e) {
@@ -361,6 +384,15 @@ public class AdministratorServiceImpl implements AdministratorService {
     public int addTeachingResearchPerformance(TeachingResearch teachingResearch) {
         teachingResearch.setStatus("0");
         try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("teaContent", teachingResearch.getTeaContent());
+            map.put("teaProject", teachingResearch.getTeaProject());
+            map.put("teaGrade", teachingResearch.getTeaGrade());
+            TeachingResearch temp = teachingResearchDao.selectByParams(map);
+            if (null != temp) {
+                return -1;
+            }
+
             int result = teachingResearchDao.insertSelective(teachingResearch);
             return result;
         } catch (Exception e) {
@@ -373,6 +405,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     public int deleteScientificResearchPerformance(List<Long> virtualIdList) {
         try {
             int result = scientificResearchDao.deleteByIdList(virtualIdList);
+            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

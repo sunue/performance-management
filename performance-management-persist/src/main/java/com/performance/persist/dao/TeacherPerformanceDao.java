@@ -17,6 +17,8 @@ public interface TeacherPerformanceDao {
 
     TeacherPerformance selectByPrimaryKey(Long id);
 
+    TeacherPerformance selectByParams(Map<String, Object> map);
+
     List<TeacherPerformance> selectListByParams(Map<String, Object> map);
 
     int selectCount(Map<String, Object> map);
