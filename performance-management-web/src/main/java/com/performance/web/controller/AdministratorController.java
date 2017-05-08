@@ -38,11 +38,6 @@ public class AdministratorController {
     @Autowired
     private AdministratorService administratorService;
 
-    @RequestMapping("/1")
-    public String change() {
-        return "1";
-    }
-
     @RequestMapping(value = "/managePerformance")
     public String managePerformance() {
         return "managePerformance";
@@ -228,9 +223,8 @@ public class AdministratorController {
      * 同意职工注册
      * */
     @RequestMapping(value = "/teacherRegisterAgree", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherRegisterAgree(HttpServletRequest request) {
+    public ResponseEntity<JsonResult<Boolean>> teacherRegisterAgree(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id) {
             jr.setData(false);
             jr.setMsg("参数为空");
@@ -259,10 +253,9 @@ public class AdministratorController {
     /**
      * 拒绝员工注册
      * */
-    @RequestMapping(value = "/teachersRegisterFail", method = RequestMethod.GET)
-    public ResponseEntity<JsonResult<Boolean>> teacherRegisterFail(HttpServletRequest request) {
+    @RequestMapping(value = "/teacherRegisterFail", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<Boolean>> teacherRegisterFail(Long id) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        Long id = (Long) request.getSession().getAttribute("id");
         if (null == id) {
             jr.setData(false);
             jr.setMsg("参数为空");
@@ -978,9 +971,12 @@ public class AdministratorController {
         return new ResponseEntity<JsonPage<List<TeachingResearch>>>(jp, HttpStatus.OK);
     }
 
+    /**
+     * 退出
+     * */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().removeAttribute("id");
-        return null;
+        return "adminLogin";
     }
 }

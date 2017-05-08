@@ -26,4 +26,10 @@ public interface TeachingResearchDao {
     int updateByPrimaryKey(TeachingResearch record);
 
     int getScore(Map<String, Object> map);
+
+    List<String> getTeaContent(Map<String, Object> map);
+
+    List<String> getTeaProjectByTeaContent(Map<String, Object> map);
+
+    List<String> getTeaGradeByTeaContentAndTeaProject(Map<String, Object> map);
 }

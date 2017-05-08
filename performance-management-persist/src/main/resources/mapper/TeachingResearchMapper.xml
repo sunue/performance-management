@@ -60,6 +60,21 @@
   	from teaching_research
   	<include refid="selectByParamsWhere"></include>
   </select>
+  <select id="getTeaContent" parameterType="java.util.Map" resultType="java.lang.String">
+  	select distinct tea_content
+  	from teaching_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getTeaProjectByTeaContent" parameterType="java.util.Map" resultType="java.lang.String">
+  	select distinct tea_project
+  	from teaching_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getTeaGradeByTeaContentAndTeaProject" parameterType="java.util.Map" resultType="java.lang.String">
+  	select distinct tea_grade
+  	from teaching_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from teaching_research
     where virtual_id = #{virtualId,jdbcType=BIGINT}

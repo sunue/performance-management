@@ -60,6 +60,21 @@
   	from scientific_research
   	<include refid="selectByParamsWhere"></include>
   </select>
+  <select id="getSciContent" parameterType="java.util.Map" resultType="java.lang.String">
+  	select distinct sci_content
+  	from scientific_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getSciProjectBySciContent" parameterType="java.util.Map" resultType="java.lang.String">
+  	select distinct sci_project
+  	from scientific_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
+  <select id="getSciGradeBySciContentAndSciProject" parameterType="java.util.Map" resultType="java.lang.String">
+  	select distinct sci_grade
+  	from scientific_research
+  	<include refid="selectByParamsWhere"></include>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from scientific_research
     where virtual_id = #{virtualId,jdbcType=BIGINT}

@@ -28,6 +28,7 @@ public class ScientificResearch {
 
     /**
      * This field corresponds to the database column scientific_research.status
+     * 0-正常；1-删除
      */
     private String status;
 

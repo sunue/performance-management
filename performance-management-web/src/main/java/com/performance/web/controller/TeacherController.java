@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,6 +33,11 @@ public class TeacherController {
 
     @Autowired
     private TeacherService teacherService;
+
+    @RequestMapping(value = "/SubMyPerformance")
+    private String SubMyPerformance() {
+        return "SubMyPerformance";
+    }
 
     @RequestMapping(value = "/showMyPerformance")
     private String showMyPerformance() {
@@ -166,12 +172,12 @@ public class TeacherController {
                     jr.setStatus(1);
                     jr.setMsg("该用户不存在");
                     jr.setData(false);
+                    mv.setViewName("login");
                 } else {
                     jr.setStatus(0);
                     jr.setMsg("登录成功");
                     jr.setData(true);
                     request.getSession().setAttribute("id", id);
-                    System.out.println("成功");
                     mv.setViewName("SubMyPerformance");
                 }
             } catch (Exception e) {
@@ -182,6 +188,42 @@ public class TeacherController {
         }
         // return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
         return mv;
+    }
+
+    /**
+     * 获取教师姓名
+     * */
+    @RequestMapping(value = "/getTeacherName", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<String>> getTeacherName(HttpServletRequest request) {
+        JsonResult<String> jr = new JsonResult<String>();
+        Long id = (Long) request.getSession().getAttribute("id");
+        if (null == id) {
+            jr.setData(null);
+            jr.setMsg("未获取教师工号");
+            jr.setStatus(3);
+        } else {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", id);
+            map.put("grade", 2); //教师
+            map.put("status", "0"); //正常
+            try {
+                String name = teacherService.getTeacherName(map);
+                if (null == name) {
+                    jr.setData(null);
+                    jr.setMsg("该教师不存在或已被删除");
+                    jr.setStatus(1);
+                } else {
+                    jr.setData(name);
+                    jr.setMsg("查询成功");
+                    jr.setStatus(0);
+                }
+            } catch (Exception e) {
+                jr.setData(null);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<String>>(jr, HttpStatus.OK);
     }
 
     /**
@@ -500,5 +542,192 @@ public class TeacherController {
             }
         }
         return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 获取科研内容
+     * */
+    @RequestMapping(value = "/getSciContent", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<List<String>>> getSciContent() {
+        JsonResult<List<String>> jr = new JsonResult<List<String>>();
+        try {
+            List<String> sciContentList = teacherService.getSciContent();
+            if (null == sciContentList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(sciContentList);
+                jr.setMsg("查询成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 获取教研内容
+     * */
+    @RequestMapping(value = "/getTeaContent", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<List<String>>> getTeaContent() {
+        JsonResult<List<String>> jr = new JsonResult<List<String>>();
+        try {
+            List<String> teaContentList = teacherService.getTeaContent();
+            if (null == teaContentList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(teaContentList);
+                jr.setMsg("查询成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 通过科研内容获取科研具体工作
+     * */
+    @RequestMapping(value = "/getSciProjectBySciContent", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<List<String>>> getSciProjectBySciContent(String sciContent) {
+        JsonResult<List<String>> jr = new JsonResult<List<String>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!StringUtils.isEmpty(sciContent)) {
+            map.put("sciContent", sciContent);
+        }
+        map.put("status", "0"); //正常
+        try {
+            List<String> sciProjectList = teacherService.getSciProjectBySciContent(map);
+            if (null == sciProjectList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(sciProjectList);
+                jr.setMsg("查询成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 根据教研内容获取教研具体工作
+     * */
+    @RequestMapping(value = "/getTeaProjectByTeaContent", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<List<String>>> getTeaProjectByTeaContent(String teaContent) {
+        JsonResult<List<String>> jr = new JsonResult<List<String>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!StringUtils.isEmpty(teaContent)) {
+            map.put("teaContent", teaContent);
+        }
+        map.put("status", "0");
+        try {
+            List<String> teaContentList = teacherService.getTeaProjectByTeaContent(map);
+            if (null == teaContentList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(teaContentList);
+                jr.setMsg("查询成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 根据科研内容和科研具体工作获取科研等级
+     * */
+    @RequestMapping(value = "/getSciGradeBySciContentAndSciProject", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<List<String>>> getSciGradeBySciContentAndSciProject(String sciContent,
+                                                                                         String sciProject) {
+        JsonResult<List<String>> jr = new JsonResult<List<String>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!StringUtils.isEmpty(sciContent)) {
+            map.put("sciContent", sciContent);
+        }
+        if (!StringUtils.isEmpty(sciProject)) {
+            map.put("sciProject", sciProject);
+        }
+        map.put("status", "0");
+        try {
+            List<String> sciGradeList = teacherService.getSciGradeBySciContentAndSciProject(map);
+            if (null == sciGradeList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(sciGradeList);
+                jr.setMsg("查询成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 根据教研内容和教研具体工作获取教研等级
+     * */
+    @RequestMapping(value = "/getTeaGradeByTeaContentAndTeaProject", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<List<String>>> getTeaGradeByTeaContentAndTeaProject(String teaContent,
+                                                                                         String teaProject) {
+        JsonResult<List<String>> jr = new JsonResult<List<String>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (!StringUtils.isEmpty(teaContent)) {
+            map.put("teaContent", teaContent);
+        }
+        if (!StringUtils.isEmpty(teaProject)) {
+            map.put("teaProject", teaProject);
+        }
+        map.put("status", "0");
+        try {
+            List<String> teaGradeList = teacherService.getTeaGradeByTeaContentAndTeaProject(map);
+            if (null == teaGradeList) {
+                jr.setData(null);
+                jr.setMsg("查无数据");
+                jr.setStatus(1);
+            } else {
+                jr.setData(teaGradeList);
+                jr.setMsg("查询成功");
+                jr.setStatus(0);
+            }
+        } catch (Exception e) {
+            jr.setData(null);
+            jr.setMsg("系统异常");
+            jr.setStatus(2);
+        }
+        return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 退出
+     * */
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request) {
+        request.getSession().removeAttribute("id");
+        return "index";
     }
 }

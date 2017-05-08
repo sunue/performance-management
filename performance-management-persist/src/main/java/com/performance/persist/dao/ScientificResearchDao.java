@@ -26,4 +26,10 @@ public interface ScientificResearchDao {
     int updateByPrimaryKey(ScientificResearch record);
 
     int getScore(Map<String, Object> map);
+
+    List<String> getSciContent(Map<String, Object> map);
+
+    List<String> getSciProjectBySciContent(Map<String, Object> map);
+
+    List<String> getSciGradeBySciContentAndSciProject(Map<String, Object> map);
 }

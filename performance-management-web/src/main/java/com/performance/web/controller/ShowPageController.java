@@ -12,4 +12,18 @@ public class ShowPageController {
         return "1";
     }
 
+    @RequestMapping("/adminLogin")
+    public String adminLogin() {
+        return "adminLogin";
+    }
+
+    @RequestMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping("/register")
+    public String register() {
+        return "register";
+    }
 }

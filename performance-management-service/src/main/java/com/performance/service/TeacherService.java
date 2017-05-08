@@ -1,5 +1,6 @@
 package com.performance.service;
 
+import java.util.List;
 import java.util.Map;
 
 import com.performance.persist.domain.Person;
@@ -62,4 +63,38 @@ public interface TeacherService {
      * */
     public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum);
 
+    /**
+     * 获取科研内容
+     * */
+    public List<String> getSciContent();
+
+    /**
+     * 获取教研内容
+     * */
+    public List<String> getTeaContent();
+
+    /**
+     * 根据科研内容获取科研具体工作
+     * */
+    public List<String> getSciProjectBySciContent(Map<String, Object> map);
+
+    /**
+     * 根据教研内容获取教研具体工作
+     * */
+    public List<String> getTeaProjectByTeaContent(Map<String, Object> map);
+
+    /**
+     * 根据科研内容和科研具体工作获取科研等级
+     * */
+    public List<String> getSciGradeBySciContentAndSciProject(Map<String, Object> map);
+
+    /**
+     * 根据教研内容和教研具体工作获取教研等级
+     * */
+    public List<String> getTeaGradeByTeaContentAndTeaProject(Map<String, Object> map);
+
+    /**
+     * 获取教师姓名
+     * */
+    public String getTeacherName(Map<String, Object> map);
 }
