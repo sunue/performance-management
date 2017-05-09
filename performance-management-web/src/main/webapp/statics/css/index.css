@@ -1,5 +1,5 @@
 body{
-	background:url(../img/login_bg_0.jpg) #f8f6e9;
+	background:url(../img/login_bg_0.jpg);
 }
 
 h1.navbar-brand{
@@ -24,6 +24,10 @@ h1.navbar-brand{
 }
 .infoChose{
     box-shadow: 6px 6px 5px #666;
+    background-color: #fff;
+    border-radius: 10px;
+    
+
 }
 
 .infoTable tr{

@@ -88,11 +88,12 @@ em {
     padding: 1em;
  }
 
- .infoPart{
- 	margin-top: 2em;
+ .infoPart {
  	border: solid 1px #ccc;
     padding: 1em;
+    margin-top:2em;
  }
+
 
  /*scientificResearch*/
 .scientificResearch, .teachingResearch{

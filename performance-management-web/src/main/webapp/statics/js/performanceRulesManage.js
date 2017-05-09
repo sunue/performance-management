@@ -2,13 +2,50 @@ $(function(){
     $(".leftNav").css("height", $(window).height());
     
     var askTeachList ="http://localhost:8080/administrator/getTeachingResearchPerformance";
+
     var askScientificList ="http://localhost:8080/administrator/getScientificResearchPerformance";
+    var askScientificAdd ="http://localhost:8080/administrator/addScientificResearchPerformance";
+    var askScientificEdit ="http://localhost:8080/administrator/updateScientificResearchPerformance";
     var askScientificListDel ="http://localhost:8080/administrator/deleteScientificResearchPerformance";
     // 科研
     var $searchDataScientific ={
         pageNum:1,
         pageSize:3
     }
+    // 增加科研选项
+    $("#AddSciBtn").on("click", function(){
+        var $addData ={};
+        $("#addScientificForm").find('input').each(function(){$addData[this.name]=this.value});
+        
+        $.ajax({
+                    url: askScientificAdd,
+                    data: JSON.stringify($addData),
+                    dataType:"json",
+                    contentType: "application/json; charset=UTF-8",
+                    type: "post",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                        else
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+        });
+    });
+
   
     getAllPages();
 
@@ -98,6 +135,7 @@ $(function(){
             }
         });
     }
+
     function initThePage(results){
         $.each(results,function(index, ele){
             $("#scientificResearchForm").find("tbody").append(
@@ -129,71 +167,25 @@ $(function(){
             });
             
         });
-        // 修改
-        // $("").each(function(index, ele){
-        //     $(ele).on("click", function()
-        //     {
-        //         var $sendData ={
-        //             "id": results[index].virtualId
-
-        //         };
-        //         console.log($sendData);
-        //         if (confirm("确认同意？")) 
-        //         {
-        //             $(ele).parent().parent().remove();
-        //             $.ajax({
-        //                     url: askAgree,
-        //                     data: $.param($sendData) ,
-        //                     dataType:"json",
-        //                     contentType: "application/json; charset=UTF-8",
-        //                     type: "get",
-        //                     success:function(result)
-        //                     {
-                             
-        //                         if(result.status == 0)
-        //                         {
-        //                             console.log(result.msg);
-        //                             alert(result.msg);
-        //                             location.reload();
-                                 
-                                   
-        //                         }
-        //                         else
-        //                         {
-        //                             console.log(result.msg);
-        //                             alert(result.msg);
-        //                             location.reload();  
-        //                         }
-        //                     },                                                
-        //                     error:function(XMLHttpRequest, textStatus, errorThrown)
-        //                     {
-        //                         console.log('错误'+errorThrown);
-        //                     }     
-        //             });
-        //         }
-        //     });
-        // });
-
-        // 删除  ？？？？格式不正确
+        
+        // 删除格式正确
         $(".scientificBtnDel").each(function(index, ele){
             $(ele).on("click", function()
             {
-                var $idArray =[];
-                    $idArray.push((results[index].virtualId).toString()); 
-                    var $deleteData = {
-                            "virtualIdListJson":$idArray
-                        };
+                var idArray =[];
+                    idArray.push((results[index].virtualId).toString());
                 if (confirm("确认删除此项？")) 
                 {
-                    $(ele).parent().parent().remove();
+                    
                     $.ajax({
                             url: askScientificListDel,
-                            data: $.param($idArray) ,
+                            data: JSON.stringify(idArray),
                             dataType:"json",
                             contentType: "application/json; charset=UTF-8",
-                            type: "get",
+                            type: "post",
                             success:function(result)
                             {
+                                $(ele).parent().parent().remove();
                              
                                 if(result.status == 0)
                                 {
@@ -216,6 +208,62 @@ $(function(){
                 }
             });
         });
+        // 删除已选  多个删除
+        $("#deleteAllScientific").on("click", function(){
+            if (confirm("确认删除已选吗？")) 
+            {
+
+                var $idArray =[];
+                $(".check_one").each(function(index, ele){
+                    
+                    if ($(ele).is(':checked')) 
+                    {
+                        $idArray.push((results[index].virtualId).toString());
+                        $(ele).parent().parent().remove();
+
+                    }
+
+                });
+                //--------- 发送删除多行：
+                if($idArray.length>0){
+
+                    $.ajax({
+                        url: askScientificListDel,
+                        data:JSON.stringify($idArray),
+                        contentType: "application/json; charset=UTF-8",
+                        dataType:"json",
+                        type: "post",
+                        success:function(result)
+                        {
+                         
+                            if(result.status == 0)
+                            {
+                                console.log(result.msg);
+                                alert(result.msg);
+                                location.reload();     
+                               
+                            }
+                            else
+                            {
+                                console.log(result.msg); 
+                                alert(result.msg);
+                                location.reload();  
+                            }
+                        },                                                
+                        error:function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            console.log('错误'+errorThrown);
+                        }     
+                   });
+                  
+                }
+                else{
+                    return false;
+                }
+                
+            }
+
+        });
 
 
         // 查看并修改
@@ -227,10 +275,43 @@ $(function(){
                 $("#editSciScore").val(results[index].sciScore);
 
                 $("#editScientificSub").on("click", function(){
+                    var $editData = {
+                        "virtualId":        results[index].virtualId,
+                        "sciContent":       $("#editSciContent").val(),
+                        "sciProject":       $("#editSciProject").val(),    
+                        "sciGrade":         $("#editSciGrade").val(),  
+                        "sciScore":         $("#editSciScore").val(),    
 
+                    };
 
-
-                });
+                    // 编辑后提交
+                    $.ajax(
+                            {
+                                url: askScientificEdit,
+                                dataType:"json",
+                                type:"POST",
+                                data:JSON.stringify($editData),
+                                contentType: "application/json; charset=UTF-8",
+                                success:function(result)
+                                {
+                                 
+                                    if(result.status == 0)
+                                    {
+                                        console.log(result.msg);
+                                        alert(result.msg);
+                                        location.reload();
+                                    }
+                                    else
+                                    {
+                                        alert(result.msg);
+                                    }
+                                },                                                
+                                error:function(XMLHttpRequest, textStatus, errorThrown)
+                                {
+                                    console.log('错误'+errorThrown);
+                                }     
+                            });
+                    });  //编辑提交结束  
 
             });
 

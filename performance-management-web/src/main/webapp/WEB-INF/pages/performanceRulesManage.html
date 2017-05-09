@@ -16,13 +16,13 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<a href="#" id="userName">用户名</a>	
+						<a href="#" id="userName"></a>	
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span><strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
 							<li>
-								<a href="#">个人中心</a>
+								<a href="manageCenter.html" target=" _blank">个人中心</a>
 							</li>
 							<li>
 								<a href="#" id="logout">退出</a>
@@ -56,7 +56,7 @@
 						<div class="tab-pane fade in active" id="scientificResearch">
 							<div >
 								<button id="btnAdd" type="button" class="btn  btn-success frBtn" data-toggle="modal" data-target="#scientificAddRules">  
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加规则
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加科研规则
 								</button>
 							</div>
 							<form id="scientificResearchForm" >
@@ -102,28 +102,31 @@
 							</form>
 							<div class="foot" id="foot">
 							    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
-							    <button class="btn btn-danger frBtn" id="deleteAll">删除已选</button>
+							    <button class="btn btn-danger frBtn" id="deleteAllScientific">删除已选</button>
 							</div>
 						</div>
+
+						<!-- 分界线 -->
 						<div class="tab-pane fade" id="teachingResearch">
 							<div >
-								<button id="btnAdd" type="button" class="btn  btn-success frBtn" data-toggle="modal" data-target="#addRules">  
-									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加规则
+								<button id="btnAdd" type="button" class="btn  btn-success frBtn" data-toggle="modal" data-target="#teachAddRules">  
+									<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加教研规则
 								</button>
 							</div>
-							<form id="" >
+							<form id="teachResearchForm" >
 								<table  class="table">
 									<thead>
 										<tr>
 											<th><input class="check_all check" type="checkbox" />&nbsp;全选</th>
-											<th>1</th>
-											<th>2</th>
-											<th>3</th>
+											<th>教研内容</th>
+											<th>教研项目</th>
+											<th>教研等级</th>
+											<th>教研分数</th>
 											<th>操作</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
+										<!-- <tr>
 											<td><input class='check_one check' type='checkbox'/></td>
 											<td>
 												w
@@ -142,7 +145,7 @@
 													<span class='glyphicon glyphicon-minus' aria-hidden='true'></span> 删除 
 												</button>
 											</td>		
-										</tr>
+										</tr> -->
 									</tbody>								
 								</table> 
 								<ul class="pagination" id="teachPages">
@@ -150,7 +153,7 @@
 							</form>
 							<div class="foot" id="foot">
 							    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
-							    <button class="btn btn-danger frBtn" id="deleteAll">删除已选</button>
+							    <button class="btn btn-danger frBtn" id="deleteAllTeach">删除已选</button>
 							</div>
 						</div>
 					</div>
@@ -239,14 +242,14 @@
 	                   <div class="form-group">
 							<label for="addSciContent" class="col-sm-3 control-label">科研内容</label>	                            
 							<div class="col-sm-9">
-	                            <input type="text" class="form-control" name="addSciContent" id="addSciContent" placeholder="请输入工程科研内容" required>
+	                            <input type="text" class="form-control" name="sciContent" id="addSciContent" placeholder="请输入工程科研内容" required>
 	                        </div>
 	                    </div>
 
 	                    <div class="form-group">
 	                        <label for="addSciProject" class="col-sm-3 control-label">科研项目</label>
 	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" name="addSciProject" id="addSciProject"
+	                            <input type="text" class="form-control" name="sciProject" id="addSciProject"
 	                                   placeholder="请输入科研项目" required>
 	                        </div>
 	                    </div>
@@ -254,14 +257,14 @@
 	                    <div class="form-group">
 	                        <label for="addSciGrade" class="col-sm-3 control-label">科研等级</label>
 	                        <div class="col-sm-9">
-	                            <input type="text" class="form-control" name="addSciGrade" id="addSciGrade"
+	                            <input type="text" class="form-control" name="sciGrade" id="addSciGrade"
 	                                   placeholder="请输入科研等级" required>
 	                        </div>
 	                    </div>
 	                    <div class="form-group">
 	                        <label for="addSciScore" class="col-sm-3 control-label">科研分数</label>
 	                        <div class="col-sm-9">  
-	                            <input type="number" class="form-control" name="addSciScore" id="addSciScore"
+	                            <input type="number" class="form-control" name="sciScore" id="addSciScore"
 	                                   placeholder="请输入科研分数" required>
 	                        </div>
 	                    </div>
@@ -269,12 +272,9 @@
 	                </form>
                 </div>
                 <div class="modal-footer">
-	                <button type="button" class="btn btn-success" id="modalAdd">增加
-                    </button>
                     <button type="submit" class="btn btn-primary" id="AddSciBtn">
                         提交
                     </button>
-                    <span id="tip"> </span>
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
                     </button>
                 </div>
@@ -286,5 +286,6 @@
 	<script src="/statics/js/jquery-1.11.1.min.js"></script>
 	<script src="/statics/js/bootstrap.min.js"></script>
 	<script src="/statics/js/bootstrap-paginator.js"></script>
+	<script src="/statics/js/adminCommon.js"></script>
 	<script src="/statics/js/performanceRulesManage.js"></script>
 </html>

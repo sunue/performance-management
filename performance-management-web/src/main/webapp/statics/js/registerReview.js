@@ -4,7 +4,7 @@ $(function(){
     var askRegisterNum = "http://localhost:8080/performance-management-web/administrator/teacherRegisterCheckSum";
     var askList ="http://localhost:8080/administrator/teacherRegisterCheck";
     var askAgree  ="http://localhost:8080/administrator/teacherRegisterAgree";
-    var askDeny ="http://localhost:8080/administrator/teachersRegisterFail";
+    var askDeny ="http://localhost:8080/administrator/teacherRegisterFail";
     var $searchData ={
         pageNum:1,
         pageSize:3
@@ -122,7 +122,7 @@ $(function(){
     function initThePage(results){
         $.each(results,function(index, ele){
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td><td>"+ele.title+"</td><td>"+ele.id+"</td><td>"+getLocalTime(ele.admissionTime)+"</td><td><button type='button' class='btn btn-danger btnDeny' ><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> 拒绝</button>  <button class='btn btn-success btnPass'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> 通过</button></td></tr>");
+                "<tr class='info'><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td><td>"+ele.age+"</td><td>"+ele.title+"</td><td>"+getLocalTime(ele.admissionTime)+"</td><td><button type='button' class='btn btn-danger btnDeny' ><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> 拒绝</button>  <button class='btn btn-success btnPass'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> 通过</button></td></tr>");
         });
         // 同意
         $(".btnPass").each(function(index, ele){
@@ -213,10 +213,30 @@ $(function(){
     }
 
 
-    // 
-    function getLocalTime(nS) {     
-       return new Date(parseInt(nS) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');     
-    }  
+    // 时间转换
+    function getLocalTime(n) {     
+       return new Date(n).format('yyyy-MM-dd hh:mm:ss');     
+    }
+
+    //处理日期格式
+    Date.prototype.format = function(fmt)
+    {
+      var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+      };
+      if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+      for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+      return fmt;
+    }
 
 })
 
