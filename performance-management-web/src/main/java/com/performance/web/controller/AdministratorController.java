@@ -995,4 +995,158 @@ public class AdministratorController {
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
+
+    /**
+     * 总分排名
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/totalRank", method = RequestMethod.GET)
+    public ResponseEntity<JsonPage<List<Person>>> totalRank(Long id, Integer pageSize,
+                                                            Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        try {
+            Map<String, Object> map = administratorService.totalRank(id, pSize, pNum);
+            if (null == map.get("personList")) {
+                jp.setData_list(null);
+                jp.setMsg("查询失败");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(1);
+                jp.setTotal((int) map.get("count"));
+            } else {
+                if (id == null) {
+                    jp.setData_list((List<Person>) map.get("personList"));
+                    jp.setMsg("查询成功");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("count"));
+                } else {
+                    jp.setData_list((List<Person>) map.get("personList"));
+                    jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("count"));
+                }
+            }
+        } catch (Exception e) {
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setStatus(2);
+            jp.setTotal(0);
+        }
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
+
+    }
+
+    /**
+     * 按科研总分排名
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/scientificResearchRank", method = RequestMethod.GET)
+    public ResponseEntity<JsonPage<List<Person>>> scientificResearchRank(Long id, Integer pageSize,
+                                                                         Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        try {
+            Map<String, Object> map = administratorService.scientificResearchRank(id, pSize, pNum);
+            if (null == map.get("personList")) {
+                jp.setData_list(null);
+                jp.setMsg("查询失败");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(1);
+                jp.setTotal((int) map.get("count"));
+            } else {
+                jp.setData_list((List<Person>) map.get("personList"));
+                jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(0);
+                jp.setTotal((int) map.get("count"));
+            }
+        } catch (Exception e) {
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setStatus(2);
+            jp.setTotal(0);
+        }
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 按教研总分排名
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/teachingResearchRank", method = RequestMethod.GET)
+    public ResponseEntity<JsonPage<List<Person>>> teachingResearchRank(Long id, Integer pageSize,
+                                                                       Integer pageNum) {
+        JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        try {
+            Map<String, Object> map = administratorService.teachingResearchRank(id, pSize, pNum);
+            if (null == map.get("personList")) {
+                jp.setData_list(null);
+                jp.setMsg("查询失败");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(1);
+                jp.setTotal((int) map.get("count"));
+            } else {
+                jp.setData_list((List<Person>) map.get("personList"));
+                jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(0);
+                jp.setTotal((int) map.get("count"));
+            }
+        } catch (Exception e) {
+            jp.setData_list(null);
+            jp.setMsg("系统异常");
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setStatus(2);
+            jp.setTotal(0);
+        }
+        return new ResponseEntity<JsonPage<List<Person>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 查询教师排名
+     * */
+    public ResponseEntity<JsonResult<Map<String, Object>>> getTeacherRank(Long id) {
+        JsonResult<Map<String, Object>> jr = new JsonResult<Map<String, Object>>();
+        if (null == id) {
+            jr.setData(null);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                Map<String, Object> map = administratorService.getTeacherRank(id);
+                if (-1 == (int) map.get("flag")) {
+                    jr.setData(null);
+                    jr.setMsg("无该用户存在");
+                    jr.setStatus(1);
+                } else {
+                    jr.setData(map);
+                    jr.setMsg("查询成功");
+                    jr.setStatus(0);
+                }
+            } catch (Exception e) {
+                jr.setData(null);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Map<String, Object>>>(jr, HttpStatus.OK);
+    }
 }

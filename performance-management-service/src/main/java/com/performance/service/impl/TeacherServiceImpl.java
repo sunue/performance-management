@@ -313,10 +313,11 @@ public class TeacherServiceImpl implements TeacherService {
         Person person = null;
         try {
             person = personDao.selectByParams(map);
+            System.out.println(person.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (null == person.getName()) {
+        if (null != person.getName()) {
             return person.getName();
         }
         return null;

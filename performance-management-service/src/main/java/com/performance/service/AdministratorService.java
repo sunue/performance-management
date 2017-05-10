@@ -134,4 +134,24 @@ public interface AdministratorService {
      * */
     public Map<String, Object> getTeachingResearchPerformance(int pageSize, int pageNum);
 
+    /**
+     * 按总分排名
+     * */
+    public Map<String, Object> totalRank(Long id, int pageSize, int pageNum);
+
+    /**
+     * 按科研总分排名
+     * */
+    public Map<String, Object> scientificResearchRank(Long id, int pageSize, int pageNum);
+
+    /**
+     * 按教研总分排名
+     * */
+    public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum);
+
+    /**
+     * 查询教师排名
+     * */
+    public Map<String, Object> getTeacherRank(Long id);
+
 }

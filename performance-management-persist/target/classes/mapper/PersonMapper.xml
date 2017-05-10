@@ -161,7 +161,9 @@
   	select count(*)
   	from person 
   	where scientific_research_score+teaching_research_score >
-	(SELECT scientific_research_score+teaching_research_score from person where id=#{id,jdbcType=BIGINT})
+	(SELECT scientific_research_score+teaching_research_score from person where id=#{id,jdbcType=BIGINT}) 
+	and grade=2
+	and status="0"
   </select>
   
   <select id="selectRankByScientificResearch" parameterType="java.lang.Long" resultType="java.lang.Integer">
@@ -169,6 +171,8 @@
   	from person 
   	where scientific_research_score >
 	(SELECT scientific_research_score from person where id=#{id,jdbcType=BIGINT})
+	and grade=2
+	and status="0"
   </select>
   
   <select id="selectRankByTeachingResearch" parameterType="java.lang.Long" resultType="java.lang.Integer">
@@ -176,6 +180,8 @@
   	from person 
   	where teaching_research_score >
 	(SELECT teaching_research_score from person where id=#{id,jdbcType=BIGINT})
+	and grade=2
+	and status="0"
   </select>
   
   <insert id="insert" parameterType="com.performance.persist.domain.Person" >

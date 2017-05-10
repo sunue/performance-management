@@ -16,7 +16,7 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav navbar-right">
 					<li>
-						<a href="#" id="userName">用户名</a>	
+						<a href="#" id="userName"></a>	
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span><strong class="caret"></strong></a>
@@ -62,62 +62,62 @@
 										<button type="button" class="btn btn-info">科研</button>	
 									</td>
 									<td>
-										<select id="status" name="status" class="input-xlarge form-control " >
-											<option value="01">科研获奖</option>
+										<select id="sicContent" name="content" class="input-xlarge form-control " >
+											<!-- <option value="01">科研获奖</option>
 											<option value="02">科研项目与经费</option>
 											<option value="03">技术创新成果</option>
 											<option value="04">论文著作</option>  
-											<option value="05">技术创新成果</option>      
+											<option value="05">技术创新成果</option>  -->     
 										</select>
 									</td>
 									<td>
-										<select id="status" name="status" class="input-xlarge form-control " >
-											<option value="01">国家自然科学奖/国家技术发明奖/国家科技进步奖/国际科学技术合作奖</option>
+										<select id="sicProject" name="project" class="input-xlarge form-control " >
+											<!-- <option value="01">国家自然科学奖/国家技术发明奖/国家科技进步奖/国际科学技术合作奖</option>
 											<option value="02">国家星火奖/教育部高等学校科学研究优秀成果奖</option>
-											<option value="">省科学技术奖（含军队科技进步奖/国防科技奖）</option>      
+											<option value="">省科学技术奖（含军队科技进步奖/国防科技奖）</option>       -->
 										</select>
 									</td>
 									<td>
-										<select id="status" name="status" class="input-xlarge form-control " >
-											<option value="01">特等奖</option>
+										<select id="sicGrade" name="status" class="input-xlarge form-control " >
+										<!-- 	<option value="01">特等奖</option>
 											<option value="02">一等奖</option>
-											<option value="">二等奖</option>      
+											<option value="">二等奖</option>  -->     
 										</select>
 									</td>
 									<td>
-										<button class="btn btn-warning" id="">
+										<button class="btn btn-warning" id="sicSub">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
 										</button>
 									</td>		
 								</tr>
 								<tr>
 									<td>
-										<button type="button" class="btn btn-info">科研</button>
+										<button type="button" class="btn btn-info">教研</button>
 										
 									</td>
 									<td>
-										<select id="status" name="status" class="input-xlarge form-control " >
+										<select id="teaContent" class="input-xlarge form-control " >
 											<option value="01">启用</option>
 											<option value="02">未启用</option>
 											<option value="">全部</option>      
 										</select>
 									</td>
 									<td>
-										<select id="status" name="status" class="input-xlarge form-control " >
+										<select id="teaProject" name="status" class="input-xlarge form-control " >
 											<option value="01">启用</option>
 											<option value="02">未启用</option>
 											<option value="">全部</option>      
 										</select>
 									</td>
 									<td>
-										<select id="status" name="status" class="input-xlarge form-control " >
+										<select id="teaGrade" name="status" class="input-xlarge form-control " >
 											<option value="01">启用</option>
 											<option value="02">未启用</option>
 											<option value="">全部</option>      
 										</select>
 									</td>
 									<td>
-										<button class="btn btn-warning" id="">
+										<button class="btn btn-warning" id="teaSub">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
 										</button>
 									</td>	
@@ -162,10 +162,6 @@
         
 			        </ul>
 				</div>
-				<div class="foot" id="foot">
-				    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
-				    <button class="btn btn-danger frBtn" id="deleteAll">删除已选</button>
-				</div>
 			</div>
 		</div>
 	</div>
@@ -173,5 +169,6 @@
 	<script src="/statics/js/jquery-1.11.1.min.js"></script>
 	<script src="/statics/js/bootstrap.min.js"></script>
 	<script src="/statics/js/bootstrap-paginator.js"></script>
+	<script src="/statics/js/teacherCommon.js"></script>
 	<script src="/statics/js/SubMyPerformance.js"></script>
 </html>

@@ -55,7 +55,6 @@ em {
 
 /*全选样式*/
 .foot {
-    margin-top: 2em;
     color: #666;
     height: 48px;
     border: 1px solid #c8c8c8;
@@ -132,4 +131,7 @@ em {
 .unchanged
 {
     border: 0;
+}
+.row {
+    margin-top: 10px;
 }

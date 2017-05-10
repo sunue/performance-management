@@ -3,7 +3,7 @@ $(function(){
     var getTeacherInfo = "http://localhost:8080/teacher/getTeacherInfo";
     var editAsk = "http://localhost:8080/teacher/updateTeacherInfo";
     var searchData ={ 
-        id:22222
+        id:111111
     };
 
 

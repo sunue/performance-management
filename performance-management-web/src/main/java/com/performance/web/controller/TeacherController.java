@@ -168,12 +168,20 @@ public class TeacherController {
             map.put("password", password);
             try {
                 Person person = teacherService.teacherLogin(map);
-                if (null == person) {
+                if (null == person || "1".equals(person.getStatus())) { //删除
                     jr.setStatus(1);
                     jr.setMsg("该用户不存在");
                     jr.setData(false);
                     mv.setViewName("login");
-                } else {
+                } else if ("2".equals(person.getStatus())) { //审核中
+                    jr.setStatus(4);
+                    jr.setMsg("审核中...");
+                    jr.setData(false);
+                } else if ("3".equals(person.getStatus())) { //未通过
+                    jr.setStatus(5);
+                    jr.setMsg("很抱歉，您未通过审核！");
+                    jr.setData(false);
+                } else if ("0".equals(person.getStatus())) { //正常
                     jr.setStatus(0);
                     jr.setMsg("登录成功");
                     jr.setData(true);
@@ -206,6 +214,7 @@ public class TeacherController {
             map.put("id", id);
             map.put("grade", 2); //教师
             map.put("status", "0"); //正常
+            System.out.println("heheh");
             try {
                 String name = teacherService.getTeacherName(map);
                 if (null == name) {

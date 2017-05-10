@@ -1,14 +1,101 @@
 $(function(){
 	$(".leftNav").css("height", $(window).height());
-	var entryPerformance = "http://localhost:8080/teacher/entryPerformance";
+
+    // 查询未提交绩效
 	var selectPerformance = "http://localhost:8080/teacher/getCheckPerformance";
+    var getSciContent ="http://localhost:8080/teacher/getSciContent";
+    var getSciProject ="http://localhost:8080/teacher/getSciProjectBySciContent"
+    var getSciGrade ="http://localhost:8080/teacher/getSciGradeBySciContentAndSciProject"
 	var entryData ={ id:""};
 	var searchData ={
-		id:222222,
 		pageSize:3,
 		pageNum:1,
 
 	};
+    // 查看待审核绩效
+    getAllPages();
+
+    // 选项查询
+    // 科研内容查询
+    createList(getSciContent,"","#sicContent","get",true,function(){
+        // 科研项目查询
+        var searchSicPro ={
+            sciContent: $("#sicContent").attr("value")
+        }
+        createList(getSciProject,searchSicPro,"#sicProject","post",true,function(){
+
+                $("#sicContent").change(function(){
+                    searchSicPro.sciContent =$("#sicContent").val();
+                    $("#sicProject").html("");
+                    createList(getSciProject,searchSicPro,"#sicProject","post",false,function(){
+                        // 科研等级查询
+                        var searchSicGrade ={
+                            sciProject: $("#sicProject").val(),
+                            sciContent: $("#sicContent").val()
+
+                        }
+                        createList(getSciGrade,searchSicGrade,"#sicGrade","post",true,function(){
+                                $("#sicContent").change(function(){
+                                searchSicGrade.sciContent =$("#sicContent").val();
+                                searchSicGrade.sciProject =$("#sicProject").val();
+
+                                $("#sicProject").html("");
+                                $("#sicGrade").html("");
+                                createList(getSciGrade,searchSicGrade,"#sicGrade","post",false,function(){
+                                    $("#sicProject").change(function(){
+                                        searchSicGrade.sciContent =$("#sicContent").val();
+                                        searchSicGrade.sciProject =$("#sicProject").val();
+
+                                        $("#sicGrade").html("");
+                                        createList(getSciGrade,searchSicGrade,"#sicGrade","post",false);
+
+                                    });
+                                });
+
+                            });
+                        });
+                    });
+
+                });
+            });
+
+        });
+    
+   
+   
+   
+   
+
+    // $.ajax({
+    //             url: getSciContent,
+    //             dataType:"json",
+    //             contentType: "application/json; charset=UTF-8",
+    //             type: "get",
+    //             success:function(result)
+    //             {
+                 
+    //                 if(result.status == 0)
+    //                 {
+    //                     var dataList = result.data;
+    //                     $.each(dataList,function(index, ele){ 
+    //                         $("#sicContent").append("<option value="+ele+">"+ele+"/option>");
+    //                     });
+                       
+    //                 }
+    //                 else
+    //                 {
+    //                     console.log(result.msg);
+    //                     alert(result.msg);
+    //                 }
+    //             },                                                
+    //             error:function(XMLHttpRequest, textStatus, errorThrown)
+    //             {
+    //                 console.log('错误'+errorThrown);
+    //             }     
+    // });
+  
+
+
 	// 添加绩效
 	// $("#scientificBtn").on("click", function(){
 	// 	entryData.category ='科研'
@@ -28,8 +115,7 @@ $(function(){
 	// 	entryData.grade = $("#scienceGrade").val();
 	// 	sendAjax(entryData,entryPerformance);
 	// });
-	// 查看待审核绩效
-	getAllPages();
+	
 
 	// 公共函数
 	// function sendAjax(data,url){
@@ -60,8 +146,12 @@ $(function(){
  //                    }     
  //        });
 	// }
+
+
+
+    // --------函数部分
 	// 分页请求
-	 function getAllPages()
+	function getAllPages()
     {
         $.ajax({
             url:selectPerformance,
@@ -112,7 +202,7 @@ $(function(){
                                         }
                                         else
                                         {
-                                            $(".infoPart").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+data.msg+"</td></tr>  ");
+                                            $(".infoPart").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+result.msg+"</td></tr>  ");
                                             
                                         }
                          
@@ -133,7 +223,7 @@ $(function(){
                     }
 
                 }
-                else if (data.status ==3) {
+                else{
                     $(".infoPart").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+data.msg+"</td></tr>  ");
 
 
@@ -148,15 +238,52 @@ $(function(){
         });
     }
     //
-   function initThePage(results){
+    function initThePage(results){
         $.each(results,function(index, ele){
             if(ele.status == "2"){
                 var status ="待审核"
-
             }
             $(".infoPart").find("tbody").append(
                 "<tr class='info'><td>"+ele.category+"</td><td>"+ele.content+"</td><td>"+ele.project+"</td><td>"+ele.proGrade+"</td><td style='color:red'>"+status+"</td><td><button type='button' class='btn btn-warning scientificBtnEdit' data-toggle='modal' data-target='#scientificEdit'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>  <button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
         });
  
+    }
+    // 获取联动列表
+    function createList(url,data,selectId,methods,firstTime,doFunction){
+        $.ajax({
+                url: url,
+                dataType:"json",
+                data:$.param(data),
+                contentType: "application/json; charset=UTF-8",
+                type: methods,
+                success:function(result)
+                {
+                 
+                    if(result.status == 0)
+                    {
+                        var dataList = result.data;
+                        $.each(dataList,function(index, ele){
+                            if(index ==0&&firstTime){
+                                $(selectId).attr("value",ele);
+                            }
+                           
+                            $(selectId).append("<option value="+ele+">"+ele+"</option>");
+                           
+                        });
+                         doFunction();
+                       
+                    }
+                    else
+                    {
+                        console.log(result.msg);
+                        alert(result.msg);
+                    }
+                },                                                
+                error:function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    console.log('错误'+errorThrown);
+                }     
+        });
+
     }
 })
