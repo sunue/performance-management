@@ -6,7 +6,21 @@ $(function(){
     var getSciContent ="http://localhost:8080/teacher/getSciContent";
     var getSciProject ="http://localhost:8080/teacher/getSciProjectBySciContent"
     var getSciGrade ="http://localhost:8080/teacher/getSciGradeBySciContentAndSciProject"
-	var entryData ={ id:""};
+
+    var getTeaContent ="http://localhost:8080/teacher/getTeaContent"
+    var getTeaProject ="http://localhost:8080/teacher/getTeaGradeByTeaContentAndTeaProject"
+    var getTeaGrade ="http://localhost:8080/teacher/getTeaProjectByTeaContent"
+
+    var entryPerformance ="http://localhost:8080/teacher/entryPerformance"
+
+	var entrySicData ={};
+    var entryTeaData ={};
+    // 查询数据
+    var searchSicPro ={}
+    var searchSicGrade ={}
+    var searchTeaPro ={}
+    var searchTeaGrade ={}
+
 	var searchData ={
 		pageSize:3,
 		pageNum:1,
@@ -18,134 +32,99 @@ $(function(){
     // 选项查询
     // 科研内容查询
     createList(getSciContent,"","#sicContent","get",true,function(){
-        // 科研项目查询
-        var searchSicPro ={
-            sciContent: $("#sicContent").attr("value")
-        }
-        createList(getSciProject,searchSicPro,"#sicProject","post",true,function(){
-
-                $("#sicContent").change(function(){
-                    searchSicPro.sciContent =$("#sicContent").val();
-                    $("#sicProject").html("");
-                    createList(getSciProject,searchSicPro,"#sicProject","post",false,function(){
-                        // 科研等级查询
-                        var searchSicGrade ={
-                            sciProject: $("#sicProject").val(),
-                            sciContent: $("#sicContent").val()
-
-                        }
-                        createList(getSciGrade,searchSicGrade,"#sicGrade","post",true,function(){
-                                $("#sicContent").change(function(){
-                                searchSicGrade.sciContent =$("#sicContent").val();
-                                searchSicGrade.sciProject =$("#sicProject").val();
-
-                                $("#sicProject").html("");
-                                $("#sicGrade").html("");
-                                createList(getSciGrade,searchSicGrade,"#sicGrade","post",false,function(){
-                                    $("#sicProject").change(function(){
-                                        searchSicGrade.sciContent =$("#sicContent").val();
-                                        searchSicGrade.sciProject =$("#sicProject").val();
-
-                                        $("#sicGrade").html("");
-                                        createList(getSciGrade,searchSicGrade,"#sicGrade","post",false);
-
-                                    });
-                                });
-
-                            });
-                        });
-                    });
-
-                });
-            });
+        searchSicPro.sciContent= $("#sicContent").val();
+    });
+    // 科研项目查询
+    createList(getSciProject,searchSicPro,"#sicProject","post",true,function(){
+        searchSicGrade.sciContent =$("#sicContent").val();
+        searchSicGrade.sciProject =$("#sicProject").val();
+    });
+    $("#sicContent").change(function(){
+        searchSicPro.sciContent =$("#sicContent").val();
+        $("#sicContent").attr("value",searchSicGrade.sciContent);
+        $("#sicProject").html("");
+        createList(getSciProject,searchSicPro,"#sicProject","post",false,function(){
+            searchSicGrade.sciProject =$("#sicProject").val();
+            searchSicGrade.sicContent =$("#sicContent").val();
 
         });
-    
-   
-   
-   
-   
 
-    // $.ajax({
-    //             url: getSciContent,
-    //             dataType:"json",
-    //             contentType: "application/json; charset=UTF-8",
-    //             type: "get",
-    //             success:function(result)
-    //             {
-                 
-    //                 if(result.status == 0)
-    //                 {
-    //                     var dataList = result.data;
-    //                     $.each(dataList,function(index, ele){ 
-    //                         $("#sicContent").append("<option value="+ele+">"+ele+"/option>");
-    //                     });
-                       
-    //                 }
-    //                 else
-    //                 {
-    //                     console.log(result.msg);
-    //                     alert(result.msg);
-    //                 }
-    //             },                                                
-    //             error:function(XMLHttpRequest, textStatus, errorThrown)
-    //             {
-    //                 console.log('错误'+errorThrown);
-    //             }     
-    // });
-  
+    });
+    // 科研等级查询   
+    createList(getSciGrade,searchSicGrade,"#sicGrade","post",true);
+     $("#sicProject").change(function(){
+        searchSicGrade.sciContent =$("#sicContent").val();
+        $("#sicContent").attr("value",searchSicGrade.sciContent);
+        searchSicGrade.sciProject =$("#sicProject").val();
+        $("#sicProject").attr("value", searchSicGrade.sciProject);
+
+        $("#sicGrade").html("");
+        createList(getSciGrade,searchSicGrade,"#sicGrade","post",false);
+
+    });
+    // =======教研项目查询
+
+    // 教研内容查询
+    createList(getTeaContent,"","#teaContent","get",true,function(){
+        searchTeaPro.teaContent= $("#teaContent").val();
+    });
+    // 教研项目查询
+    createList(getTeaProject,searchTeaPro,"#teaProject","post",true,function(){
+        searchTeaGrade.teaContent =$("#teaContent").val();
+        searchTeaGrade.sciProject =$("#teaProject").val();
+    });
+    $("#teaContent").change(function(){
+        searchTeaPro.teaContent =$("#teaContent").val();
+        $("#teaContent").attr("value",searchTeaGrade.teaContent);
+        $("#teaProject").html("");
+        createList(getTeaProject,searchTeaPro,"#teaProject","post",false,function(){
+            searchTeaGrade.sciProject =$("#teaProject").val();
+            searchTeaGrade.teaContent =$("#teaContent").val();
+
+        });
+
+    });
+    // 教研等级查询   
+    createList(getTeaGrade,searchTeaGrade,"#teaGrade","post",true);
+     $("#teaProject").change(function(){
+        searchTeaGrade.teaContent =$("#teaContent").val();
+        $("#teaContent").attr("value",searchTeaGrade.teaContent);
+        searchTeaGrade.sciProject =$("#teaProject").val();
+        $("#teaProject").attr("value", searchTeaGrade.sciProject);
+
+        $("#teaGrade").html("");
+        createList(getTeaGrade,searchTeaGrade,"#teaGrade","post",false);
+
+    });
 
 
-	// 添加绩效
-	// $("#scientificBtn").on("click", function(){
-	// 	entryData.category ='科研'
-	// 	// 其他参数
-	// 	entryData.content = $("#scienceContent").val();
-	// 	entryData.project = $("#scienceProject").val();
-	// 	entryData.grade = $("#scienceGrade").val();
-	// 	sendAjax(entryData,entryPerformance);
 
 
-	// });
-	// $("#teachBtn").on("click", function(){
-	// 	entryData.category ='教研'
-	// 	// 其他参数
-	// 	entryData.content = $("#scienceContent").val();
-	// 	entryData.project = $("#scienceProject").val();
-	// 	entryData.grade = $("#scienceGrade").val();
-	// 	sendAjax(entryData,entryPerformance);
-	// });
+    // 添加科研绩效
+	$("#sicSub").on("click", function(){
+		entrySicData.category ='科研'
+		// 其他参数
+		entrySicData.content = $("#sicContent").val();
+		entrySicData.project = $("#sicProject").val();
+		entrySicData.proGrade = $("#sicGrade").val();
+		sendAjax(entrySicData,entryPerformance);
+
+
+	});
+    // 添加教研绩效
+	$("#teaSub").on("click", function(){
+        entryTeaData.category ='教研'
+        // 其他参数
+        entryTeaData.content = $("#teaContent").val();
+        entryTeaData.project = $("#teaProject").val();
+        entryTeaData.proGrade = $("#teaGrade").val();
+        sendAjax(entryTeaData,entryPerformance);
+
+
+    });
 	
 
-	// 公共函数
-	// function sendAjax(data,url){
-	// 	$.ajax({
- //                    url: url,
- //                    data: JSON.stringify(data) ,
- //                    dataType:"json",
- //                    contentType: "application/json; charset=UTF-8",
- //                    type: "post",
- //                    success:function(result)
- //                    {
-                     
- //                        if(result.status == 0)
- //                        {
- //                            console.log(result.msg);
- //                            alert(result.msg);
-                           
- //                        }
- //                        else
- //                        {
- //                            console.log(result.msg);
- //                            alert(result.msg);
- //                        }
- //                    },                                                
- //                    error:function(XMLHttpRequest, textStatus, errorThrown)
- //                    {
- //                        console.log('错误'+errorThrown);
- //                    }     
- //        });
-	// }
+	
 
 
 
@@ -162,7 +141,6 @@ $(function(){
                 if(data.status ==0){
                     var dataList =data.data_list;
                     initThePage(dataList);
-
                     var options = {
                         bootstrapMajorVersion: 3, //版本
                         currentPage: 1, //当前页数
@@ -249,13 +227,14 @@ $(function(){
  
     }
     // 获取联动列表
-    function createList(url,data,selectId,methods,firstTime,doFunction){
+    function createList(url,data,selectId,methods,firstTime,tovalue){
         $.ajax({
                 url: url,
                 dataType:"json",
                 data:$.param(data),
-                contentType: "application/json; charset=UTF-8",
+                contentType: "application/x-www-form-urlencoded;charset=utf-8",
                 type: methods,
+                async:false,
                 success:function(result)
                 {
                  
@@ -263,15 +242,18 @@ $(function(){
                     {
                         var dataList = result.data;
                         $.each(dataList,function(index, ele){
-                            if(index ==0&&firstTime){
-                                $(selectId).attr("value",ele);
-                            }
+                            // if(index ==0&&firstTime){
+                            //     $(selectId).attr("value",ele);
+                            // }
                            
                             $(selectId).append("<option value="+ele+">"+ele+"</option>");
-                           
                         });
-                         doFunction();
-                       
+                        if(tovalue){
+
+                            tovalue();
+                                   
+                        }
+                        
                     }
                     else
                     {
@@ -285,5 +267,36 @@ $(function(){
                 }     
         });
 
+    }
+    // 发送提交请求
+    function sendAjax(data,url){
+        $.ajax({
+                    url: url,
+                    data: JSON.stringify(data) ,
+                    dataType:"json",
+                    contentType: "application/json; charset=UTF-8",
+                    type: "post",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload(); 
+                           
+                        }
+                        else
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload(); 
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+        });
     }
 })

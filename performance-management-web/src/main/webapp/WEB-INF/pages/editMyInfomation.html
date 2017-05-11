@@ -38,129 +38,27 @@
 			<div class="col-md-2 column leftNav">
 				<ul class="nav nav-pills nav-stacked">
 					<li><a href="SubMyPerformance.html">提交我的绩效</a></li>
-					<li><a href="showMyPerformance.html">查看我的绩效</a></li>
+					<li><a href="showMyPerformance.html">查看我的排名</a></li>
 					<li class="active"><a href="editMyInfomation.html">修改我的信息</a></li>		
 				</ul>
 			</div>
 			<div class="col-md-10 column">
-				<!-- <div class="searchPart">
-					<ul id="myTab" class="nav nav-tabs">
-						<li class="active">
-							<a href="#scientificResearch" data-toggle="tab">
-								 科研
-							</a>
-						</li>
-						<li><a href="#teachingResearch" data-toggle="tab">教研</a></li>
-						<li><a href="#all" data-toggle="tab">全部</a></li>
-					</ul>
-					<div id="myTabContent" class="tab-content">
-						<div class="tab-pane fade in active" id="scientificResearch">
-							<form id="">
-								<table  class="table">
-									<tbody>
-										<tr>
-											<td class="scientificResearch">
-												<input type="text" value="scientificResearch" >	
-											</td>
-											<td>
-												<select id="status" name="status" class="input-xlarge form-control " >
-													<option value="01">按ID</option>
-													<option value="02">按名次</option>
-													<option value="">全部</option>      
-												</select>
-											</td>
-											<td>
-												<button class="btn btn-warning" id="">
-													<span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
-												</button>
-											</td>			
-										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>
-						<div class="tab-pane fade" id="teachingResearch">
-							<form id="">
-								<table  class="table">
-									<tbody>
-										<tr>
-											<td class="teachingResearch">
-												<input type="text" value="teachingResearch" >	
-											</td>
-											<td>
-												<select id="status" name="status" class="input-xlarge form-control " >
-													<option value="01">按ID</option>
-													<option value="02">按名次</option>
-													<option value="">全部</option>      
-												</select>
-											</td>
-											<td>
-												<button class="btn btn-warning" id="">
-													<span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
-												</button>
-											</td>		
-										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>
-						<div class="tab-pane fade" id="all">
-							<form id="">
-								<table  class="table">
-									<tbody>
-										<tr>
-											<td class="teachingResearch">
-												<input type="text" value="" >	
-											</td>
-											<td>
-												<select id="status" name="status" class="input-xlarge form-control " >
-													<option value="01">按ID</option>
-													<option value="02">按名次</option>
-													<option value="">全部</option>      
-												</select>
-											</td>
-											<td>
-												<button class="btn btn-warning" id="">
-													<span class="glyphicon glyphicon-search" aria-hidden="true"></span>查询
-												</button>
-											</td>		
-										</tr>
-									</tbody>
-								</table>
-							</form>
-						</div>	
-					</div>
-				</div> -->
 				<div class="infoPart">
 					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
 								<th>工号</th>
 								<th>姓名</th>
-								<th>密码</th>
 								<th>性别</th>
 								<th>年龄</th>
 								<th>职称</th>
 								<th>入职时间</th>
+								<th>科研绩效总分</th>
+								<th>教研绩效总分</th>
 								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody>
-					<!-- 		<tr>
-								<td></td>
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
-								<td></td>
-								<td>1</td>
-								<td>2</td>
-								<td>3</td>
-								<td>
-									<button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#see'>
-										<span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看详情
-									</button> 
-								</td>
-							</tr> -->	
 						</tbody>
 					</table>
 					<ul class="pagination" id="pages">
@@ -187,88 +85,111 @@
 	                </h4>
 	            </div>
 	            <div class="modal-body">
-	                <form class="form-horizontal" role="form" id="editUriForm" role="form">
+	                <form class="form-horizontal" role="form" id="editForm" role="form">
 	                    <div class="form-group">
-	                        <label for="id" class="col-sm-2 control-label">
+	                        <label for="id" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            工号
+	                            工号：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <input type="text" class="form-control id"  name="id" placeholder="请输入工号" required>
+	                            <input type="text" class="form-control editId"  name="id" placeholder="请输入工号" required readonly>
 	                        </div>
-	                        <div class="col-sm-4 idTip"></div>
+	                      
 	                    </div>
 	                    <div class="form-group">
-	                        <label for="name" class="col-sm-2 control-label">
+	                        <label for="name" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            姓名
+	                            姓名：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <input type="text" class="form-control name" name="name"  placeholder="请输入姓名" required>
+	                            <input type="text" class="form-control editName" name="name"  readonly required>
 	                        </div>
-	                        <div class="col-sm-4 nameTip"></div>
+	                       
 	                    </div>
 	                    
 
 	                    <div class="form-group">
-	                        <label for="sex" class="col-sm-2 control-label">
+	                        <label for="sex" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            性别
+	                            性别：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <select name="sex" class="input-xlarge form-control sex" required>
+	                            <select name="sex" class="input-xlarge form-control editSex" required>
 	                                    <option value="男">男</option>
 	                                    <option value="女">女</option>     
 	                            </select>   
 	                        </div>
-	                        <div class="col-sm-4 sexTip"></div>
 	                    </div>
 
 	                    <div class="form-group">
-	                        <label for="age" class="col-sm-2 control-label">
+	                        <label for="age" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            年龄
+	                            年龄：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <input type="number" class="form-control age" name="age"  placeholder="请输入年龄" required>
+	                            <input type="number" class="form-control editAge" name="age"  placeholder="请输入年龄" required>
 	                        </div>
-	                        <div class="col-sm-4 ageTip"></div>
+	      
 	                    </div>
 	                    <div class="form-group">
-	                        <label for="title" class="col-sm-2 control-label">
+	                        <label for="title" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            职称
+	                            职称：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <select name="title" class="input-xlarge form-control title" required>
-	                                    <option value="01">教授</option>
-	                                    <option value="02">副教授</option>
-	                                    <option value="03">讲师</option>
-	                                    <option value="04">助教</option>     
+	                            <select name="title" class="input-xlarge form-control editTitle" required>
+	                                    <option value="教授">教授</option>
+	                                    <option value="副教授">副教授</option>
+	                                    <option value="讲师">讲师</option>
+	                                    <option value="助教">助教</option>     
 	                            </select> 
 	                        </div>
-	                        <div class="col-sm-4 titleTip"></div>
+	                      
 	                    </div>
 	                    <div class="form-group">
-	                        <label for="admissionTime" class="col-sm-2 control-label">
+	                        <label for="admissionTime" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            入教时间
+	                            入教时间：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <input type="date" class="form-control admissionTime" name="admissionTime"  placeholder="请输入入教时间" required>
+	                            <input type="date" class="form-control editAdmissionTime" name="admissionTime"  placeholder="请输入入教时间" required>
 
 	                        </div>
-	                        <div class="col-sm-4 admissionTimeTip"></div>
+	                       
 	                    </div>
 	                    <div class="form-group">
-	                        <label for="password" class="col-sm-2 control-label">
+	                        <label for="password" class="col-sm-4 control-label">
 	                            <em>*</em>
-	                            密码
+	                            密码：
 	                        </label>
 	                        <div class="col-sm-6">
-	                            <input type="password" class="form-control password" name="password"  placeholder="请输入密码" value="123456" required>
+	                           <!--  <input type="password" class="form-control editPassword" name="password" required> -->
+	                           <button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editPassword' id='clickEditPassword'>
+									<span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 修改密码
+								</button> 
 	                        </div>
-	                        <div class="col-sm-4 passwordTip"></div>
+	                       
+	                    </div>
+	                     <div class="form-group">
+	                        <label for="scientificResearchScore" class="col-sm-4 control-label">
+	                            <em>*</em>
+	                            科研绩效总分：
+	                        </label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control editScientificResearchScore" name="scientificResearchScore" required readonly>
+
+	                        </div>
+	                       
+	                    </div>
+	                     <div class="form-group">
+	                        <label for="teachingResearchScore" class="col-sm-4 control-label">
+	                            <em>*</em>
+	                            教研绩效总分：
+	                        </label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control editTeachingResearchScore" name="teachingResearchScore"  required readonly>
+	                        </div>
+	                       
 	                    </div>
 	                </form>
 	            </div>
@@ -278,7 +199,67 @@
 	                </button>
 	                <button type="submit" class="btn btn-primary" id="editSub">
 	                    提交
-	                </button><span id="tip"> </span>
+	                </button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+
+	<!-- 修改密码 -->
+		    
+	<div class="modal fade" id="editPassword" tabindex="-2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                    &times;
+	                </button>
+	                <h4 class="modal-title" id="myModalLabel">
+	                    修改密码
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal" role="form" id="editPasswordForm" role="form">
+	                    <div class="form-group">
+	                        <label for="password" class="col-sm-4 control-label">
+	                            <em>*</em>
+	                            旧密码：
+	                        </label>
+	                        <div class="col-sm-5">
+	                            <input type="password" class="form-control oldPassword" required>
+	                        </div> 
+	                        <div class="col-sm-3 oldPasswordTip"></div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="password" class="col-sm-4 control-label">
+	                            <em>*</em>
+	                            新密码：
+	                        </label>
+	                        <div class="col-sm-5">
+	                            <input type="password" class="form-control newPassword" name="password" required>
+	                        </div>
+	                        <div class="col-sm-3 newPasswordTip"></div>  
+	                    </div>
+	                     <div class="form-group">
+	                        <label for="password" class="col-sm-4 control-label">
+	                            <em>*</em>
+	                            确认密码：
+	                        </label>
+	                        <div class="col-sm-5">
+	                            <input type="password" class="form-control newPassword1" required>
+	                        </div>
+	                        <div class="col-sm-3 newPassword1Tip"></div> 
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	    
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+	                </button>
+	                <button type="submit" class="btn btn-primary" id="subPassword">
+	                    提交
+	                </button>
+	                <div class="subtip"></div>
 	            </div>
 	        </div><!-- /.modal-content -->
 	    </div><!-- /.modal -->

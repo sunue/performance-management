@@ -508,73 +508,78 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public Map<String, Object> totalRank(Long id, int pageSize, int pageNum) {
+    public Map<String, Object> totalRank(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("firstdata", (pageNum - 1) * pageSize);
         map.put("nums", pageSize);
         map.put("grade", 2); //教师
         map.put("status", "0"); //正常
+        List<Person> personList = null;
+        int total = 0;
         try {
-            List<Person> personList = personDao.selectListByTotalRank(map);
-            int rank = personDao.selectRankByTotal(id);
-            int count = personDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("personList", personList);
-            resultMap.put("rank", rank);
-            resultMap.put("count", count);
-            return resultMap;
+            personList = personDao.selectListByTotalRank(map);
+            total = personDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != personList && personList.size() > 0) {
+            resultMap.put("personList", personList);
+        } else {
+            resultMap.put("personList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
     @Override
-    public Map<String, Object> scientificResearchRank(Long id, int pageSize, int pageNum) {
+    public Map<String, Object> scientificResearchRank(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("firstdata", (pageNum - 1) * pageSize);
         map.put("nums", pageSize);
         map.put("grade", 2); //教师
         map.put("status", "0"); //正常
+        List<Person> personList = null;
+        int total = 0;
         try {
-            List<Person> personList = personDao.selectListByScientificResearch(map);
-
-            int rank = personDao.selectRankByScientificResearch(id);
-            int count = personDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("personList", personList);
-            resultMap.put("rank", rank);
-            resultMap.put("count", count);
-            return resultMap;
+            personList = personDao.selectListByScientificResearch(map);
+            total = personDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != personList && personList.size() > 0) {
+            resultMap.put("personList", personList);
+        } else {
+            resultMap.put("personList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
     @Override
-    public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum) {
+    public Map<String, Object> teachingResearchRank(int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("firstdata", (pageNum - 1) * pageSize);
         map.put("nums", pageSize);
         map.put("grade", 2); //教师
         map.put("status", "0"); //正常
+        List<Person> personList = null;
+        int total = 0;
         try {
-            List<Person> personList = personDao.selectListByTeachingResearch(map);
-            int rank = personDao.selectRankByTeachingResearch(id);
-            int count = personDao.selectCount(map);
-
-            Map<String, Object> resultMap = new HashMap<String, Object>();
-            resultMap.put("personList", personList);
-            resultMap.put("rank", rank);
-            resultMap.put("count", count);
-            return resultMap;
+            personList = personDao.selectListByTeachingResearch(map);
+            total = personDao.selectCount(map);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != personList && personList.size() > 0) {
+            resultMap.put("personList", personList);
+        } else {
+            resultMap.put("personList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
     }
 
     @Override

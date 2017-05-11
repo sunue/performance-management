@@ -9,6 +9,7 @@ h1.navbar-brand{
 .navbar-inverse {
 	background-color: #428bca;
 	border-bottom: solid 2px #000;
+    z-index: 0;
 	
 
 

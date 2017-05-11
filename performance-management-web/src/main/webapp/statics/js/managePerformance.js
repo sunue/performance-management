@@ -84,7 +84,7 @@ $(function(){
                     }
 
                 }
-                else if (data.status ==3) {
+                else{
                     $(".infoPart").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+data.msg+"</td></tr>  ");
 
 

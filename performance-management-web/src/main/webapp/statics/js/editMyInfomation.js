@@ -2,14 +2,11 @@ $(function(){
     $(".leftNav").css("height", $(window).height());
     var getTeacherInfo = "http://localhost:8080/teacher/getTeacherInfo";
     var editAsk = "http://localhost:8080/teacher/updateTeacherInfo";
-    var searchData ={ 
-        id:111111
-    };
-
-
+    var editPassword ="http://localhost:8080/teacher/updatePassword";
+// $("#myModal").modal('hide');
+    // 获取信息
     $.ajax({
                 url: getTeacherInfo,
-                data:$.param(searchData) ,
                 dataType:"json",
                 contentType: "application/json; charset=UTF-8",
                 type: "get",
@@ -18,8 +15,7 @@ $(function(){
                  
                     if(result.status == 0)
                     {
-                       
-                     
+                         initThePage(result.data);                  
                     }
                     else
                     {
@@ -32,4 +28,149 @@ $(function(){
                     console.log('错误'+errorThrown);
                 }     
     });
+    // ----------函数---------------
+    // 初始化
+    function initThePage(results){
+
+        $(".infoPart").find("tbody").append(
+            "<tr class='info'><td>"+results.id+"</td><td>"+results.name+"</td><td>"+results.sex+"</td><td>"+results.age+"</td><td>"+results.title+"</td><td>"+getLocalTime(results.admissionTime).substring(0,10)+"</td><td>"+results.scientificResearchScore+"</td><td>"+results.teachingResearchScore+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#see'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看详情</button> <button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editPassword' id='clickEditPassword'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 修改密码</button> </td></tr>");
+
+        // 查看并修改
+        $(".editId").val(results.id);
+        $(".editName").val(results.name);
+        // $(".editPassword").val(results.password);
+        $(".editSex").val(results.sex);
+        $(".editAge").val(results.age);
+        $(".editTitle").val(results.title);
+        $(".editAdmissionTime").val(getLocalTime(results.admissionTime).substring(0,10));
+        // $(".editAdmissionTime").attr("value", getLocalTime(results.admissionTime));
+        $(".editScientificResearchScore").val(results.scientificResearchScore);
+        $(".editTeachingResearchScore").val(results.teachingResearchScore);
+        $("#editSub").on("click", function(){
+            var editData ={
+                "id":                         $(".editId").val(),
+                "name":                       $(".editName").val(),
+                // "password":                   $(".editPassword").val(),
+                "sex":                        $(".editSex").val(),
+                "age":                        $(".editAge").val(),
+                "title":                      $(".editTitle").val(),
+                "admissionTime":              $(".editAdmissionTime").val(),
+                "scientificResearchScore":    $(".editScientificResearchScore").val(),
+                "teachingResearchScore":      $(".editTeachingResearchScore").val()
+            };
+            // 修改信息
+            $.ajax({
+                    url: editAsk,
+                    dataType:"json",
+                    type:"POST",
+                    data:JSON.stringify(editData),
+                    contentType: "application/json; charset=UTF-8",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();
+                        }
+                        else
+                        {
+                            alert(result.msg);
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+            });
+
+            
+        });
+
+
+        // 提交密码
+        $("#subPassword").on("click", function(){
+            var passed =[false,false];
+            if($(".oldPassword").val() == results.password){
+                $(".oldPasswordTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
+                passed[0]=true;
+            }
+            else{
+                $(".oldPasswordTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>密码不一致</span>"); 
+                passed[0]=false;
+            }
+           if($(".newPassword").val() == $(".newPassword1").val()){
+                $(".newPassword1Tip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
+                passed[1]=true;
+            }
+            else{
+                $(".newPassword1Tip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>两次输入不一致</span>"); 
+                passed[1]=false;
+            }
+            var sendPsw ={
+                "password":$(".newPassword").val()
+            }
+            if(passed[0]&&passed[1]){
+                $.ajax({
+                    url: editPassword,
+                    data: $.param(sendPsw) ,
+                    dataType:"json",
+                    contentType: "application/x-www-form-urlencoded;charset=utf-8",
+                    type: "post",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                        else
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+                });
+            }
+            else{
+                $(".subTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>验证不通过</span>");
+            }
+           
+        });
+
+    }
+
+    // 时间转换
+    function getLocalTime(n) {     
+       return new Date(n).format('yyyy-MM-dd hh:mm:ss');     
+    }
+
+    //处理日期格式
+    Date.prototype.format = function(fmt)
+    {
+      var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+      };
+      if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+      for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+      return fmt;
+    }
+
 })

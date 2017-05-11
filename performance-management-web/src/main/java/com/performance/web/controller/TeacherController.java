@@ -185,7 +185,7 @@ public class TeacherController {
                     jr.setStatus(0);
                     jr.setMsg("登录成功");
                     jr.setData(true);
-                    request.getSession().setAttribute("id", id);
+                    request.getSession().setAttribute("teacherId", id);
                     mv.setViewName("SubMyPerformance");
                 }
             } catch (Exception e) {
@@ -204,7 +204,7 @@ public class TeacherController {
     @RequestMapping(value = "/getTeacherName", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<String>> getTeacherName(HttpServletRequest request) {
         JsonResult<String> jr = new JsonResult<String>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("teacherId");
         if (null == id) {
             jr.setData(null);
             jr.setMsg("未获取教师工号");
@@ -214,7 +214,6 @@ public class TeacherController {
             map.put("id", id);
             map.put("grade", 2); //教师
             map.put("status", "0"); //正常
-            System.out.println("heheh");
             try {
                 String name = teacherService.getTeacherName(map);
                 if (null == name) {
@@ -241,13 +240,16 @@ public class TeacherController {
     @RequestMapping(value = "/getTeacherInfo", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Person>> getTeacherInfo(HttpServletRequest request) {
         JsonResult<Person> jr = new JsonResult<Person>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("teacherId");
         if (null == id) {
             jr.setStatus(3);
             jr.setMsg("参数为空");
             jr.setData(null);
         } else {
             Map<String, Object> map = new HashMap<String, Object>();
+            map.put("id", id);
+            map.put("grade", 2); //教师
+            map.put("status", 0);
             try {
                 Person person = teacherService.getTeacherInfo(map);
                 if (null == person) {
@@ -274,11 +276,14 @@ public class TeacherController {
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updatePassword(HttpServletRequest request,
                                                               String password) {
+        System.out.println("1");
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("teacherId");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("password", password);
+        System.out.println(id);
+        System.out.println(password);
         try {
             String result = teacherService.updatePassword(map);
             if (result.equals("修改成功")) {
@@ -335,14 +340,17 @@ public class TeacherController {
      * 教师录入绩效
      * */
     @RequestMapping(value = "/entryPerformance", method = RequestMethod.POST)
-    public ResponseEntity<JsonResult<Boolean>> entryPerformance(@RequestBody TeacherPerformance teacherPerformance) {
+    public ResponseEntity<JsonResult<Boolean>> entryPerformance(@RequestBody TeacherPerformance teacherPerformance,
+                                                                HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        Long id = (Long) request.getSession().getAttribute("teacherId");
         if (null == teacherPerformance) {
             jr.setData(false);
             jr.setMsg("参数为空");
             jr.setStatus(3);
         } else {
             try {
+                teacherPerformance.setId(id);
                 Boolean result = teacherService.saveTeacherPerformance(teacherPerformance);
                 if (true == result) {
                     jr.setData(true);
@@ -372,7 +380,7 @@ public class TeacherController {
                                                                                   Integer pageNum) {
 
         JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("teacherId");
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
         if (null == id) {
@@ -384,7 +392,7 @@ public class TeacherController {
             jp.setTotal(0);
         } else {
             try {
-                Map<String, Object> map = teacherService.getCheckPerformance(id);
+                Map<String, Object> map = teacherService.getCheckPerformance(id, pSize, pNum);
                 if (null == map.get("teacherPerformanceList")) {
                     jp.setData_list(null);
                     jp.setMsg("无待审核绩效");
@@ -410,6 +418,37 @@ public class TeacherController {
             }
         }
         return new ResponseEntity<JsonPage<List<TeacherPerformance>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 教师删除待审核绩效
+     * */
+    @RequestMapping(value = "/deleteCheckPerformance", method = RequestMethod.POST)
+    public ResponseEntity<JsonResult<Boolean>> deleteCheckPerformance(@RequestBody List<Long> idList) {
+        JsonResult<Boolean> jr = new JsonResult<Boolean>();
+        if (null == idList) {
+            jr.setData(false);
+            jr.setMsg("未选择要删除的绩效");
+            jr.setStatus(3);
+        } else {
+            try {
+                int result = teacherService.deleteCheckPerformance(idList);
+                if (idList.size() == result) {
+                    jr.setData(true);
+                    jr.setMsg("删除成功");
+                    jr.setStatus(0);
+                } else {
+                    jr.setData(false);
+                    jr.setMsg("删除失败");
+                    jr.setStatus(1);
+                }
+            } catch (Exception e) {
+                jr.setData(false);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
 
     /**
@@ -738,7 +777,7 @@ public class TeacherController {
     public ResponseEntity<JsonResult<Boolean>> logout(HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
-            request.getSession().removeAttribute("id");
+            request.getSession().removeAttribute("teacherId");
             jr.setData(true);
             jr.setMsg("成功退出");
             jr.setStatus(0);

@@ -1,6 +1,5 @@
 package com.performance.web.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,9 +86,10 @@ public class AdministratorController {
                     jr.setData(true);
                     jr.setMsg("登录成功");
                     jr.setStatus(0);
-                    request.getSession().setAttribute("id", id);
+                    request.getSession().setAttribute("administratorId", id);
                     return "managePerformance";
                 } else {
+                    System.out.println("bucunzai");
                     jr.setData(false);
                     jr.setMsg("该用户不存在");
                     jr.setStatus(1);
@@ -110,7 +110,7 @@ public class AdministratorController {
     public ResponseEntity<JsonResult<String>> getAdministratorName(HttpServletRequest request) {
         System.out.println("调用获取管理员名称方法");
         JsonResult<String> jr = new JsonResult<String>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("administratorId");
         System.out.println(id);
         if (null == id) {
             jr.setData(null);
@@ -275,24 +275,6 @@ public class AdministratorController {
                 jr.setMsg("系统异常");
                 jr.setStatus(2);
             }
-        }
-        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
-    }
-
-    @RequestMapping("/add")
-    public ResponseEntity<JsonResult<Boolean>> add() {
-        JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        List<Integer> arr = new ArrayList<Integer>();
-        int a = 1;
-        arr.add(a);
-        System.out.println(arr);
-        Map map = new HashMap<>();
-        map.put(a, "hh");
-        System.out.println(map);
-        if (true) {
-            jr.setData(true);
-            jr.setMsg("增加教师成功");
-            jr.setStatus(0);
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
@@ -476,7 +458,7 @@ public class AdministratorController {
     @RequestMapping(value = "/getAdministratorInfo", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Person>> getAdministratorInfo(HttpServletRequest request) {
         JsonResult<Person> jr = new JsonResult<Person>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("administratorId");
         if (null == id) {
             jr.setData(null);
             jr.setMsg("参数为空");
@@ -534,7 +516,7 @@ public class AdministratorController {
     public ResponseEntity<JsonResult<Boolean>> updatePassword(HttpServletRequest request,
                                                               String password) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        Long id = (Long) request.getSession().getAttribute("id");
+        Long id = (Long) request.getSession().getAttribute("administratorId");
         if (null == id || null == password) {
             jr.setData(false);
             jr.setMsg("参数为空");
@@ -984,7 +966,7 @@ public class AdministratorController {
     public ResponseEntity<JsonResult<Boolean>> logout(HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         try {
-            request.getSession().removeAttribute("id");
+            request.getSession().removeAttribute("administratorId");
             jr.setData(true);
             jr.setMsg("成功退出");
             jr.setStatus(0);
@@ -1001,36 +983,26 @@ public class AdministratorController {
      * */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/totalRank", method = RequestMethod.GET)
-    public ResponseEntity<JsonPage<List<Person>>> totalRank(Long id, Integer pageSize,
-                                                            Integer pageNum) {
+    public ResponseEntity<JsonPage<List<Person>>> totalRank(Integer pageSize, Integer pageNum) {
         JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
         try {
-            Map<String, Object> map = administratorService.totalRank(id, pSize, pNum);
+            Map<String, Object> map = administratorService.totalRank(pSize, pNum);
             if (null == map.get("personList")) {
                 jp.setData_list(null);
-                jp.setMsg("查询失败");
+                jp.setMsg("查无数据");
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setStatus(1);
-                jp.setTotal((int) map.get("count"));
+                jp.setTotal((int) map.get("total"));
             } else {
-                if (id == null) {
-                    jp.setData_list((List<Person>) map.get("personList"));
-                    jp.setMsg("查询成功");
-                    jp.setPageNum(pNum);
-                    jp.setPageSize(pSize);
-                    jp.setStatus(0);
-                    jp.setTotal((int) map.get("count"));
-                } else {
-                    jp.setData_list((List<Person>) map.get("personList"));
-                    jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
-                    jp.setPageNum(pNum);
-                    jp.setPageSize(pSize);
-                    jp.setStatus(0);
-                    jp.setTotal((int) map.get("count"));
-                }
+                jp.setData_list((List<Person>) map.get("personList"));
+                jp.setMsg("查询成功");
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setStatus(0);
+                jp.setTotal((int) map.get("total"));
             }
         } catch (Exception e) {
             jp.setData_list(null);
@@ -1049,27 +1021,27 @@ public class AdministratorController {
      * */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/scientificResearchRank", method = RequestMethod.GET)
-    public ResponseEntity<JsonPage<List<Person>>> scientificResearchRank(Long id, Integer pageSize,
+    public ResponseEntity<JsonPage<List<Person>>> scientificResearchRank(Integer pageSize,
                                                                          Integer pageNum) {
         JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
         try {
-            Map<String, Object> map = administratorService.scientificResearchRank(id, pSize, pNum);
+            Map<String, Object> map = administratorService.scientificResearchRank(pSize, pNum);
             if (null == map.get("personList")) {
                 jp.setData_list(null);
-                jp.setMsg("查询失败");
+                jp.setMsg("查无数据");
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setStatus(1);
-                jp.setTotal((int) map.get("count"));
+                jp.setTotal((int) map.get("total"));
             } else {
                 jp.setData_list((List<Person>) map.get("personList"));
-                jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                jp.setMsg("查询成功");
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setStatus(0);
-                jp.setTotal((int) map.get("count"));
+                jp.setTotal((int) map.get("total"));
             }
         } catch (Exception e) {
             jp.setData_list(null);
@@ -1087,27 +1059,27 @@ public class AdministratorController {
      * */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/teachingResearchRank", method = RequestMethod.GET)
-    public ResponseEntity<JsonPage<List<Person>>> teachingResearchRank(Long id, Integer pageSize,
+    public ResponseEntity<JsonPage<List<Person>>> teachingResearchRank(Integer pageSize,
                                                                        Integer pageNum) {
         JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
         try {
-            Map<String, Object> map = administratorService.teachingResearchRank(id, pSize, pNum);
+            Map<String, Object> map = administratorService.teachingResearchRank(pSize, pNum);
             if (null == map.get("personList")) {
                 jp.setData_list(null);
-                jp.setMsg("查询失败");
+                jp.setMsg("查无数据");
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setStatus(1);
-                jp.setTotal((int) map.get("count"));
+                jp.setTotal((int) map.get("total"));
             } else {
                 jp.setData_list((List<Person>) map.get("personList"));
-                jp.setMsg("当前排名为" + ((int) map.get("rank") + 1) + "名");
+                jp.setMsg("查询成功");
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setStatus(0);
-                jp.setTotal((int) map.get("count"));
+                jp.setTotal((int) map.get("total"));
             }
         } catch (Exception e) {
             jp.setData_list(null);
@@ -1123,6 +1095,7 @@ public class AdministratorController {
     /**
      * 查询教师排名
      * */
+    @RequestMapping(value = "/getTeacherRank", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Map<String, Object>>> getTeacherRank(Long id) {
         JsonResult<Map<String, Object>> jr = new JsonResult<Map<String, Object>>();
         if (null == id) {

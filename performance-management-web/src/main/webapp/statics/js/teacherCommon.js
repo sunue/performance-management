@@ -20,28 +20,32 @@ $(function(){
     });
 
     $("#logout").on("click",function(){
+        if (confirm("确认要退出了吗？")){
+            $.ajax({
+                    url:logout,
+                    contentType: "application/json; charset=UTF-8",
+                    type:"get",
+                    success:function(data){
+                        if(data.status ==0){
+                            location.href = "../login.html";
+                            alert(data.msg)
+                        }
+                        else{
+                            alert(data.msg);
+                        }
+            
+                        
+                    },
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
 
-    	$.ajax({
-            url:logout,
-            contentType: "application/json; charset=UTF-8",
-            type:"get",
-            success:function(data){
-                if(data.status ==0){
-                    location.href = "../login.html";
-                    alert(data.msg)
-                }
-                else{
-                    alert(data.msg);
-                }
-    
-                
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrown)
-            {
-                console.log('错误'+errorThrown);
+                    }
+            });
 
-            }
-	    });
+        }
+
+    	
 
     });
 

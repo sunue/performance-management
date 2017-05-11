@@ -198,10 +198,12 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Map<String, Object> getCheckPerformance(Long id) {
+    public Map<String, Object> getCheckPerformance(Long id, int pageSize, int pageNum) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("status", "2");
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
         List<TeacherPerformance> teacherPerformanceList = null;
         int total = 0;
         try {
@@ -257,6 +259,7 @@ public class TeacherServiceImpl implements TeacherService {
         List<String> sciProjectList = null;
         try {
             sciProjectList = scientificResearchDao.getSciProjectBySciContent(map);
+            System.out.println(sciProjectList.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -321,6 +324,17 @@ public class TeacherServiceImpl implements TeacherService {
             return person.getName();
         }
         return null;
+    }
+
+    @Override
+    public int deleteCheckPerformance(List<Long> idList) {
+        try {
+            int result = teacherPerformanceDao.deleteByVirtualIdList(idList);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

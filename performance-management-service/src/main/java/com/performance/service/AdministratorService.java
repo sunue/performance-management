@@ -137,17 +137,17 @@ public interface AdministratorService {
     /**
      * 按总分排名
      * */
-    public Map<String, Object> totalRank(Long id, int pageSize, int pageNum);
+    public Map<String, Object> totalRank(int pageSize, int pageNum);
 
     /**
      * 按科研总分排名
      * */
-    public Map<String, Object> scientificResearchRank(Long id, int pageSize, int pageNum);
+    public Map<String, Object> scientificResearchRank(int pageSize, int pageNum);
 
     /**
      * 按教研总分排名
      * */
-    public Map<String, Object> teachingResearchRank(Long id, int pageSize, int pageNum);
+    public Map<String, Object> teachingResearchRank(int pageSize, int pageNum);
 
     /**
      * 查询教师排名

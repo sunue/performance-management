@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ShowPageController {
 
-    @RequestMapping(value = "/12")
+    @RequestMapping(value = "/1")
     public String showIndexPage() {
         System.out.println("1233");
         return "1";
@@ -20,6 +20,11 @@ public class ShowPageController {
     @RequestMapping("/login")
     public String login() {
         return "login";
+    }
+
+    @RequestMapping("/index")
+    public String index() {
+        return "index";
     }
 
     @RequestMapping("/register")

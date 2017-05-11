@@ -46,7 +46,7 @@ public interface TeacherService {
     /**
      * 教师查看待审核绩效
      * */
-    public Map<String, Object> getCheckPerformance(Long id);
+    public Map<String, Object> getCheckPerformance(Long id, int pageSize, int pageNum);
 
     /**
      * 按总分排名
@@ -97,4 +97,6 @@ public interface TeacherService {
      * 获取教师姓名
      * */
     public String getTeacherName(Map<String, Object> map);
+
+    public int deleteCheckPerformance(List<Long> idList);
 }

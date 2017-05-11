@@ -78,6 +78,14 @@
   		#{id,jdbcType=BIGINT}
   	</foreach> 
   </delete>
+  <delete id="deleteByVirtualIdList" parameterType="java.util.List">
+  	update teacher_performance
+  	set status="1"
+  	where virtual_id in
+    <foreach collection="list" item="id" index="index" open="(" separator="," close=")">
+  		#{id,jdbcType=BIGINT}
+  	</foreach> 
+  </delete>
   <insert id="insert" parameterType="com.performance.persist.domain.TeacherPerformance" >
     insert into teacher_performance (virtual_id, id, category, content, 
       project, pro_grade, status

@@ -11,6 +11,8 @@ public interface TeacherPerformanceDao {
 
     int deleteByIdList(List<Long> idList);
 
+    int deleteByVirtualIdList(List<Long> idList);
+
     int insert(TeacherPerformance record);
 
     int insertSelective(TeacherPerformance record);
