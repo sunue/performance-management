@@ -12,6 +12,7 @@ $(function(){
     var getTeaGrade ="http://localhost:8080/teacher/getTeaProjectByTeaContent"
 
     var entryPerformance ="http://localhost:8080/teacher/entryPerformance"
+    var deleteCheckPerformance= "http://localhost:8080/teacher/deleteCheckPerformance"
 
 	var entrySicData ={};
     var entryTeaData ={};
@@ -222,7 +223,47 @@ $(function(){
                 var status ="待审核"
             }
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td>"+ele.category+"</td><td>"+ele.content+"</td><td>"+ele.project+"</td><td>"+ele.proGrade+"</td><td style='color:red'>"+status+"</td><td><button type='button' class='btn btn-warning scientificBtnEdit' data-toggle='modal' data-target='#scientificEdit'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>  <button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td>"+ele.category+"</td><td>"+ele.content+"</td><td>"+ele.project+"</td><td>"+ele.proGrade+"</td><td style='color:red'>"+status+"</td><td><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+            // 删除待审核绩效
+            $(".scientificBtnDel").each(function(index, ele){
+                $(ele).on("click", function()
+                { 
+                    var idArray =[];
+                    idArray.push((results[index].virtualId).toString());
+                    if (confirm("确认删除吗？")) 
+                    {
+                        $.ajax({
+                                url: deleteCheckPerformance,
+                                data: JSON.stringify(idArray) ,
+                                dataType:"json",
+                                contentType: "application/json; charset=UTF-8",
+                                type: "post",
+                                success:function(result)
+                                {
+                                    $(ele).parent().parent().remove();
+                                    if(result.status == 0)
+                                    {
+                                        console.log(result.msg);
+                                        alert(result.msg);
+                                        location.reload();  
+                                    }
+                                    else
+                                    {
+                                        console.log(result.msg);
+                                        alert(result.msg);
+                                        location.reload();  
+                                    }
+                                },                                                
+                                error:function(XMLHttpRequest, textStatus, errorThrown)
+                                {
+                                    console.log('错误'+errorThrown);
+                                }     
+                        });
+                    }
+                });
+            });
+ 
+
         });
  
     }
@@ -242,9 +283,6 @@ $(function(){
                     {
                         var dataList = result.data;
                         $.each(dataList,function(index, ele){
-                            // if(index ==0&&firstTime){
-                            //     $(selectId).attr("value",ele);
-                            // }
                            
                             $(selectId).append("<option value="+ele+">"+ele+"</option>");
                         });

@@ -25,12 +25,15 @@ public class SessionFilter implements Filter {
         HttpServletResponse resp = (HttpServletResponse) response;
         String requestUri = ((HttpServletRequest) request).getServletPath();
         HttpSession session = req.getSession();
-        Object obj = session.getAttribute("id");
-        System.out.println((Long) obj);
-        if (obj != null || requestUri.equals("/login.html") || requestUri.equals("/index.html")
-            || requestUri.equals("/gateway_admin/user/login") || requestUri.equals("/")
-            || requestUri.equals("/adminLogin.html") || requestUri.equals("")
-            || requestUri.contains("administratorLogin") || requestUri.contains("teacherLogin")
+        Object administrator = session.getAttribute("administratorId");
+        Object teacher = session.getAttribute("teacherId");
+        System.out.println("过滤器" + administrator);
+        System.out.println(teacher);
+        if (administrator != null || teacher != null || requestUri.equals("/login.html")
+            || requestUri.equals("/index.html") || requestUri.equals("/register.html")
+            || requestUri.equals("/") || requestUri.equals("/adminLogin.html")
+            || requestUri.equals("") || requestUri.contains("administratorLogin")
+            || requestUri.contains("teacherLogin")
             || requestUri.equals("/gateway_admin/user/logout") || requestUri.contains(".css")
             || requestUri.contains(".js") || requestUri.contains(".jpg")
             || requestUri.contains(".png") || requestUri.contains(".eot")
@@ -39,8 +42,8 @@ public class SessionFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        //resp.sendRedirect("/1.html");
-        req.getRequestDispatcher("/index.html").forward(req, resp);
+        resp.sendRedirect("/index.html"); //重定向，url改变
+        //req.getRequestDispatcher("/index.html").forward(req, resp); //转发
     }
 
     @Override

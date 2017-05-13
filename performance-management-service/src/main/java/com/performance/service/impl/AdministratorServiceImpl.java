@@ -1,6 +1,5 @@
 package com.performance.service.impl;
 
-import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,14 +78,6 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
         Map<String, Object> resultMap = new HashMap<String, Object>();
         if (teacherList != null && teacherList.size() > 0) {
-            DateFormat df = DateFormat.getDateInstance();
-            for (int i = 0; i < teacherList.size(); i++) {
-                if (null != teacherList.get(i).getAdmissionTime()) {
-                    //     teacherList.get(i)
-                    //         .setAdmissionTime(df.format(teacherList.get(i).getAdmissionTime()));
-                    System.out.println(teacherList.get(i).getAdmissionTime());
-                }
-            }
             resultMap.put("teacherList", teacherList);
         } else {
             resultMap.put("teacherList", null);
@@ -309,8 +300,6 @@ public class AdministratorServiceImpl implements AdministratorService {
                 return -3;
             }
 
-            System.out.println(score);
-
             //增加该教师相应的科研或教研分数
             int updateScore = 0;
             if (temp.getCategory().equals("科研")) {
@@ -324,8 +313,6 @@ public class AdministratorServiceImpl implements AdministratorService {
             if (1 != updateScore) {
                 return -4;
             }
-
-            System.out.println(updateScore);
 
             //修改绩效状态为0：正常
             int result = teacherPerformanceDao.updateByPrimaryKeySelective(teacherPerformance);
@@ -405,7 +392,6 @@ public class AdministratorServiceImpl implements AdministratorService {
     public int deleteScientificResearchPerformance(List<Long> virtualIdList) {
         try {
             int result = scientificResearchDao.deleteByIdList(virtualIdList);
-            System.out.println(result);
             return result;
         } catch (Exception e) {
             e.printStackTrace();

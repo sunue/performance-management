@@ -69,8 +69,9 @@ public class AdministratorController {
      * 管理员登录
      * */
     @RequestMapping(value = "/administratorLogin", method = RequestMethod.GET)
-    //public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String password) {
-    public String administratorLogin(Long id, String password, HttpServletRequest request) {
+    public ResponseEntity<JsonResult<Boolean>> administratorLogin(Long id, String password,
+                                                                  HttpServletRequest request) {
+        //public String administratorLogin(Long id, String password, HttpServletRequest request) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Map<String, Object> map = new HashMap<String, Object>();
         if (null == id || StringUtils.isEmpty(password)) {
@@ -87,9 +88,10 @@ public class AdministratorController {
                     jr.setMsg("登录成功");
                     jr.setStatus(0);
                     request.getSession().setAttribute("administratorId", id);
-                    return "managePerformance";
+                    System.out
+                        .println("登录成功：" + request.getSession().getAttribute("administratorId"));
+                    //return "managePerformance";
                 } else {
-                    System.out.println("bucunzai");
                     jr.setData(false);
                     jr.setMsg("该用户不存在");
                     jr.setStatus(1);
@@ -100,7 +102,7 @@ public class AdministratorController {
                 jr.setStatus(2);
             }
         }
-        return "adminLogin.html";
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
     }
 
     /**
@@ -108,10 +110,8 @@ public class AdministratorController {
      * */
     @RequestMapping(value = "/getAdministratorName", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<String>> getAdministratorName(HttpServletRequest request) {
-        System.out.println("调用获取管理员名称方法");
         JsonResult<String> jr = new JsonResult<String>();
         Long id = (Long) request.getSession().getAttribute("administratorId");
-        System.out.println(id);
         if (null == id) {
             jr.setData(null);
             jr.setMsg("未获取管理员工号");
@@ -128,7 +128,6 @@ public class AdministratorController {
                     jr.setMsg("该管理员不存在");
                     jr.setStatus(1);
                 } else {
-                    System.out.println(name);
                     jr.setData(name);
                     jr.setMsg("查询成功");
                     jr.setStatus(0);
@@ -199,12 +198,6 @@ public class AdministratorController {
                 jp.setPageNum(pNum);
                 jp.setPageSize(pSize);
                 jp.setTotal((int) resultMap.get("total"));
-
-                //  DateFormat df = DateFormat.getDateInstance();
-                //  System.out.println(df.format(
-                //      ((List<Person>) resultMap.get("teacherList")).get(0).getAdmissionTime()));
-                System.out.println(
-                    ((List<Person>) resultMap.get("teacherList")).get(0).getAdmissionTime());
             }
         } catch (Exception e) {
             jp.setData_list(null);
@@ -358,7 +351,6 @@ public class AdministratorController {
             jr.setStatus(3);
         } else {
             try {
-                System.out.println(idList);
                 int result = administratorService.deleteTeacher(idList);
                 if (idList.size() == result) {
                     jr.setData(true);

@@ -15,7 +15,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.performance.persist.common.JsonPage;
@@ -149,14 +148,12 @@ public class TeacherController {
     /**
      * 教师登录
      * */
+
+    // public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password,HttpServletRequest request){
     @RequestMapping(value = "/teacherLogin", method = RequestMethod.GET)
-    //public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password) {
-    public ModelAndView teacherLogin(Long id, String password, HttpServletRequest request) {
+    public String teacherLogin(Long id, String password, HttpServletRequest request) {
 
-        ModelAndView mv = new ModelAndView();
-        //mv.setViewName("hhh");
-        //mv.addObject("msg", "从。。。传回视图的数据");
-
+        System.out.println("教师登录");
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == id || null == password) {
             jr.setData(false);
@@ -166,13 +163,13 @@ public class TeacherController {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("id", id);
             map.put("password", password);
+            map.put("grade", 2); //教师
             try {
                 Person person = teacherService.teacherLogin(map);
                 if (null == person || "1".equals(person.getStatus())) { //删除
                     jr.setStatus(1);
                     jr.setMsg("该用户不存在");
                     jr.setData(false);
-                    mv.setViewName("login");
                 } else if ("2".equals(person.getStatus())) { //审核中
                     jr.setStatus(4);
                     jr.setMsg("审核中...");
@@ -186,7 +183,8 @@ public class TeacherController {
                     jr.setMsg("登录成功");
                     jr.setData(true);
                     request.getSession().setAttribute("teacherId", id);
-                    mv.setViewName("SubMyPerformance");
+                    System.out.println("jjj");
+                    return "SubMyPerformance";
                 }
             } catch (Exception e) {
                 jr.setStatus(2);
@@ -194,8 +192,8 @@ public class TeacherController {
                 jr.setData(false);
             }
         }
-        // return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
-        return mv;
+        //return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+        return null;
     }
 
     /**
@@ -276,14 +274,11 @@ public class TeacherController {
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> updatePassword(HttpServletRequest request,
                                                               String password) {
-        System.out.println("1");
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Long id = (Long) request.getSession().getAttribute("teacherId");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("id", id);
         map.put("password", password);
-        System.out.println(id);
-        System.out.println(password);
         try {
             String result = teacherService.updatePassword(map);
             if (result.equals("修改成功")) {

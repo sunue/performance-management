@@ -259,7 +259,6 @@ public class TeacherServiceImpl implements TeacherService {
         List<String> sciProjectList = null;
         try {
             sciProjectList = scientificResearchDao.getSciProjectBySciContent(map);
-            System.out.println(sciProjectList.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -316,7 +315,6 @@ public class TeacherServiceImpl implements TeacherService {
         Person person = null;
         try {
             person = personDao.selectByParams(map);
-            System.out.println(person.getName());
         } catch (Exception e) {
             e.printStackTrace();
         }
