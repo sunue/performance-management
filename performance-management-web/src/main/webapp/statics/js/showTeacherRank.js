@@ -7,7 +7,7 @@ $(function(){
     var getTeacherRank ="http:///localhost:8080/administrator/getTeacherRank"
     var $searchData ={
         pageNum:1,
-        pageSize:3
+        pageSize:5
     }
 
     // 默认查询总分排名
@@ -133,17 +133,10 @@ $(function(){
 
     function initThePage(results,page){
         $.each(results,function(index, ele){
-            var grade = '';
             var status ='';
-            if(ele.grade ==1){
-                grade = "管理员";
-
-            }
-            else{
-                grade = "教师";
-            }
+           
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td>"+(index+(page-1)*3+1)+"</td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td> <td>"+ele.age+"</td><td>"+ele.title+"</td> <td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td> <td>"+grade+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+(ele.scientificResearchScore+ele.teachingResearchScore)+"</td><td><button type='button' class='btn btn-warning btnInfo' data-toggle='modal' data-target='#rankDetail'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td>"+(index+(page-1)*3+1)+"</td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td> <td>"+ele.age+"</td><td>"+ele.title+"</td> <td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+(ele.scientificResearchScore+ele.teachingResearchScore)+"</td><td><button type='button' class='btn btn-warning btnInfo' data-toggle='modal' data-target='#rankDetail'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button></td></tr>");
 
         });
 

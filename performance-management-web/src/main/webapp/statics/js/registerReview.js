@@ -1,13 +1,13 @@
 $(function(){
     $(".leftNav").css("height", $(window).height());
     
-    var askRegisterNum = "http://localhost:8080/administrator/teacherRegisterCheckSum";
+    var askRegisterNum = "http://localhost:8080/performance-management-web/administrator/teacherRegisterCheckSum";
     var askList ="http://localhost:8080/administrator/teacherRegisterCheck";
     var askAgree  ="http://localhost:8080/administrator/teacherRegisterAgree";
     var askDeny ="http://localhost:8080/administrator/teacherRegisterFail";
     var $searchData ={
         pageNum:1,
-        pageSize:3
+        pageSize:6
     }
     // 查询待审核人数
     $.ajax({

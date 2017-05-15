@@ -9,7 +9,7 @@ $(function(){
     // 科研
     var $searchData ={
         pageNum:1,
-        pageSize:3
+        pageSize:5
     }
     // 增加
     $("#modalAddSubBtn").on("click", function(){
@@ -154,15 +154,7 @@ $(function(){
 
     function initThePage(results){
         $.each(results,function(index, ele){
-        	var grade = '';
         	var status ='';
-        	if(ele.grade ==1){
-        		grade = "管理员";
-
-        	}
-        	else{
-        		grade = "教师";
-        	}
         	switch(ele.status){
         		case "0":
 	        		status ="正常";
@@ -179,7 +171,7 @@ $(function(){
 
         	}
             $("#userInfo").find("tbody").append(
-                "<tr class='info'><td><input class='check_one check' type='checkbox'/></td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.password+"</td><td>"+ele.sex+"</td><td>"+ele.age+"</td><td>"+ele.title+"</td><td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td><td>"+grade+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+status+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#seeModal'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td><input class='check_one check' type='checkbox'/></td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.password+"</td><td>"+ele.sex+"</td><td>"+ele.age+"</td><td>"+ele.title+"</td><td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+status+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#seeModal'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
         });
 
         // 选择框

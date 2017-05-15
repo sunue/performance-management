@@ -8,8 +8,9 @@ $(function(){
     var getSciGrade ="http://localhost:8080/teacher/getSciGradeBySciContentAndSciProject"
 
     var getTeaContent ="http://localhost:8080/teacher/getTeaContent"
-    var getTeaProject ="http://localhost:8080/teacher/getTeaGradeByTeaContentAndTeaProject"
-    var getTeaGrade ="http://localhost:8080/teacher/getTeaProjectByTeaContent"
+    var getTeaProject ="http://localhost:8080/teacher/getTeaProjectByTeaContent"
+    var getTeaGrade ="http://localhost:8080/teacher/getTeaGradeByTeaContentAndTeaProject"
+
 
     var entryPerformance ="http://localhost:8080/teacher/entryPerformance"
     var deleteCheckPerformance= "http://localhost:8080/teacher/deleteCheckPerformance"
@@ -23,7 +24,7 @@ $(function(){
     var searchTeaGrade ={}
 
 	var searchData ={
-		pageSize:3,
+		pageSize:5,
 		pageNum:1,
 
 	};
@@ -35,6 +36,7 @@ $(function(){
     createList(getSciContent,"","#sicContent","get",true,function(){
         searchSicPro.sciContent= $("#sicContent").val();
     });
+
     // 科研项目查询
     createList(getSciProject,searchSicPro,"#sicProject","post",true,function(){
         searchSicGrade.sciContent =$("#sicContent").val();
@@ -87,7 +89,7 @@ $(function(){
     });
     // 教研等级查询   
     createList(getTeaGrade,searchTeaGrade,"#teaGrade","post",true);
-     $("#teaProject").change(function(){
+    $("#teaProject").change(function(){
         searchTeaGrade.teaContent =$("#teaContent").val();
         $("#teaContent").attr("value",searchTeaGrade.teaContent);
         searchTeaGrade.sciProject =$("#teaProject").val();
@@ -97,6 +99,10 @@ $(function(){
         createList(getTeaGrade,searchTeaGrade,"#teaGrade","post",false);
 
     });
+    // $("#teaProject").on("click", function(){
+
+
+    //  });
 
 
 
@@ -282,6 +288,7 @@ $(function(){
                     if(result.status == 0)
                     {
                         var dataList = result.data;
+                        $(selectId).append("<option value=''>请选择 </option>");
                         $.each(dataList,function(index, ele){
                            
                             $(selectId).append("<option value="+ele+">"+ele+"</option>");

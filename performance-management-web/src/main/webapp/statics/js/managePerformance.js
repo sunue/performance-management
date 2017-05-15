@@ -6,7 +6,7 @@ $(function(){
     var askDeny  ="http://localhost:8080/administrator/teacherPerformanceFail";
     var $searchData ={
         pageNum:1,
-        pageSize:3
+        pageSize:6
     }
   
     getAllPages();

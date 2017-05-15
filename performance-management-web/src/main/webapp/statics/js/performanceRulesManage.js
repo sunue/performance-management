@@ -9,7 +9,7 @@ $(function(){
     // 科研
     var $searchDataScientific ={
         pageNum:1,
-        pageSize:3
+        pageSize:5
     }
     // 增加科研选项
     $("#AddSciBtn").on("click", function(){
@@ -138,7 +138,7 @@ $(function(){
     function initThePage(results){
         $.each(results,function(index, ele){
             $("#scientificResearchForm").find("tbody").append(
-                "<tr class='info'><td><input class='check_one check' type='checkbox'/></td><td>"+ele.sciContent+"</td><td>"+ele.sciProject+"</td><td>"+ele.sciGrade+"</td><td>"+ele.sciScore+"</td><td><button type='button' class='btn btn-warning scientificBtnEdit' data-toggle='modal' data-target='#scientificEdit'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>  <button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td><input class='check_one check' type='checkbox'/></td><td>"+ele.sciContent+"</td><td>"+ele.sciProject+"</td><td>"+ele.sciGrade+"</td><td>"+ele.sciScore+"</td><td style='width:154px'><button type='button' class='btn btn-warning scientificBtnEdit' data-toggle='modal' data-target='#scientificEdit'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>  <button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
         });
 
         // 选择框
@@ -327,7 +327,7 @@ $(function(){
     // 教研请求数据
     var $searchTeach ={
         pageNum:1,
-        pageSize:3
+        pageSize:5
     }
     // 添加
     
@@ -457,7 +457,7 @@ $(function(){
         console.log(results);
         $.each(results,function(index, ele){
             $("#teachResearchForm").find("tbody").append(
-                "<tr class='info'><td><input class='checkTea_one checkTea' type='checkbox'/></td><td>"+ele.teaContent+"</td><td>"+ele.teaProject+"</td><td>"+ele.teaGrade+"</td><td>"+ele.teaScore+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#teaProject'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td><input class='checkTea_one checkTea' type='checkbox'/></td><td>"+ele.teaContent+"</td><td>"+ele.teaProject+"</td><td>"+ele.teaGrade+"</td><td>"+ele.teaScore+"</td><td style='width:154px'><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#teaProject'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
         });
 
         // 选择框

@@ -2,13 +2,45 @@ $(function(){
 	var passed =[false, false, false, false, false, false, false,false,false];
 	var sendData ={};
     var codeNum =createCode(6);
+    var validateId = "http://localhost:8080/teacher/idValidate";
      $("#checkCode").html(codeNum );
 
 	$(".id").blur(function(){
+       
 
 		if(/^[0-9]{6,20}$/.test($(this).val())){
-        	$(".idTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
-        	passed[0] = true;
+            var validId ={ id: $(this).val()};
+            $.ajax(
+                {
+                    url: validateId,
+                    type: "get",
+                    data: $.param(validId),
+                    dataType:"json",
+                    contentType: "application/json; charset=UTF-8",
+                    success:function(result)
+                    {
+                        if (result.status ==0) 
+                        {
+                           
+                            $(".idTip").html("<span style='color:green'><span class='glyphicon glyphicon-ok'></span></span>");
+                            passed[0] = true;
+
+                        }
+                        else
+                        {
+                            $(".idTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>"+result.msg+"</span>"); 
+
+                            passed[0] = false;
+                        }
+         
+                    },
+                    
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }
+                        
+            });
 
         }else{
 

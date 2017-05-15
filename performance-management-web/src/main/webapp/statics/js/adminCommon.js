@@ -1,7 +1,13 @@
 $(function(){
     $(".leftNav").css("height", $(window).height());
+    // var leftNavHeight =$(window).height();
+    // var searchHeight = $(".searchPart").css("height")||0;
+    // $(".infoPart").css("height",leftNavHeight- searchHeight);
+
+
 	var getTheName = "http://localhost:8080/administrator/getAdministratorName";
 	var logout = "http://localhost:8080/administrator/logout";
+
 
 	$.ajax({
             url:getTheName,
@@ -29,7 +35,7 @@ $(function(){
                     success:function(data){
                         if(data.status ==0){
                             location.href = "../login.html";
-                            alert(data.msg)
+                           
                         }
                         else{
                             alert(data.msg);

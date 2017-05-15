@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件上传</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>	
+	<form action="/teacher/upload" enctype="multipart/form-data" method="post">
+		选择文件:<input type="file" name="file">
+		<input type="submit" value="上传">
+		<span class="input-group-addon"  style="cursor: pointer; background-color: #e7e7e7"><i class="fa fa-folder-open"></i>Browse</span>
+		
+	</form>
+	
+	<hr>
+	<form action="/teacher/down" method="get">
+		<input type="submit" value="下载">
+		<span class="fa fa-download form-control-feedback" style="cursor: pointer;pointer-events: auto;"></span>
+	</form>
+	
+</body>
+  
+</html>

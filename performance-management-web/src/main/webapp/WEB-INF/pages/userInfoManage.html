@@ -18,16 +18,8 @@
 					<li>
 						<a href="#" id="userName"></a>	
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span><strong class="caret"></strong></a>
-						<ul class="dropdown-menu">
-						<!-- 	<li>
-								<a href="manageCenter.html">个人中心</a>
-							</li> -->
-							<li>
-								<a href="#" id="logout">退出</a>
-							</li>
-						</ul>
+					<li >
+						<a href="#"  id="logout"> <span class="glyphicon glyphicon-cog"></span> 退出</a>
 					</li>
 				</ul>
 			</div>
@@ -98,7 +90,6 @@
 								<th>年龄</th>
 								<th>职称</th>
 								<th>入职时间</th>
-								<th>身份</th>
 								<th>科研绩效</th>
 								<th>教研绩效</th>
 								<th>账号状态</th>
@@ -130,14 +121,19 @@
 							</tr>	 -->
 						</tbody>
 					</table>
+					
+			        
+				</div>
+				<div class="foot" id="foot">
+					    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
+					    <button class="btn btn-danger frBtn" id="deleteAll">删除已选</button>
+				</div>
+				<div class="paginationFoot">
 					<ul class="pagination" id="pages">
         
 			        </ul>
 				</div>
-				<div class="foot" id="foot">
-				    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
-				    <button class="btn btn-danger frBtn" id="deleteAll">删除已选</button>
-				</div>
+				
 			</div>
 
 		</div>

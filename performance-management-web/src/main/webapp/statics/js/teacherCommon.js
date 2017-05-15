@@ -28,7 +28,6 @@ $(function(){
                     success:function(data){
                         if(data.status ==0){
                             location.href = "../login.html";
-                            alert(data.msg)
                         }
                         else{
                             alert(data.msg);

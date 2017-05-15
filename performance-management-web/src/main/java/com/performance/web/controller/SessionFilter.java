@@ -27,8 +27,8 @@ public class SessionFilter implements Filter {
         HttpSession session = req.getSession();
         Object administrator = session.getAttribute("administratorId");
         Object teacher = session.getAttribute("teacherId");
-        System.out.println("过滤器" + administrator);
-        System.out.println(teacher);
+        //System.out.println("过滤器" + administrator);
+        //System.out.println(teacher);
         if (administrator != null || teacher != null || requestUri.equals("/login.html")
             || requestUri.equals("/index.html") || requestUri.equals("/register.html")
             || requestUri.equals("/") || requestUri.equals("/adminLogin.html")

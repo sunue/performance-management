@@ -1,8 +1,7 @@
 body {
-	/*background:url(../img/login_bg_0.jpg) #f8f6e9;*/
-  padding: 0;
-  margin: 0;
-  background-color: #428bca;
+	background:url(../img/center.jpg) #f8f6e9;
+	padding: 0;
+	margin: 0;
 }
 h1{
   text-align: center;
