@@ -21,9 +21,9 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span><strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
-							<li>
+							<!-- <li>
 								<a href="manageCenter.html">个人中心</a>
-							</li>
+							</li> -->
 							<li>
 								<a href="#" id="logout">退出</a>
 							</li>
@@ -48,24 +48,6 @@
 			<div class="col-md-10 column">
 				<div class="searchPart">
 					<form id="searchForm">
-						<div class="row">
-							<div class="col-md-4 column">
-								<div class="form-group">
-			                        <label for="id" class="col-sm-4 control-label">工号：</label>
-			                        <div class="col-sm-8">
-					                  <input type="number" class="form-control" name="id" id="id" placeholder="请输入工号">    
-			                        </div>
-			                    </div>
-							</div>
-							<div class="col-md-4 column">
-								<div class="form-group">
-			                        <label for="name" class="col-sm-4 control-label">姓名：</label>
-			                        <div class="col-sm-8">
-					                  <input type="text" class="form-control" name="name" id="name" placeholder="请输入姓名">    
-			                        </div>
-			                    </div>
-							</div>
-						</div> 
 						<div class="row">
 							<div class="col-md-4 column">
 								<div class="form-group">
@@ -114,6 +96,7 @@
 								<th>科研绩效</th>
 								<th>教研绩效</th>
 								<th>总分绩效</th>
+								<th>排名情况</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -139,6 +122,59 @@
 			</div>
 
 		</div>
+	</div>
+
+	<div class="modal fade" id="rankDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                    &times;
+	                </button>
+	                <h4 class="modal-title" id="myModalLabel">
+	                    排名详情
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal" role="form" id="rankForm" role="form">
+	                    <div class="form-group">
+	                        <label for="totalRank" class="col-sm-2 control-label">
+	                            <em>*</em>
+		                        总分排名
+	                        </label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control totalRank"  name="totalRank" readonly required>
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="scientificResearchRank" class="col-sm-2 control-label">
+	                            <em>*</em>
+	                            科研排名
+	                        </label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control scientificResearchRank" name="scientificResearchRank"  readonly required>
+	                        </div>
+	                    </div>
+	                    
+
+	                    <div class="form-group">
+	                        <label for="teachingResearchRank" class="col-sm-2 control-label">
+	                            <em>*</em>
+	                            教研排名
+	                        </label>
+	                        <div class="col-sm-6">
+	                            <input type="text" class="form-control teachingResearchRank" name="teachingResearchRank"  readonly required>
+	                        </div>
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	    
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+	                </button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
 	</div>
 	
 </body>

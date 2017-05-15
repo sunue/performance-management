@@ -8,7 +8,7 @@ h1.navbar-brand{
 }
 .navbar-inverse {
 	background-color: #428bca;
-	border-bottom: solid 2px #000;
+	/*border-bottom: solid 2px #000;*/
     z-index: 0;
 	
 
@@ -30,7 +30,8 @@ h1.navbar-brand{
 
 }
 .leftNav {
-    border-right: solid 1px #31b0d5;
+    border-right: solid 2px #31b0d5;
+    box-shadow: 5px 5px 8px #76bfd4;
 }
 .container{
 	margin-left:0px;
@@ -63,6 +64,8 @@ em {
     background-image:linear-gradient(RGB(241,241,241),RGB(226,226,226));
     position: relative;
     z-index: 0;
+    line-height:48px;
+    border-radius: 10px;
 }
 .foot div, .foot a {
     line-height: 48px;
@@ -84,14 +87,23 @@ em {
 
  /**/
  .searchPart{
- 	border: solid 1px #ccc;
+    border: solid 1px #31b0d5;
+    /*box-shadow: 4px 4px 5px #ccc;*/
+    box-shadow: 5px 5px 8px #76bfd4;
+    border-radius: 10px;
     padding: 1em;
+
  }
 
  .infoPart {
- 	border: solid 1px #ccc;
+
+    border: solid 1px #31b0d5;
+    border-radius: 10px;
+    /* box-shadow: 4px 4px 5px #666; */
+    box-shadow: 5px 5px 8px #76bfd4;
     padding: 1em;
-    margin-top:2em;
+    margin-top: 2em;
+    margin-bottom: 1em;
  }
 
 
@@ -136,3 +148,16 @@ em {
 .row {
     margin-top: 10px;
 }
+
+.pagination>.active>a{
+    z-index:0;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+    margin-right: 5px;
+}
+

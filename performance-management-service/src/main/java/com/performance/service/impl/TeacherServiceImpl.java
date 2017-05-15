@@ -335,4 +335,31 @@ public class TeacherServiceImpl implements TeacherService {
         return 0;
     }
 
+    @Override
+    public Map<String, Object> getTeacherRank(Long id) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("grade", 2); //教师
+        map.put("status", "0"); //正常
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        try {
+            Person temp = personDao.selectByParams(map);
+            if (null == temp) {
+                resultMap.put("flag", -1); //无该用户存在
+            } else {
+                resultMap.put("flag", 0);
+                resultMap.put("person", temp);
+                int totalRank = personDao.selectRankByTotal(id);
+                int scientificResearchRank = personDao.selectRankByScientificResearch(id);
+                int teachingResearchRank = personDao.selectRankByTeachingResearch(id);
+                resultMap.put("totalRank", totalRank + 1);
+                resultMap.put("scientificResearchRank", scientificResearchRank + 1);
+                resultMap.put("teachingResearchRank", teachingResearchRank + 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultMap;
+    }
+
 }

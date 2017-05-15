@@ -413,6 +413,16 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public int updateScientificResearchPerformance(ScientificResearch scientificResearch) {
         try {
+            //查询该绩效是否已存在
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("sciContent", scientificResearch.getSciContent());
+            map.put("sciProject", scientificResearch.getSciProject());
+            map.put("sciGrade", scientificResearch.getSciGrade());
+            ScientificResearch temp = scientificResearchDao.selectByParams(map);
+            if (null != temp) {
+                return -1;
+            }
+
             int result = scientificResearchDao.updateByPrimaryKeySelective(scientificResearch);
             return result;
         } catch (Exception e) {
@@ -424,6 +434,15 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Override
     public int updateTeachingResearchPerformance(TeachingResearch teachingResearch) {
         try {
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("teaContent", teachingResearch.getTeaContent());
+            map.put("teaProject", teachingResearch.getTeaProject());
+            map.put("teaGrade", teachingResearch.getTeaGrade());
+            TeachingResearch temp = teachingResearchDao.selectByParams(map);
+            if (null != temp) {
+                return -1;
+            }
+
             int result = teachingResearchDao.updateByPrimaryKeySelective(teachingResearch);
             return result;
         } catch (Exception e) {

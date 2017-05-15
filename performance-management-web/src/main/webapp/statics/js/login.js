@@ -29,21 +29,19 @@ $(function(){
     });
 
 	$("#logoBtn").on("click", function(){
-		// $("#logoForm").submit(function(event) {
-		// 	if(!namePass&&pwdPass ){
-		// 		$("#tip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请检查您的输入</span>"); 
-		// 		return false;
-		// 	}
-  //           return true;
-		// });
-		$("#adminLogoForm").submit(function(event) {
+		$("#logoForm").submit(function(event) {
 			return false;
 		});
 		var sendData ={};
 		$("#logoForm").find("input").each(function(){sendData[this.name] =this.value});
 		if(namePass&&pwdPass){
-			sendAjax(sendData,loginAsk,"../teacher/SubMyPerformance.html.html")
-
+			if($("#type").val() == 0){
+				sendAjax(sendData,loginAsk,"../teacher/SubMyPerformance.html.html")
+			}
+			else{
+				sendAjax(sendData,admLoginAsk,"../administrator/managePerformance.html")
+			}
+			
 
 		}
 
@@ -51,25 +49,18 @@ $(function(){
 
 	});
 
-	$("#adminLogoBtn").on("click", function(){
-		// $("#adminLogoForm").submit(function(event) {
-		// 	if(!namePass&&pwdPass ){
-		// 		$("#tip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>请检查您的输入</span>"); 
-		// 		return false;
-		// 	}
-  //           return true;
-		// });
-		$("#adminLogoForm").submit(function(event) {
-			return false;
-		});
-		var sendAdmData ={};
-		$("#adminLogoForm").find("input").each(function(){sendAdmData[this.name] =this.value});
-		if(namePass&&pwdPass){
-			sendAjax(sendAdmData,admLoginAsk,"../administrator/managePerformance.html")
+	// $("#adminLogoBtn").on("click", function(){
+	// 	$("#adminLogoForm").submit(function(event) {
+	// 		return false;
+	// 	});
+	// 	var sendAdmData ={};
+	// 	$("#adminLogoForm").find("input").each(function(){sendAdmData[this.name] =this.value});
+	// 	if(namePass&&pwdPass){
+	// 		sendAjax(sendAdmData,admLoginAsk,"../administrator/managePerformance.html")
 
-		}
+	// 	}
 
-	});
+	// });
 
 
 	function sendAjax(data,url,turnUrl){

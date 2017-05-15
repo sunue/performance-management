@@ -42,7 +42,7 @@ public class SessionFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        resp.sendRedirect("/index.html"); //重定向，url改变
+        resp.sendRedirect("/login.html"); //重定向，url改变
         //req.getRequestDispatcher("/index.html").forward(req, resp); //转发
     }
 

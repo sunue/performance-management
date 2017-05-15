@@ -1,12 +1,11 @@
 $(function(){
     $(".leftNav").css("height", $(window).height());
-    var getTeacherInfo = "http://localhost:8080/teacher/getTeacherInfo";
-    var editAsk = "http://localhost:8080/teacher/updateTeacherInfo";
-    var editPassword ="http://localhost:8080/teacher/updatePassword";
-// $("#myModal").modal('hide');
+    var getAdministratorInfo = "http://localhost:8080/administrator/getAdministratorInfo";
+    var editAsk = "http://localhost:8080/administrator/updateAdministratorInfo";
+    var editPassword ="http://localhost:8080/administrator/updatePassword";
     // 获取信息
     $.ajax({
-                url: getTeacherInfo,
+                url: getAdministratorInfo,
                 dataType:"json",
                 contentType: "application/json; charset=UTF-8",
                 type: "get",
@@ -31,9 +30,8 @@ $(function(){
     // ----------函数---------------
     // 初始化
     function initThePage(results){
-
         $(".infoPart").find("tbody").append(
-            "<tr class='info'><td>"+results.id+"</td><td>"+results.name+"</td><td>"+results.sex+"</td><td>"+results.age+"</td><td>"+results.title+"</td><td>"+getLocalTime(results.admissionTime).substring(0,10)+"</td><td>"+results.scientificResearchScore+"</td><td>"+results.teachingResearchScore+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#see'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看详情</button> <button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editPassword' id='clickEditPassword'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 修改密码</button> </td></tr>");
+            "<tr class='info'><td>"+results.id+"</td><td>"+results.name+"</td><td>"+results.sex+"</td><td>"+results.age+"</td><td>"+results.title+"</td><td>"+getLocalTime(results.admissionTime).substring(0,10)+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#see'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看详情</button> <button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editPassword' id='clickEditPassword'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 修改密码</button> </td></tr>");
 
         // 查看并修改
         $(".editId").val(results.id);
@@ -43,20 +41,14 @@ $(function(){
         $(".editAge").val(results.age);
         $(".editTitle").val(results.title);
         $(".editAdmissionTime").val(getLocalTime(results.admissionTime).substring(0,10));
-        // $(".editAdmissionTime").attr("value", getLocalTime(results.admissionTime));
-        $(".editScientificResearchScore").val(results.scientificResearchScore);
-        $(".editTeachingResearchScore").val(results.teachingResearchScore);
         $("#editSub").on("click", function(){
             var editData ={
                 "id":                         $(".editId").val(),
                 "name":                       $(".editName").val(),
-                // "password":                   $(".editPassword").val(),
                 "sex":                        $(".editSex").val(),
                 "age":                        $(".editAge").val(),
                 "title":                      $(".editTitle").val(),
                 "admissionTime":              $(".editAdmissionTime").val(),
-                "scientificResearchScore":    $(".editScientificResearchScore").val(),
-                "teachingResearchScore":      $(".editTeachingResearchScore").val()
             };
             // 修改信息
             $.ajax({
@@ -87,13 +79,13 @@ $(function(){
 
             
         });
-
         $("#clickEditPassword").on("click", function(){
             $(".oldPasswordTip").html('');
             $(".newPasswordTip").html('');
             $(".newPassword1Tip").html('');
 
         });
+
 
         // 提交密码
         $("#subPassword").on("click", function(){
@@ -137,8 +129,7 @@ $(function(){
                         {
                             console.log(result.msg);
                             alert(result.msg);
-                            location.reload();
-
+                            location.reload();  
                         }
                     },                                                
                     error:function(XMLHttpRequest, textStatus, errorThrown)
@@ -150,7 +141,7 @@ $(function(){
             else{
                 $(".oldPassword").val('');
                 $(".newPassword").val('');
-                $(".newPassword1").val(''); 
+                $(".newPassword1").val('');
                 $(".subTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>验证不通过</span>");
             }
            

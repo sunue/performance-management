@@ -1,4 +1,5 @@
 $(function(){
+    $(".leftNav").css("height", $(window).height());
 	var getTheName = "http://localhost:8080/administrator/getAdministratorName";
 	var logout = "http://localhost:8080/administrator/logout";
 
@@ -27,7 +28,7 @@ $(function(){
                     type:"get",
                     success:function(data){
                         if(data.status ==0){
-                            location.href = "../adminLogin.html";
+                            location.href = "../login.html";
                             alert(data.msg)
                         }
                         else{

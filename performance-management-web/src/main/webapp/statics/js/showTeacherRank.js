@@ -3,6 +3,8 @@ $(function(){
     var totalRank ="http://localhost:8080/administrator/totalRank";
     var sicRank ="http://localhost:8080/administrator/scientificResearchRank";
     var teaRank ="http://localhost:8080/administrator/teachingResearchRank";
+
+    var getTeacherRank ="http:///localhost:8080/administrator/getTeacherRank"
     var $searchData ={
         pageNum:1,
         pageSize:3
@@ -53,6 +55,7 @@ $(function(){
             success:function(data){
                 if(data.status ==0){
                     var dataList =data.data_list;
+                    $(".waitReviewNum").html(data.total);
                     initThePage(dataList,1);
 
                     var options = {
@@ -140,7 +143,43 @@ $(function(){
                 grade = "教师";
             }
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td>"+(index+(page-1)*3+1)+"</td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td> <td>"+ele.age+"</td><td>"+ele.title+"</td> <td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td> <td>"+grade+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+(ele.scientificResearchScore+ele.teachingResearchScore)+"</td></tr>");
+                "<tr class='info'><td>"+(index+(page-1)*3+1)+"</td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td> <td>"+ele.age+"</td><td>"+ele.title+"</td> <td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td> <td>"+grade+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+(ele.scientificResearchScore+ele.teachingResearchScore)+"</td><td><button type='button' class='btn btn-warning btnInfo' data-toggle='modal' data-target='#rankDetail'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button></td></tr>");
+
+        });
+
+        $(".btnInfo").each(function(index,ele){
+            $(ele).on("click", function(){
+                var infoData ={
+                    id: results[index].id
+                }
+                $.ajax({
+                            url: getTeacherRank,
+                            data: $.param(infoData),
+                            dataType:"json",
+                            contentType: "application/json; charset=UTF-8",
+                            type: "get",
+                            success:function(result)
+                            {
+                             
+                                if(result.status == 0)
+                                {
+                                   $(".totalRank").val("第"+result.data.totalRank+"名")
+                                   $(".scientificResearchRank").val("第"+result.data.scientificResearchRank+"名")
+                                   $(".teachingResearchRank").val("第"+result.data.teachingResearchRank+"名")
+                                }
+                                else
+                                {
+                                   $("#rankForm").html();
+                                   $("#myModalLabel").html("<span style='color:red'>"+result.msg+"</span>");
+                                }
+                            },                                                
+                            error:function(XMLHttpRequest, textStatus, errorThrown)
+                            {
+                                console.log('错误'+errorThrown);
+                            }     
+                });
+            });
+
         });
  
     }

@@ -835,6 +835,10 @@ public class AdministratorController {
                 jr.setData(true);
                 jr.setMsg("修改科研基础选项成功");
                 jr.setStatus(0);
+            } else if (-1 == result) {
+                jr.setData(false);
+                jr.setMsg("该科研基础选项已存在");
+                jr.setStatus(4);
             } else {
                 jr.setData(false);
                 jr.setMsg("修改科研基础选项失败");

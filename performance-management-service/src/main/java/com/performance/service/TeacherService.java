@@ -98,5 +98,14 @@ public interface TeacherService {
      * */
     public String getTeacherName(Map<String, Object> map);
 
+    /**
+     * 删除待审核绩效
+     * */
     public int deleteCheckPerformance(List<Long> idList);
+
+    /**
+     * 查看教师排名
+     * */
+    public Map<String, Object> getTeacherRank(Long id);
+
 }

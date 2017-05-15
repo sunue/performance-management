@@ -148,12 +148,12 @@ public class TeacherController {
     /**
      * 教师登录
      * */
-
-    // public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password,HttpServletRequest request){
     @RequestMapping(value = "/teacherLogin", method = RequestMethod.GET)
-    public String teacherLogin(Long id, String password, HttpServletRequest request) {
+    public ResponseEntity<JsonResult<Boolean>> teacherLogin(Long id, String password,
+                                                            HttpServletRequest request) {
 
-        System.out.println("教师登录");
+        //public String teacherLogin(Long id, String password, HttpServletRequest request) {
+
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == id || null == password) {
             jr.setData(false);
@@ -183,8 +183,7 @@ public class TeacherController {
                     jr.setMsg("登录成功");
                     jr.setData(true);
                     request.getSession().setAttribute("teacherId", id);
-                    System.out.println("jjj");
-                    return "SubMyPerformance";
+                    //return "SubMyPerformance";
                 }
             } catch (Exception e) {
                 jr.setStatus(2);
@@ -192,8 +191,8 @@ public class TeacherController {
                 jr.setData(false);
             }
         }
-        //return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
-        return null;
+        return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
+        // return null;
     }
 
     /**
@@ -451,11 +450,12 @@ public class TeacherController {
      * */
     @SuppressWarnings("unchecked")
     @RequestMapping(value = "/totalRank", method = RequestMethod.GET)
-    public ResponseEntity<JsonPage<List<Person>>> totalRank(Long id, Integer pageSize,
-                                                            Integer pageNum) {
+    public ResponseEntity<JsonPage<List<Person>>> totalRank(HttpServletRequest request,
+                                                            Integer pageSize, Integer pageNum) {
         JsonPage<List<Person>> jp = new JsonPage<List<Person>>();
         int pSize = pageSize == null ? 20 : pageSize;
         int pNum = pageNum == null ? 1 : pageNum;
+        Long id = (Long) request.getSession().getAttribute("teacherId");
         if (null == id) {
             jp.setData_list(null);
             jp.setMsg("参数为空");
@@ -763,6 +763,38 @@ public class TeacherController {
             jr.setStatus(2);
         }
         return new ResponseEntity<JsonResult<List<String>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 查询教师排名
+     * */
+    @RequestMapping(value = "/getTeacherRank", method = RequestMethod.GET)
+    public ResponseEntity<JsonResult<Map<String, Object>>> getTeacherRank(HttpServletRequest request) {
+        JsonResult<Map<String, Object>> jr = new JsonResult<Map<String, Object>>();
+        Long id = (Long) request.getSession().getAttribute("teacherId");
+        if (null == id) {
+            jr.setData(null);
+            jr.setMsg("参数为空");
+            jr.setStatus(3);
+        } else {
+            try {
+                Map<String, Object> map = teacherService.getTeacherRank(id);
+                if (-1 == (int) map.get("flag")) {
+                    jr.setData(null);
+                    jr.setMsg("无该用户存在");
+                    jr.setStatus(1);
+                } else {
+                    jr.setData(map);
+                    jr.setMsg("查询成功");
+                    jr.setStatus(0);
+                }
+            } catch (Exception e) {
+                jr.setData(null);
+                jr.setMsg("系统异常");
+                jr.setStatus(2);
+            }
+        }
+        return new ResponseEntity<JsonResult<Map<String, Object>>>(jr, HttpStatus.OK);
     }
 
     /**

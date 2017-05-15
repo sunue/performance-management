@@ -9,7 +9,7 @@
 <body>
 
 	<div class="signin">
-		<div class="signin-head"><h1>绩效管理系统用户登录</h1></div>
+		<div class="signin-head"><h1>绩效管理用户登录</h1></div>
 		<form class="form-signin" role="form" id="logoForm" >
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -21,11 +21,18 @@
 				<input type="password" class="form-control" name="password" id="password" placeholder="密码" required />
 			</div>
 			<div id="pswTip"></div>	
+			<div class="input-group">
+				<span class="input-group-addon">身份</span>
+				<select class="input-xlarge form-control type"  id="type" placeholder="请选择" required>
+	                <option value="0">教师</option>
+					<option value="1">管理员</option>
+				</select>
+			</div>
 			<button class="btn btn-lg btn-info btn-block" id="logoBtn" type="submit">登录</button>					
 		</form>
 		
 		<div id="tip"></div>
-		<div class="reg"><a href="register.html">账号注册</a></div>
+		<div class="reg"><a href="register.html">教师账号注册</a></div>
 	</div>
 
 	<script src="/statics/js/jquery-1.11.1.min.js"></script>

@@ -21,9 +21,9 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-cog"></span><strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
-							<li>
+							<!-- <li>
 								<a href="manageCenter.html" target=" _blank">个人中心</a>
-							</li>
+							</li> -->
 							<li>
 								<a href="#" id="logout">退出</a>
 							</li>
@@ -46,7 +46,7 @@
 				</ul>
 			</div>
 			<div class="col-md-10 column">
-				<div class="searchPart">
+				<div class="infoPart">
 					<ul id="myTab" class="nav nav-tabs">
 						<li class="active">
 							<a href="#scientificResearch" data-toggle="tab">科研</a></li>
@@ -117,7 +117,7 @@
 								<table  class="table">
 									<thead>
 										<tr>
-											<th><input class="check_all check" type="checkbox" />&nbsp;全选</th>
+											<th><input class="checkTea_all checkTea" type="checkbox" />&nbsp;全选</th>
 											<th>教研内容</th>
 											<th>教研项目</th>
 											<th>教研等级</th>
@@ -127,7 +127,7 @@
 									</thead>
 									<tbody>
 										<!-- <tr>
-											<td><input class='check_one check' type='checkbox'/></td>
+											<td><input class='checkTea_one checkTea' type='checkbox'/></td>
 											<td>
 												w
 											</td>
@@ -138,7 +138,10 @@
 												w
 											</td>
 											<td>
-												<button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#editProject'>
+												w
+											</td>
+											<td>
+												<button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#editTeaProject'>
 													<span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看并修改 
 												</button> 
 												<button type='button' class='btn btn-danger btnDel' >
@@ -152,7 +155,7 @@
 						        </ul>
 							</form>
 							<div class="foot" id="foot">
-							    <label class="fl select-all"><input type="checkbox" class="check_all check"/>&nbsp;全选</label>
+							    <label class="fl select-all"><input type="checkbox" class="checkTea_all checkTea"/>&nbsp;全选</label>
 							    <button class="btn btn-danger frBtn" id="deleteAllTeach">删除已选</button>
 							</div>
 						</div>
@@ -273,6 +276,124 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" id="AddSciBtn">
+                        提交
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+
+    <!-- 修改教研 -->
+		    
+	<div class="modal fade" id="teaProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="width:60%">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+	                    &times;
+	                </button>
+	                <h4 class="modal-title" id="myModalLabel">
+	                    修改教研规则选项
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <form class="form-horizontal" role="form" id="editTeaForm">
+	                   <div class="form-group">
+							<label for="editTeaContent" class="col-sm-3 control-label">教研内容</label>	                            
+							<div class="col-sm-9">
+	                            <input type="text" class="form-control" name="editTeaContent" id="editTeaContent" placeholder="请输入工程科研内容" required>
+	                        </div>
+	                    </div>
+
+	                    <div class="form-group">
+	                        <label for="editTeaProject" class="col-sm-3 control-label">教研项目</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" name="editTeaProject" id="editTeaProject"
+	                                   placeholder="请输入教研项目" required>
+	                        </div>
+	                    </div>
+	                   
+	                    <div class="form-group">
+	                        <label for="editTeaGrade" class="col-sm-3 control-label">教研等级</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" name="editTeaGrade" id="editTeaGrade"
+	                                   placeholder="请输入教研等级" required>
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="editTeaScore" class="col-sm-3 control-label">教研分数</label>
+	                        <div class="col-sm-9">  
+	                            <input type="number" class="form-control" name="editTeaScore" id="editTeaScore"
+	                                   placeholder="请输入教研分数" required>
+	                        </div>
+	                    </div>
+	        
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	    
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+	                </button>
+	                <button type="submit" class="btn btn-primary" id="editTeaentificSub">
+	                    提交
+	                </button><span id="tip"> </span>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+
+	<!-- 添加教研模态 -->
+   
+    <div class="modal fade" id="teachAddRules" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:60%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        添加教研规则选项
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form" id="addTeaForm">
+	                   <div class="form-group">
+							<label for="addTeaContent" class="col-sm-3 control-label">教研内容</label>	                            
+							<div class="col-sm-9">
+	                            <input type="text" class="form-control" name="teaContent" id="addTeaContent" placeholder="请输入工程教研内容" required>
+	                        </div>
+	                    </div>
+
+	                    <div class="form-group">
+	                        <label for="addTeaProject" class="col-sm-3 control-label">教研项目</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" name="teaProject" id="addTeaProject"
+	                                   placeholder="请输入教研项目" required>
+	                        </div>
+	                    </div>
+	                   
+	                    <div class="form-group">
+	                        <label for="addTeaGrade" class="col-sm-3 control-label">教研等级</label>
+	                        <div class="col-sm-9">
+	                            <input type="text" class="form-control" name="teaGrade" id="addTeaGrade"
+	                                   placeholder="请输入教研等级" required>
+	                        </div>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="addTeaScore" class="col-sm-3 control-label">教研分数</label>
+	                        <div class="col-sm-9">  
+	                            <input type="number" class="form-control" name="teaScore" id="addTeaScore"
+	                                   placeholder="请输入教研分数" required>
+	                        </div>
+	                    </div>
+	        
+	                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="AddTeaBtn">
                         提交
                     </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭
