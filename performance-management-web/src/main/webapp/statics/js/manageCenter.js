@@ -31,7 +31,7 @@ $(function(){
     // 初始化
     function initThePage(results){
         $(".infoPart").find("tbody").append(
-            "<tr class='info'><td>"+results.id+"</td><td>"+results.name+"</td><td>"+results.sex+"</td><td>"+results.age+"</td><td>"+results.title+"</td><td>"+getLocalTime(results.admissionTime).substring(0,10)+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#see'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看详情</button> <button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editPassword' id='clickEditPassword'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 修改密码</button> </td></tr>");
+            "<tr class='info'><td align='center'>"+results.id+"</td><td align='center'>"+results.name+"</td><td align='center'>"+results.sex+"</td><td align='center'>"+results.age+"</td><td align='center'>"+results.title+"</td><td align='center'>"+getLocalTime(results.admissionTime).substring(0,10)+"</td><td align='center'><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#see'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 查看详情</button> <button type='button' class='btn btn-warning' data-toggle='modal' data-target='#editPassword' id='clickEditPassword'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> 修改密码</button> </td></tr>");
 
         // 查看并修改
         $(".editId").val(results.id);

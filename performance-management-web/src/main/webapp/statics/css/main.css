@@ -35,6 +35,15 @@ h1.navbar-brand{
 	margin-right: 10px;
 
 }
+.head-portrait{
+	height: 50px;
+	padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 0px;
+}
+.name{
+	font-size:20px
+}
 .leftNav {
     border-right: solid 2px #31b0d5;
     box-shadow: 5px 5px 8px #76bfd4;
@@ -61,7 +70,7 @@ em {
     color: red;
 }
 
-/*全选样式*/
+/*鍏ㄩ�鏍峰紡*/
 .foot {
     color: #666;
     height: 48px;
@@ -126,7 +135,7 @@ em {
     text-align: center;
 }
 
-/*注册*/
+/*娉ㄥ唽*/
 #checkCode {
     width: 80px;
     height: 34px;

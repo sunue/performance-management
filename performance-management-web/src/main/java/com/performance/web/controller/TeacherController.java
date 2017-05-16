@@ -67,6 +67,11 @@ public class TeacherController {
         return "upload";
     }
 
+    @RequestMapping(value = "/myPerformance")
+    private String myPerformance() {
+        return "myPerformance";
+    }
+
     /**
      * 教师注册
      * */
@@ -814,6 +819,104 @@ public class TeacherController {
             }
         }
         return new ResponseEntity<JsonResult<Map<String, Object>>>(jr, HttpStatus.OK);
+    }
+
+    /**
+     * 获取已通过绩效
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/getPassPerformance", method = RequestMethod.GET)
+    public ResponseEntity<JsonPage<List<TeacherPerformance>>> getPassPerformance(HttpServletRequest request,
+                                                                                 Integer pageSize,
+                                                                                 Integer pageNum) {
+        JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
+        Long id = (Long) request.getSession().getAttribute("teacherId");
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        if (null == id) {
+            jp.setData_list(null);
+            jp.setMsg("参数为空");
+            jp.setStatus(3);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setTotal(0);
+        } else {
+            try {
+                Map<String, Object> map = teacherService.getPassPerformance(id, pSize, pNum);
+                if (null == map.get("teacherPerformanceList")) {
+                    jp.setData_list(null);
+                    jp.setMsg("查无数据");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(1);
+                    jp.setTotal((int) map.get("total"));
+                } else {
+                    jp.setData_list((List<TeacherPerformance>) map.get("teacherPerformanceList"));
+                    jp.setMsg("查询成功");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("total"));
+                }
+            } catch (Exception e) {
+                jp.setData_list(null);
+                jp.setMsg("系统异常");
+                jp.setStatus(2);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setTotal(0);
+            }
+        }
+        return new ResponseEntity<JsonPage<List<TeacherPerformance>>>(jp, HttpStatus.OK);
+    }
+
+    /**
+     * 获取未通过绩效
+     * */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = "/getFailPerformance", method = RequestMethod.GET)
+    public ResponseEntity<JsonPage<List<TeacherPerformance>>> getFailPerformance(HttpServletRequest request,
+                                                                                 Integer pageSize,
+                                                                                 Integer pageNum) {
+        JsonPage<List<TeacherPerformance>> jp = new JsonPage<List<TeacherPerformance>>();
+        Long id = (Long) request.getSession().getAttribute("teacherId");
+        int pSize = pageSize == null ? 20 : pageSize;
+        int pNum = pageNum == null ? 1 : pageNum;
+        if (null == id) {
+            jp.setData_list(null);
+            jp.setMsg("参数为空");
+            jp.setStatus(3);
+            jp.setPageNum(pNum);
+            jp.setPageSize(pSize);
+            jp.setTotal(0);
+        } else {
+            try {
+                Map<String, Object> map = teacherService.getFailPerformance(id, pSize, pNum);
+                if (null == map.get("teacherPerformanceList")) {
+                    jp.setData_list(null);
+                    jp.setMsg("查无数据");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(1);
+                    jp.setTotal((int) map.get("total"));
+                } else {
+                    jp.setData_list((List<TeacherPerformance>) map.get("teacherPerformanceList"));
+                    jp.setMsg("查询成功");
+                    jp.setPageNum(pNum);
+                    jp.setPageSize(pSize);
+                    jp.setStatus(0);
+                    jp.setTotal((int) map.get("total"));
+                }
+            } catch (Exception e) {
+                jp.setData_list(null);
+                jp.setMsg("系统异常");
+                jp.setStatus(2);
+                jp.setPageNum(pNum);
+                jp.setPageSize(pSize);
+                jp.setTotal(0);
+            }
+        }
+        return new ResponseEntity<JsonPage<List<TeacherPerformance>>>(jp, HttpStatus.OK);
     }
 
     /**

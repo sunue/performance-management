@@ -229,7 +229,7 @@ $(function(){
                 var status ="待审核"
             }
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td>"+ele.category+"</td><td>"+ele.content+"</td><td>"+ele.project+"</td><td>"+ele.proGrade+"</td><td style='color:red'>"+status+"</td><td><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td align='center'>"+ele.category+"</td><td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+"</td><td align='center'>"+ele.proGrade+"</td><td style='color:red' align='center'>"+status+"</td><td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
             // 删除待审核绩效
             $(".scientificBtnDel").each(function(index, ele){
                 $(ele).on("click", function()

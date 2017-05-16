@@ -108,4 +108,14 @@ public interface TeacherService {
      * */
     public Map<String, Object> getTeacherRank(Long id);
 
+    /**
+     * 获取已通过绩效
+     * */
+    public Map<String, Object> getPassPerformance(Long id, int pageSize, int pageNum);
+
+    /**
+     * 获取未通过绩效
+     * */
+    public Map<String, Object> getFailPerformance(Long id, int pageSize, int pageNum);
+
 }

@@ -302,14 +302,25 @@ public class AdministratorController {
                     throw new RuntimeException("参数错误：性别不符合要求");
                 }
 
-                if (person.getAge() < 0 || person.getAge() > 120) {
-                    throw new RuntimeException("参数错误：年龄不符合要求");
+                if (null != person.getAge()) {
+                    if (person.getAge() < 0 || person.getAge() > 120) {
+                        throw new RuntimeException("参数错误：年龄不符合要求");
+                    }
                 }
 
-                if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
-                    && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
-                    throw new RuntimeException("参数错误：职称不符合要求");
+                if (null != person.getTitle()) {
+                    if (!person.getTitle().equals("助教") && !person.getTitle().equals("讲师")
+                        && !person.getTitle().equals("副教授") && !person.getTitle().equals("教授")) {
+                        throw new RuntimeException("参数错误：职称不符合要求");
+                    }
                 }
+
+                System.out.println("工号：" + person.getId());
+                System.out.println("姓名：" + person.getName());
+                System.out.println("密码：" + person.getPassword());
+                System.out.println("性别：" + person.getSex());
+                System.out.println("入教时间:" + person.getAdmissionTime());
+                System.out.println("年龄：" + person.getAge());
 
                 int result = administratorService.addTeacher(person);
                 if (1 == result) {
@@ -326,7 +337,10 @@ public class AdministratorController {
                     jr.setStatus(1);
                 }
             } catch (Exception e) {
+                System.out.println("异常");
+                System.out.println(e);
                 if (e.getMessage().startsWith("参数错误")) {
+                    System.out.println("参数错误");
                     jr.setStatus(4);
                     jr.setMsg(e.getMessage());
                 } else {

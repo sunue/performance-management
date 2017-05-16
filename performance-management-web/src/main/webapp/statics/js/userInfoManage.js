@@ -155,6 +155,8 @@ $(function(){
     function initThePage(results){
         $.each(results,function(index, ele){
         	var status ='';
+        	var age='';
+        	var admissionTime;
         	switch(ele.status){
         		case "0":
 	        		status ="正常";
@@ -170,8 +172,19 @@ $(function(){
 	        		break;
 
         	}
+        	if(null==ele.age){
+        		age="未知";
+        	}else{
+        		age=ele.age;
+        	}
+        	
+        	if(null==ele.admissionTime){
+        		admissionTime="未知";
+        	}else{
+        		admissionTime=getLocalTime(ele.admissionTime).substring(0,10);
+        	}
             $("#userInfo").find("tbody").append(
-                "<tr class='info'><td><input class='check_one check' type='checkbox'/></td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.password+"</td><td>"+ele.sex+"</td><td>"+ele.age+"</td><td>"+ele.title+"</td><td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+status+"</td><td><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#seeModal'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td align='center'><input class='check_one check' type='checkbox'/></td><td align='center'>"+ele.id+"</td><td align='center'>"+ele.name+"</td><td align='center'>"+ele.password+"</td><td align='center'>"+ele.sex+"</td><td align='center'>"+age+"</td><td align='center'>"+ele.title+"</td><td align='center'>"+admissionTime+"</td><td align='center'>"+ele.scientificResearchScore+"</td><td align='center'>"+ele.teachingResearchScore+"</td><td align='center'>"+status+"</td><td align='center'><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#seeModal'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
         });
 
         // 选择框

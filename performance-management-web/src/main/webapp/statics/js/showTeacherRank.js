@@ -136,7 +136,13 @@ $(function(){
             var status ='';
            
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td>"+(index+(page-1)*3+1)+"</td><td>"+ele.id+"</td><td>"+ele.name+"</td><td>"+ele.sex+"</td> <td>"+ele.age+"</td><td>"+ele.title+"</td> <td>"+getLocalTime(ele.admissionTime).substring(0,10)+"</td><td>"+ele.scientificResearchScore+"</td><td>"+ele.teachingResearchScore+"</td><td>"+(ele.scientificResearchScore+ele.teachingResearchScore)+"</td><td><button type='button' class='btn btn-warning btnInfo' data-toggle='modal' data-target='#rankDetail'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td align='center'>"+(index+(page-1)*3+1)+
+                "</td><td align='center'>"+ele.id+"</td><td align='center'>"+ele.name+
+                "</td><td align='center'>"+ele.sex+"</td> <td align='center'>"+ele.age+
+                "</td><td align='center'>"+ele.title+"</td> <td align='center'>"+getLocalTime(ele.admissionTime).substring(0,10)+
+                "</td><td align='center'>"+ele.scientificResearchScore+"</td><td align='center'>"+ele.teachingResearchScore+
+                "</td><td align='center'>"+(ele.scientificResearchScore+ele.teachingResearchScore)+
+                "</td><td align='center'><button type='button' class='btn btn-warning btnInfo' data-toggle='modal' data-target='#rankDetail'><span class='glyphicon glyphicon-search' aria-hidden='true'></span></button></td></tr>");
 
         });
 

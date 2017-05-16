@@ -362,4 +362,54 @@ public class TeacherServiceImpl implements TeacherService {
         return resultMap;
     }
 
+    @Override
+    public Map<String, Object> getPassPerformance(Long id, int pageSize, int pageNum) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("status", "0"); //正常
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
+        List<TeacherPerformance> teacherPerformanceList = null;
+        int total = 0;
+        try {
+            teacherPerformanceList = teacherPerformanceDao.selectListByParams(map);
+            total = teacherPerformanceDao.selectCount(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != teacherPerformanceList && teacherPerformanceList.size() > 0) {
+            resultMap.put("teacherPerformanceList", teacherPerformanceList);
+        } else {
+            resultMap.put("teacherPerformanceList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, Object> getFailPerformance(Long id, int pageSize, int pageNum) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        map.put("status", "3"); //未通过
+        map.put("firstdata", (pageNum - 1) * pageSize);
+        map.put("nums", pageSize);
+        List<TeacherPerformance> teacherPerformanceList = null;
+        int total = 0;
+        try {
+            teacherPerformanceList = teacherPerformanceDao.selectListByParams(map);
+            total = teacherPerformanceDao.selectCount(map);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        if (null != teacherPerformanceList && teacherPerformanceList.size() > 0) {
+            resultMap.put("teacherPerformanceList", teacherPerformanceList);
+        } else {
+            resultMap.put("teacherPerformanceList", null);
+        }
+        resultMap.put("total", total);
+        return resultMap;
+    }
+
 }
