@@ -118,4 +118,6 @@ public interface TeacherService {
      * */
     public Map<String, Object> getFailPerformance(Long id, int pageSize, int pageNum);
 
+    public TeacherPerformance down(Long virtualId);
+
 }

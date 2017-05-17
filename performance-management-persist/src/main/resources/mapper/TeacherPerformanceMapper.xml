@@ -9,6 +9,7 @@
     <result column="project" property="project" jdbcType="VARCHAR" />
     <result column="pro_grade" property="proGrade" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
+    <result column="upload" property="upload" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="selectByParamsWhere">
   	<where>
@@ -37,7 +38,7 @@
   	</where>
   </sql>
   <sql id="Base_Column_List" >
-    virtual_id,id, category, content, project, pro_grade, status
+    virtual_id,id, category, content, project, pro_grade, status,upload
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -118,6 +119,9 @@
       <if test="status != null" >
         status,
       </if>
+      <if test="upload != null" >
+      	upload,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="virtualId != null" >
@@ -140,6 +144,9 @@
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
+      </if>
+      <if test="upload !=null" >
+      	#{upload,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

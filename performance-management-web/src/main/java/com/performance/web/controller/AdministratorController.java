@@ -93,7 +93,7 @@ public class AdministratorController {
                     //return "managePerformance";
                 } else {
                     jr.setData(false);
-                    jr.setMsg("该用户不存在");
+                    jr.setMsg("账号或密码错误");
                     jr.setStatus(1);
                 }
             } catch (Exception e) {

@@ -14,6 +14,9 @@ $(function(){
 
     var entryPerformance ="http://localhost:8080/teacher/entryPerformance"
     var deleteCheckPerformance= "http://localhost:8080/teacher/deleteCheckPerformance"
+    	
+   // var upload="http://localhost:8080/teacher/upload"
+    var down="http://localhost:8080/teacher/down"
 
 	var entrySicData ={};
     var entryTeaData ={};
@@ -114,10 +117,20 @@ $(function(){
 		entrySicData.content = $("#sicContent").val();
 		entrySicData.project = $("#sicProject").val();
 		entrySicData.proGrade = $("#sicGrade").val();
+		console.info("打印");
+		console.log($("#sicUpload").val());
+		
 		sendAjax(entrySicData,entryPerformance);
 
 
 	});
+	
+//	//科研上传资料
+//	$("uploadSub").on("click",function(){
+//		uploadAjax(upload);
+//	});
+//	
+	
     // 添加教研绩效
 	$("#teaSub").on("click", function(){
         entryTeaData.category ='教研'
@@ -229,13 +242,18 @@ $(function(){
                 var status ="待审核"
             }
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td align='center'>"+ele.category+"</td><td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+"</td><td align='center'>"+ele.proGrade+"</td><td style='color:red' align='center'>"+status+"</td><td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td align='center'>"+ele.category+
+                "</td><td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+
+                "</td><td align='center'>"+ele.proGrade+"</td><td style='color:red' align='center'>"+status+"</td>" +
+                "<td align='center'><form action='/teacher/down' method='get'><button type='button' class='btn btn-warning downBtn'>"+"下载"+"</button></form></td>" +
+                "<td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
             // 删除待审核绩效
             $(".scientificBtnDel").each(function(index, ele){
                 $(ele).on("click", function()
                 { 
                     var idArray =[];
                     idArray.push((results[index].virtualId).toString());
+                    console.info(idArray);
                     if (confirm("确认删除吗？")) 
                     {
                         $.ajax({
@@ -268,8 +286,37 @@ $(function(){
                     }
                 });
             });
- 
 
+        });
+        
+        // 下载证明资料
+        $(".downBtn").each(function(index, ele){
+            $(ele).on("click", function()
+            { 
+            	console.info("下载证明资料");
+                var $sendData ={
+                	"virtualId": results[index].virtualId	
+                };
+                var virtualId=results[index].virtualId;
+                console.info($sendData);
+                console.info(results[index].virtualId); 
+                
+                	console.info("开始");
+                	var form=$("<form>");//定义一个form表单
+                	//form.attr("style","display:none");
+                	//form.attr("target","");
+                	form.attr("method","get");
+                	form.attr("action","/teacher/down");
+                	var input1=$("<input>");
+                	input1.attr("type","hidden");
+                	input1.attr("name","virtualId");
+                	input1.attr("value",virtualId);
+                	$("body").append(form);//将表单放置在web中
+                	form.append(input1);
+                	console.info("提交");
+                	form.submit();//表单提交
+               
+            });
         });
  
     }
@@ -343,5 +390,9 @@ $(function(){
                         console.log('错误'+errorThrown);
                     }     
         });
+    }
+    
+    function uploadAjax(){
+    	$("#uploadForm").ajaxSubmit();
     }
 })

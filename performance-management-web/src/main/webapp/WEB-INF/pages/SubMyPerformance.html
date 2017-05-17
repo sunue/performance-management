@@ -7,6 +7,16 @@
 	<link href="/statics/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/statics/css/main.css">
 </head>
+<script type="text/javascript">
+	function sciUploadAjax(){
+		$("#sciUploadForm").ajaxSubmit();
+	}
+	
+	function teaUploadAjax(){
+		$("#teaUploadForm").ajaxSubmit();
+	}
+	
+</script>
 <body>
 	<div class="nav">
 		<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
@@ -47,6 +57,7 @@
 									<th style="text-align: center">内容</th>
 									<th style="text-align: center">具体工作</th>
 									<th style="text-align: center">等级</th>
+									<th style="text-align: center">上传材料</th>
 									<th style="text-align: center">操作</th>
 								</tr>
 							</thead>
@@ -78,6 +89,13 @@
 											<option value="02">一等奖</option>
 											<option value="">二等奖</option>  -->     
 										</select>
+									</td>
+									<td align="center">
+										<form action="/teacher/upload" enctype="multipart/form-data" method="post" id="sciUploadForm">
+											<input type="file" name="file" id="sicUpload">
+											<!--  <input type="submit" value="上传"> -->
+										</form>
+										<button type="button" id="uploadSub" onclick="sciUploadAjax()">上传</button> 
 									</td>
 									<td align="center">
 										<button class="btn btn-warning" id="sicSub">
@@ -112,6 +130,13 @@
 										</select>
 									</td>
 									<td align="center">
+										<form action="/teacher/upload" enctype="multipart/form-data" method="post" id="teaUploadForm">
+											<input type="file" name="file">
+											<!--  <input type="submit" value="上传"> -->
+										</form>
+										<button type="button" id="uploadSub" onclick="teaUploadAjax()">上传</button> 
+									</td>
+									<td align="center">
 										<button class="btn btn-warning" id="teaSub">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
 										</button>
@@ -130,6 +155,7 @@
 								<th style="text-align: center">具体工作</th>
 								<th style="text-align: center">等级</th>
 								<th style="text-align: center">状态</th>
+								<th style="text-align: center">资料</th>
 								<th style="text-align: center">操作</th>
 							</tr>
 						</thead>
@@ -167,4 +193,5 @@
 	<script src="/statics/js/bootstrap-paginator.js"></script>
 	<script src="/statics/js/teacherCommon.js"></script>
 	<script src="/statics/js/SubMyPerformance.js"></script>
+	<script src="/statics/js/jquery-form.js"></script>
 </html>

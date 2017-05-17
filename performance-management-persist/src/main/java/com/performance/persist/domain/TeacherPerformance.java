@@ -34,6 +34,19 @@ public class TeacherPerformance {
      */
     private String status;
 
+    /**
+     * 上传资料
+     * */
+    private String upload;
+
+    public String getUpload() {
+        return upload;
+    }
+
+    public void setUpload(String upload) {
+        this.upload = upload;
+    }
+
     public Long getVirtualId() {
         return virtualId;
     }

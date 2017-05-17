@@ -412,4 +412,13 @@ public class TeacherServiceImpl implements TeacherService {
         return resultMap;
     }
 
+    @Override
+    public TeacherPerformance down(Long virtualId) {
+        TeacherPerformance teacherPerformance = teacherPerformanceDao.selectByPrimaryKey(virtualId);
+        if (null != teacherPerformance) {
+            return teacherPerformance;
+        }
+        return null;
+    }
+
 }
