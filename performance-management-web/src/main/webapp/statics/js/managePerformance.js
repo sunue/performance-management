@@ -193,6 +193,29 @@ $(function(){
                 }
             });
         });
+        
+        
+        // 下载证明资料
+        $(".downBtn").each(function(index, ele){
+            $(ele).on("click", function()
+            { 
+            	console.info("下载证明资料");
+                var virtualId=results[index].virtualId;
+                
+                	console.info("开始");
+                	var form=$("<form>");//定义一个form表单
+                	form.attr("method","get");
+                	form.attr("action","/teacher/down");
+                	var input1=$("<input>");
+                	input1.attr("type","hidden");
+                	input1.attr("name","virtualId");
+                	input1.attr("value",virtualId);
+                	$("body").append(form);//将表单放置在web中
+                	form.append(input1);
+                	console.info("提交");
+                	form.submit();//表单提交
+            });
+        });
  
     }
 

@@ -15,7 +15,6 @@ $(function(){
     var entryPerformance ="http://localhost:8080/teacher/entryPerformance"
     var deleteCheckPerformance= "http://localhost:8080/teacher/deleteCheckPerformance"
     	
-   // var upload="http://localhost:8080/teacher/upload"
     var down="http://localhost:8080/teacher/down"
 
 	var entrySicData ={};
@@ -117,13 +116,12 @@ $(function(){
 		entrySicData.content = $("#sicContent").val();
 		entrySicData.project = $("#sicProject").val();
 		entrySicData.proGrade = $("#sicGrade").val();
-		console.info("打印");
-		console.log($("#sicUpload").val());
+		entrySicData.upload=$("#sicUpload").val();
 		
 		sendAjax(entrySicData,entryPerformance);
 
 
-	});
+	}); 
 	
 //	//科研上传资料
 //	$("uploadSub").on("click",function(){
@@ -241,11 +239,18 @@ $(function(){
             if(ele.status == "2"){
                 var status ="待审核"
             }
+            
+            var upload='';
+            if(null==ele.upload || ""==ele.upload){
+            	var upload="<button type='button' class='btn btn-warning downBtn'>"+"无"+"</button>"
+            }else{
+            	upload="<button type='button' class='btn btn-warning downBtn'><span class='glyphicon glyphicon-arrow-down' aria-hidden='true'></span></button>"
+            }
             $(".infoPart").find("tbody").append(
                 "<tr class='info'><td align='center'>"+ele.category+
                 "</td><td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+
                 "</td><td align='center'>"+ele.proGrade+"</td><td style='color:red' align='center'>"+status+"</td>" +
-                "<td align='center'><form action='/teacher/down' method='get'><button type='button' class='btn btn-warning downBtn'>"+"下载"+"</button></form></td>" +
+                "<td align='center'><form action='/teacher/down' method='get'>"+upload+"</form></td>" +
                 "<td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
             // 删除待审核绩效
             $(".scientificBtnDel").each(function(index, ele){
@@ -294,12 +299,13 @@ $(function(){
             $(ele).on("click", function()
             { 
             	console.info("下载证明资料");
-                var $sendData ={
-                	"virtualId": results[index].virtualId	
-                };
+            	var $sendData ={
+                    	"virtualId": results[index].virtualId	
+                  	};
+            	//$.ajax({
+            	
+                
                 var virtualId=results[index].virtualId;
-                console.info($sendData);
-                console.info(results[index].virtualId); 
                 
                 	console.info("开始");
                 	var form=$("<form>");//定义一个form表单
@@ -315,7 +321,7 @@ $(function(){
                 	form.append(input1);
                 	console.info("提交");
                 	form.submit();//表单提交
-               
+            	//});
             });
         });
  
@@ -362,15 +368,58 @@ $(function(){
     }
     // 发送提交请求
     function sendAjax(data,url){
+    	/*
+    	console.info("开始");
+    	var form=$("<form>");//定义一个form表单
+    	form.attr("method","post");
+    	//form.attr("enctype","multipart/form-data");
+    	form.attr("contentType","application/json");
+    	form.attr("action","/teacher/entryPerformance");
+    	var input1=$("<input>");
+    	input1.attr("type","hidden");
+    	input1.attr("name","category");
+    	input1.attr("value",data.category); //
+    	
+    	var input2=$("<input>");
+    	input2.attr("type","hidden");
+    	input2.attr("name","content");
+    	input2.attr("value",data.content); //
+    	
+    	var input3=$("<input>");
+    	input3.attr("type","hidden");
+    	input3.attr("name","project");
+    	input3.attr("value",data.project); //
+    	
+    	var input4=$("<input>");
+    	input4.attr("type","hidden");
+    	input4.attr("name","proGrade");
+    	input4.attr("value",data.proGrade); //
+    	
+    	//var input5=$("<input>");
+    	//input5.attr("type","file");
+    	//input5.attr("name","file");
+    	//input5.attr("value",data.proGrade); //
+    	
+    	$("body").append(form);//将表单放置在web中
+    	form.append(input1);
+    	form.append(input2);
+    	form.append(input3);
+    	form.append(input4);
+    	//form.append(input5);
+    	console.info("提交");
+    	form.submit();//表单提交
+    	//form.ajaxSubmit(); */
+    	
         $.ajax({
                     url: url,
                     data: JSON.stringify(data) ,
                     dataType:"json",
                     contentType: "application/json; charset=UTF-8",
                     type: "post",
+                    
                     success:function(result)
                     {
-                     
+                    	$("#sciUploadForm").ajaxSubmit();
                         if(result.status == 0)
                         {
                             console.log(result.msg);
@@ -389,10 +438,7 @@ $(function(){
                     {
                         console.log('错误'+errorThrown);
                     }     
-        });
+        }); 
     }
     
-    function uploadAjax(){
-    	$("#uploadForm").ajaxSubmit();
-    }
 })

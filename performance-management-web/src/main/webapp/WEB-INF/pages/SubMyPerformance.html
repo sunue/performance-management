@@ -9,13 +9,51 @@
 </head>
 <script type="text/javascript">
 	function sciUploadAjax(){
-		$("#sciUploadForm").ajaxSubmit();
+		var file=$("#sicUpload");
+		console.info($.trim(file.val()));
+        if($.trim(file.val())!=''){
+        	   $("#sciUploadForm").ajaxSubmit();
+               alert("上传成功");
+         }else{
+			alert("未选择文件");        	 
+         } 
 	}
 	
-	function teaUploadAjax(){
-		$("#teaUploadForm").ajaxSubmit();
+	function teaUploadAjax(){		
+		var file=$("#teaUpload");
+        if($.trim(file.val())!=''){
+        	   $("#teaUploadForm").ajaxSubmit();
+               alert("上传成功");
+         }else{
+			alert("未选择文件");        	 
+         } 
 	}
 	
+	
+	function sub(){
+		console.info("111");
+        category ='科研'
+		// 其他参数
+		content = $("#sicContent").val();
+		project = $("#sicProject").val();
+		proGrade = $("#sicGrade").val();
+        $.ajaxFileUpload({
+           url:"http://localhost:8080/teacher/entryPerformance",
+           secureuri : false,//是否需要安全协议
+           fileElementId : 'sicUpload',
+           type:'post',
+           data:JSON.stringify({category:category,content:content,project:project,proGrade:proGrade}),
+           dataType:'json',	
+           cache : false, //是否进行页面缓存
+           async : true, // 是否同步提交
+           success:function(data){
+                	   alert("成功");
+           },
+           error:function(){
+               alert("失败");
+           }
+        });
+   }
 </script>
 <body>
 	<div class="nav">
@@ -63,7 +101,6 @@
 							</thead>
 							<tbody>
 								<tr>
-								
 									<td align="center">
 										<button type="button" class="btn btn-info">科研</button>	
 									</td>
@@ -91,22 +128,21 @@
 										</select>
 									</td>
 									<td align="center">
-										<form action="/teacher/upload" enctype="multipart/form-data" method="post" id="sciUploadForm">
+										<form action="/teacher/upload"  enctype="multipart/form-data" method="post" id="sciUploadForm">
 											<input type="file" name="file" id="sicUpload">
-											<!--  <input type="submit" value="上传"> -->
-										</form>
+										</form>	
 										<button type="button" id="uploadSub" onclick="sciUploadAjax()">上传</button> 
 									</td>
 									<td align="center">
 										<button class="btn btn-warning" id="sicSub">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
 										</button>
-									</td>		
+									</td>	
 								</tr>
+								
 								<tr>
 									<td align="center">
 										<button type="button" class="btn btn-info">教研</button>
-										
 									</td>
 									<td align="center">
 										<select id="teaContent" class="input-xlarge form-control " >
@@ -130,10 +166,9 @@
 										</select>
 									</td>
 									<td align="center">
-										<form action="/teacher/upload" enctype="multipart/form-data" method="post" id="teaUploadForm">
-											<input type="file" name="file">
-											<!--  <input type="submit" value="上传"> -->
-										</form>
+									 	<form action="/teacher/upload" enctype="multipart/form-data" method="post" id="teaUploadForm"> 
+											<input type="file" name="file" id="teaUpload">
+									  	</form>
 										<button type="button" id="uploadSub" onclick="teaUploadAjax()">上传</button> 
 									</td>
 									<td align="center">
@@ -155,7 +190,7 @@
 								<th style="text-align: center">具体工作</th>
 								<th style="text-align: center">等级</th>
 								<th style="text-align: center">状态</th>
-								<th style="text-align: center">资料</th>
+								<th style="text-align: center">资料下载</th>
 								<th style="text-align: center">操作</th>
 							</tr>
 						</thead>
@@ -194,4 +229,5 @@
 	<script src="/statics/js/teacherCommon.js"></script>
 	<script src="/statics/js/SubMyPerformance.js"></script>
 	<script src="/statics/js/jquery-form.js"></script>
+	<script type="text/javascript" src="/statics/js/ajaxfileupload.js"></script>
 </html>
