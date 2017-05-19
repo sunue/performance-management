@@ -83,6 +83,9 @@ $(function(){
                     }
 
                 }
+                else if(data.status==1){
+               	 $("#passPerformanceForm").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+"暂无数据"+"</td></tr>  ");
+               }
                 else if (data.status ==3) {
                     $("#passPerformanceForm").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+data.msg+"</td></tr>  ");
 
@@ -194,6 +197,9 @@ $(function(){
                     }
 
                 }
+                else if(data.status==1){
+               	 $("#checkPerformanceForm").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+"暂无数据"+"</td></tr>  ");
+               }
                 else if (data.status ==3) {
                     $("#checkPerformanceForm").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+data.msg+"</td></tr>  ");
 
@@ -275,6 +281,7 @@ $(function(){
                                     contentType: "application/json; charset=UTF-8",
                                     success:function(result)
                                     {
+                                    	alert(result.status);
                                         if (result.status ==0) 
                                         {
                                            
@@ -305,6 +312,9 @@ $(function(){
                     }
 
                 }
+                else if(data.status == 1){
+               	 $("#failPerformanceForm").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+"暂无数据"+"</td></tr>  ");
+               }
                 else if (data.status ==3) {
                     $("#failPerformanceForm").find("tbody").html("<tr class='toCenter'><td colspan='7'>"+data.msg+"</td></tr>  ");
 

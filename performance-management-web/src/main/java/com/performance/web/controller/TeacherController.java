@@ -360,29 +360,54 @@ public class TeacherController {
     public ResponseEntity<JsonResult<Boolean>> entryPerformance(@RequestBody TeacherPerformance teacherPerformance,
                                                                 HttpServletRequest request,
                                                                 HttpServletResponse response) {
-        System.out.println("进入方法");
-        System.out
-            .println(teacherPerformance.getCategory() + " " + teacherPerformance.getContent());
-        System.out.println(teacherPerformance.getUpload());
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         Long id = (Long) request.getSession().getAttribute("teacherId");
-        if (null == teacherPerformance) {
+        if ((null == teacherPerformance.getContent() || "".equals(teacherPerformance.getContent()))
+            && (null == teacherPerformance.getProject()
+                || "".equals(teacherPerformance.getProject()))
+            && (null == teacherPerformance.getProGrade()
+                || "".equals(teacherPerformance.getProGrade()))) {
             jr.setData(false);
-            jr.setMsg("参数为空");
+            jr.setMsg("未选择绩效");
             jr.setStatus(3);
         } else {
             try {
-                //teacherPerformance.setUpload(filePath);
-                teacherPerformance.setId(id);
-                Boolean result = teacherService.saveTeacherPerformance(teacherPerformance);
-                if (true == result) {
-                    jr.setData(true);
-                    jr.setMsg("绩效录入成功，待审核");
-                    jr.setStatus(0);
+                if (null != teacherPerformance.getUpload()
+                    && !"".equals(teacherPerformance.getUpload())) {
+                    String path = request.getSession().getServletContext().getRealPath("upload");
+                    String fileName = teacherPerformance.getUpload().split("\\\\")[2];
+                    File dir = new File(path, fileName);
+                    if (!dir.exists()) {
+                        jr.setData(false);
+                        jr.setMsg("未上传文件");
+                        jr.setStatus(4);
+                    } else {
+                        String upload = teacherPerformance.getUpload().split("\\\\")[2];
+                        teacherPerformance.setUpload(upload);
+                        teacherPerformance.setId(id);
+                        Boolean result = teacherService.saveTeacherPerformance(teacherPerformance);
+                        if (true == result) {
+                            jr.setData(true);
+                            jr.setMsg("绩效录入成功，待审核");
+                            jr.setStatus(0);
+                        } else {
+                            jr.setData(false);
+                            jr.setMsg("绩效录入失败");
+                            jr.setStatus(1);
+                        }
+                    }
                 } else {
-                    jr.setData(false);
-                    jr.setMsg("绩效录入失败");
-                    jr.setStatus(1);
+                    teacherPerformance.setId(id);
+                    Boolean result = teacherService.saveTeacherPerformance(teacherPerformance);
+                    if (true == result) {
+                        jr.setData(true);
+                        jr.setMsg("绩效录入成功，待审核");
+                        jr.setStatus(0);
+                    } else {
+                        jr.setData(false);
+                        jr.setMsg("绩效录入失败");
+                        jr.setStatus(1);
+                    }
                 }
             } catch (Exception e) {
                 jr.setData(false);
@@ -391,7 +416,6 @@ public class TeacherController {
             }
         }
         return new ResponseEntity<JsonResult<Boolean>>(jr, HttpStatus.OK);
-
     }
 
     /**
@@ -995,7 +1019,7 @@ public class TeacherController {
     @ResponseBody
     public void upload(MultipartFile file, HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
-
+        System.out.println("执行下载方法！！！");
         if (null != file) {
             String path = request.getSession().getServletContext().getRealPath("upload");
             String fileName = file.getOriginalFilename();
@@ -1031,41 +1055,22 @@ public class TeacherController {
                     jr.setMsg("无此绩效");
                     jr.setStatus(4);
                 } else if (StringUtils.isEmpty(teacherPerformance.getUpload())) {
-                    //String fileName = request.getSession().getServletContext().getRealPath("upload") + "/1.jpg";
-                    String fileName = "D:/EclipseWorkspace/performance-management/performance-management-web/target/m2e-wtp/web-resources/upload/1.jpg";
-                    //获取输入流
-                    InputStream bis = new BufferedInputStream(
-                        new FileInputStream(new File(fileName)));
-                    //转码，免得文件名中文乱码
-                    String filename = URLEncoder.encode(fileName, "UTF-8");
-                    //设置文件下载头
-                    response.addHeader("Content-Disposition", "attachment;filename=" + filename);
-                    //1.设置文件ContentType类型，这样设置，会自动判断下载文件类型  
-                    response.setContentType("multipart/form-data");
-                    BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-                    int len = 0;
-                    while ((len = bis.read()) != -1) {
-                        out.write(len);
-                        out.flush();
-                    }
-                    out.close();
-
+                    //String fileName = "D:/EclipseWorkspace/performance-management/performance-management-web/target/m2e-wtp/web-resources/upload/1.jpg";
                     jr.setData(false);
                     jr.setMsg("无资料");
                     jr.setStatus(5);
                 } else {
                     System.out.println("下载数据库内的文件");
-                    //模拟文件，myfile.txt为需要下载的文件
                     //String fileName = request.getSession().getServletContext().getRealPath("upload") + "/1.jpg";
-                    String file = teacherPerformance.getUpload();
-                    System.out.println(file);
-                    String fileName = file.replace('\\', '/');
+                    String fileName = request.getSession().getServletContext().getRealPath("upload")
+                                      + "/" + teacherPerformance.getUpload();
+
                     System.out.println(fileName);
                     //获取输入流
                     InputStream bis = new BufferedInputStream(
                         new FileInputStream(new File(fileName)));
                     //假如以中文名下载的话
-                    //   String filename = "下载文件.txt";
+                    //String filename = "下载文件.txt";
                     //转码，免得文件名中文乱码
                     String filename = URLEncoder.encode(fileName, "UTF-8");
                     //设置文件下载头

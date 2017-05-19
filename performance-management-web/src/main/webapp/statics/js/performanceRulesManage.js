@@ -35,7 +35,7 @@ $(function(){
                         {
                             console.log(result.msg);
                             alert(result.msg);
-                            location.reload();  
+                            //location.reload();  
                         }
                     },                                                
                     error:function(XMLHttpRequest, textStatus, errorThrown)
@@ -140,7 +140,7 @@ $(function(){
             $("#scientificResearchForm").find("tbody").append(
                 "<tr class='info'><td align='center'><input class='check_one check' type='checkbox'/></td><td align='center'>"+ele.sciContent+
                 "</td><td align='center'>"+ele.sciProject+"</td><td align='center'>"+ele.sciGrade+"</td><td align='center'>"+ele.sciScore+
-                "</td><td style='width:154px' align='center'><button type='button' class='btn btn-warning scientificBtnEdit' data-toggle='modal' data-target='#scientificEdit'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>  <button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "</td><td style='width:154px' align='center'><button type='button' class='btn btn-warning scientificBtnEdit' data-toggle='modal' data-target='#scientificEdit'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button>  <button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></td></tr>");
         });
 
         // 选择框
@@ -175,6 +175,7 @@ $(function(){
             {
                 var idArray =[];
                     idArray.push((results[index].virtualId).toString());
+                console.info(idArray);
                 if (confirm("确认删除此项？")) 
                 {
                     
@@ -221,10 +222,11 @@ $(function(){
                     {
                         $idArray.push((results[index].virtualId).toString());
                         $(ele).parent().parent().remove();
-
+                        
                     }
 
                 });
+                console.info($idArray);
                 //--------- 发送删除多行：
                 if($idArray.length>0){
 
@@ -356,7 +358,7 @@ $(function(){
                         {
                             console.log(result.msg);
                             alert(result.msg);
-                            location.reload();  
+                            //location.reload();  
                         }
                     },                                                
                     error:function(XMLHttpRequest, textStatus, errorThrown)
@@ -459,7 +461,7 @@ $(function(){
         console.log(results);
         $.each(results,function(index, ele){
             $("#teachResearchForm").find("tbody").append(
-                "<tr class='info'><td align='center'><input class='checkTea_one checkTea' type='checkbox'/></td><td align='center'>"+ele.teaContent+"</td><td align='center'>"+ele.teaProject+"</td><td align='center'>"+ele.teaGrade+"</td><td align='center'>"+ele.teaScore+"</td><td style='width:154px' align='center'><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#teaProject'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<tr class='info'><td align='center'><input class='checkTea_one checkTea' type='checkbox'/></td><td align='center'>"+ele.teaContent+"</td><td align='center'>"+ele.teaProject+"</td><td align='center'>"+ele.teaGrade+"</td><td align='center'>"+ele.teaScore+"</td><td style='width:154px' align='center'><button type='button' class='btn btn-warning btnEdit' data-toggle='modal' data-target='#teaProject'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span></button> <button type='button' class='btn btn-danger btnDel' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></td></tr>");
         });
 
         // 选择框
@@ -538,10 +540,12 @@ $(function(){
                     {
                         $idArrayTeas.push((results[index].virtualId).toString());
                         $(ele).parent().parent().remove();
-
+                        console.info(index);
+                        console.info((results[index].virtualId).toString());
                     }
-
+                    console.info($idArrayTeas);
                 });
+                console.info($idArrayTeas);
                 //--------- 发送删除多行：
                 if($idArrayTeas.length>0){
 

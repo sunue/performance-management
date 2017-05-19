@@ -136,6 +136,8 @@ $(function(){
         entryTeaData.content = $("#teaContent").val();
         entryTeaData.project = $("#teaProject").val();
         entryTeaData.proGrade = $("#teaGrade").val();
+        entryTeaData.upload=$("#teaUpload").val();
+        
         sendAjax(entryTeaData,entryPerformance);
 
 
@@ -242,16 +244,18 @@ $(function(){
             
             var upload='';
             if(null==ele.upload || ""==ele.upload){
-            	var upload="<button type='button' class='btn btn-warning downBtn'>"+"无"+"</button>"
+            	var upload="<button type='button' class='btn btn-success downBtn' disabled='disabled'>"+"无"+"</button>"
             }else{
-            	upload="<button type='button' class='btn btn-warning downBtn'><span class='glyphicon glyphicon-arrow-down' aria-hidden='true'></span></button>"
+            	upload="<button type='button' class='btn btn-success downBtn'><span class='glyphicon glyphicon-arrow-down' aria-hidden='true'></span></button>"
             }
             $(".infoPart").find("tbody").append(
                 "<tr class='info'><td align='center'>"+ele.category+
                 "</td><td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+
                 "</td><td align='center'>"+ele.proGrade+"</td><td style='color:red' align='center'>"+status+"</td>" +
                 "<td align='center'><form action='/teacher/down' method='get'>"+upload+"</form></td>" +
-                "<td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-minus' aria-hidden='true'></span></button></td></tr>");
+                "<td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></td></tr>");
+            
+        }); 
             // 删除待审核绩效
             $(".scientificBtnDel").each(function(index, ele){
                 $(ele).on("click", function()
@@ -292,7 +296,7 @@ $(function(){
                 });
             });
 
-        });
+        
         
         // 下载证明资料
         $(".downBtn").each(function(index, ele){
@@ -302,8 +306,6 @@ $(function(){
             	var $sendData ={
                     	"virtualId": results[index].virtualId	
                   	};
-            	//$.ajax({
-            	
                 
                 var virtualId=results[index].virtualId;
                 
@@ -321,7 +323,6 @@ $(function(){
                 	form.append(input1);
                 	console.info("提交");
                 	form.submit();//表单提交
-            	//});
             });
         });
  
@@ -419,7 +420,7 @@ $(function(){
                     
                     success:function(result)
                     {
-                    	$("#sciUploadForm").ajaxSubmit();
+                    	//$("#sciUploadForm").ajaxSubmit();
                         if(result.status == 0)
                         {
                             console.log(result.msg);
@@ -431,7 +432,7 @@ $(function(){
                         {
                             console.log(result.msg);
                             alert(result.msg);
-                            location.reload(); 
+                            //location.reload(); 
                         }
                     },                                                
                     error:function(XMLHttpRequest, textStatus, errorThrown)

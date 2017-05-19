@@ -704,10 +704,19 @@ public class AdministratorController {
     @RequestMapping(value = "/addScientificResearchPerformance", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> addScientificResearchPerformance(@RequestBody ScientificResearch scientificResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        if (null == scientificResearch) {
+        if ((null == scientificResearch.getSciContent()
+             || "".equals(scientificResearch.getSciContent()))
+            && (null == scientificResearch.getSciProject()
+                || "".equals(scientificResearch.getSciProject()))
+            && (null == scientificResearch.getSciGrade()
+                || "".equals(scientificResearch.getSciGrade()))) {
             jr.setData(false);
-            jr.setMsg("参数为空");
+            jr.setMsg("未输入科研规则，请检查...");
             jr.setStatus(3);
+        } else if (null == scientificResearch.getSciScore()) {
+            jr.setData(false);
+            jr.setMsg("未输入分数，请检查...");
+            jr.setStatus(5);
         } else {
             try {
                 int result = administratorService
@@ -740,10 +749,19 @@ public class AdministratorController {
     @RequestMapping(value = "/addTeachingResearchPerformance", method = RequestMethod.POST)
     public ResponseEntity<JsonResult<Boolean>> addTeachingResearchPerformance(@RequestBody TeachingResearch teachingResearch) {
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
-        if (teachingResearch == null) {
+        if ((null == teachingResearch.getTeaContent()
+             || "".equals(teachingResearch.getTeaContent()))
+            && (null == teachingResearch.getTeaProject()
+                || "".equals(teachingResearch.getTeaProject()))
+            && (null == teachingResearch.getTeaGrade()
+                || "".equals(teachingResearch.getTeaGrade()))) {
             jr.setData(false);
-            jr.setMsg("参数为空");
+            jr.setMsg("未输入教研规则，请检查...");
             jr.setStatus(3);
+        } else if (null == teachingResearch.getTeaScore()) {
+            jr.setData(false);
+            jr.setMsg("未输入分数，请检查...");
+            jr.setStatus(4);
         } else {
             try {
                 int result = administratorService.addTeachingResearchPerformance(teachingResearch);

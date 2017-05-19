@@ -354,6 +354,7 @@ public class AdministratorServiceImpl implements AdministratorService {
             map.put("sciContent", scientificResearch.getSciContent());
             map.put("sciProject", scientificResearch.getSciProject());
             map.put("sciGrade", scientificResearch.getSciGrade());
+            map.put("status", "0"); //正常
             ScientificResearch temp = scientificResearchDao.selectByParams(map);
             if (null != temp) {
                 return -1;
@@ -375,6 +376,7 @@ public class AdministratorServiceImpl implements AdministratorService {
             map.put("teaContent", teachingResearch.getTeaContent());
             map.put("teaProject", teachingResearch.getTeaProject());
             map.put("teaGrade", teachingResearch.getTeaGrade());
+            map.put("status", "0"); //正常
             TeachingResearch temp = teachingResearchDao.selectByParams(map);
             if (null != temp) {
                 return -1;
