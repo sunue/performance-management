@@ -1019,10 +1019,12 @@ public class TeacherController {
     @ResponseBody
     public void upload(MultipartFile file, HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
-        System.out.println("执行下载方法！！！");
+        System.out.println("执行上传方法！！！");
         if (null != file) {
             String path = request.getSession().getServletContext().getRealPath("upload");
+            System.out.println("path:" + path);
             String fileName = file.getOriginalFilename();
+            System.out.println("fileName：" + fileName);
             File dir = new File(path, fileName);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -1041,6 +1043,7 @@ public class TeacherController {
     @RequestMapping(value = "/down", method = RequestMethod.GET)
     public ResponseEntity<JsonResult<Boolean>> down(Long virtualId, HttpServletRequest request,
                                                     HttpServletResponse response) throws Exception {
+        System.out.println("下载文件");
         JsonResult<Boolean> jr = new JsonResult<Boolean>();
         if (null == virtualId) {
             jr.setData(false);
@@ -1060,12 +1063,12 @@ public class TeacherController {
                     jr.setMsg("无资料");
                     jr.setStatus(5);
                 } else {
-                    System.out.println("下载数据库内的文件");
+                    System.out.println("下载服务器上的文件");
                     //String fileName = request.getSession().getServletContext().getRealPath("upload") + "/1.jpg";
                     String fileName = request.getSession().getServletContext().getRealPath("upload")
                                       + "/" + teacherPerformance.getUpload();
 
-                    System.out.println(fileName);
+                    System.out.println("下载路径:" + fileName);
                     //获取输入流
                     InputStream bis = new BufferedInputStream(
                         new FileInputStream(new File(fileName)));

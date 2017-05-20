@@ -17,8 +17,8 @@ h1.navbar-brand{
 }
 
 
-#logout:hover{
-	 background-color: #000;
+#bs-example-navbar-collapse-1 .logout:hover{
+	 background-color: #428bca;
 }
 .infoChose{
     border:5px solid #666;
@@ -40,10 +40,9 @@ h1.navbar-brand{
 	padding-top: 15px;
     padding-bottom: 15px;
     padding-right: 0px;
+    color:#fff;
 }
-.name{
-	font-size:20px
-}
+
 .leftNav {
     border-right: solid 2px #31b0d5;
     box-shadow: 5px 5px 8px #76bfd4;

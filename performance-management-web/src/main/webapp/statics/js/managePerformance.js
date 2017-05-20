@@ -104,14 +104,15 @@ $(function(){
         	var upload='';
             if(null==ele.upload || ""==ele.upload){
             	var upload="<button type='button' class='btn btn-warning downBtn' disabled='disabled'>"+"无"+"</button>"
+            	var upload="无";
             }else{
-            	upload="<button type='button' class='btn btn-warning downBtn'><span class='glyphicon glyphicon-arrow-down' aria-hidden='true'></span></button>"
+            	upload="<button type='button' class='btn btn-primary downBtn'><span class='glyphicon glyphicon-arrow-down' aria-hidden='true'></span></button>"
             }
         	
             $(".infoPart").find("tbody").append(
                 "<tr class='info'><td align='center'>"+ele.id+"</td><td align='center'>"+ele.category+"</td>" +
                 "<td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+"</td><td align='center'>"+ele.proGrade+"</td>" +
-                "<td align='center'>"+upload+"</td>" +
+                "<td style='color:blue' align='center'>"+upload+"</td>" +
                 "<td align='center'><button class='btn btn-success btnPass'><span class='glyphicon glyphicon-ok' aria-hidden='true'></span> 通过</button>  <button type='button' class='btn btn-danger btnDeny' ><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> 拒绝</button></td></tr>");
         });
         // 同意

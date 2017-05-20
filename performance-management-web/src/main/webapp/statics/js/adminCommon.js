@@ -26,7 +26,7 @@ $(function(){
             }
     });
 
-    $("#logout").on("click",function(){
+    $(".logout").on("click",function(){
         if (confirm("确认要退出了吗？")){
             $.ajax({
                     url:logout,

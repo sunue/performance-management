@@ -244,7 +244,8 @@ $(function(){
             
             var upload='';
             if(null==ele.upload || ""==ele.upload){
-            	var upload="<button type='button' class='btn btn-success downBtn' disabled='disabled'>"+"无"+"</button>"
+            	//var upload="<button type='button' class='btn btn-success downBtn' disabled='disabled'>"+"无"+"</button>"
+            	var upload="无";
             }else{
             	upload="<button type='button' class='btn btn-success downBtn'><span class='glyphicon glyphicon-arrow-down' aria-hidden='true'></span></button>"
             }
@@ -252,7 +253,7 @@ $(function(){
                 "<tr class='info'><td align='center'>"+ele.category+
                 "</td><td align='center'>"+ele.content+"</td><td align='center'>"+ele.project+
                 "</td><td align='center'>"+ele.proGrade+"</td><td style='color:red' align='center'>"+status+"</td>" +
-                "<td align='center'><form action='/teacher/down' method='get'>"+upload+"</form></td>" +
+                "<td align='center' style='color:green'><form action='/teacher/down' method='get'>"+upload+"</form></td>" +
                 "<td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></td></tr>");
             
         }); 
