@@ -139,9 +139,15 @@ $(function(){
                 });
             }
             else{
-                $(".oldPassword").val('');
-                $(".newPassword").val('');
-                $(".newPassword1").val('');
+                if (passed[0]) {
+                    $(".newPassword").val('');
+                    $(".newPassword1").val('');
+                }
+                else{
+                    $(".oldPassword").val('');
+                }
+                
+               
                 $(".subTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>验证不通过</span>");
             }
            

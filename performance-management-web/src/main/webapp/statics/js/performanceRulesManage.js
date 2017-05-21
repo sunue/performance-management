@@ -11,6 +11,8 @@ $(function(){
         pageNum:1,
         pageSize:5
     }
+    var sicResult ={};
+    var teaResult ={};
     // 增加科研选项
     $("#AddSciBtn").on("click", function(){
         var $addData ={};
@@ -136,6 +138,7 @@ $(function(){
     }
 
     function initThePage(results){
+        sicResult =results;
         $.each(results,function(index, ele){
             $("#scientificResearchForm").find("tbody").append(
                 "<tr class='info'><td align='center'><input class='check_one check' type='checkbox'/></td><td align='center'>"+ele.sciContent+
@@ -210,64 +213,7 @@ $(function(){
                 }
             });
         });
-        // 删除已选  多个删除
-        $("#deleteAllScientific").on("click", function(){
-            if (confirm("确认删除已选吗？")) 
-            {
-
-                var $idArray =[];
-                $(".check_one").each(function(index, ele){
-                    
-                    if ($(ele).is(':checked')) 
-                    {
-                        $idArray.push((results[index].virtualId).toString());
-                        $(ele).parent().parent().remove();
-                        
-                    }
-
-                });
-                console.info($idArray);
-                //--------- 发送删除多行：
-                if($idArray.length>0){
-
-                    $.ajax({
-                        url: askScientificListDel,
-                        data:JSON.stringify($idArray),
-                        contentType: "application/json; charset=UTF-8",
-                        dataType:"json",
-                        type: "post",
-                        success:function(result)
-                        {
-                         
-                            if(result.status == 0)
-                            {
-                                console.log(result.msg);
-                                alert(result.msg);
-                                location.reload();     
-                               
-                            }
-                            else
-                            {
-                                console.log(result.msg); 
-                                alert(result.msg);
-                                location.reload();  
-                            }
-                        },                                                
-                        error:function(XMLHttpRequest, textStatus, errorThrown)
-                        {
-                            console.log('错误'+errorThrown);
-                        }     
-                   });
-                  
-                }
-                else{
-                    return false;
-                }
-                
-            }
-
-        });
-
+       
 
         // 查看并修改
         $(".scientificBtnEdit").each(function(index, ele){
@@ -321,6 +267,65 @@ $(function(){
 
         });
     }
+
+    // 删除已选  多个删除
+    $("#deleteAllScientific").on("click", function(){
+        if (confirm("确认删除已选吗？")) 
+        {
+
+            var $idArray =[];
+            $(".check_one").each(function(index, ele){
+                
+                if ($(ele).is(':checked')) 
+                {
+                    $idArray.push((sicResult[index].virtualId).toString());
+                    $(ele).parent().parent().remove();
+                    
+                }
+
+            });
+            console.info($idArray);
+            //--------- 发送删除多行：
+            if($idArray.length>0){
+
+                $.ajax({
+                    url: askScientificListDel,
+                    data:JSON.stringify($idArray),
+                    contentType: "application/json; charset=UTF-8",
+                    dataType:"json",
+                    type: "post",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();     
+                           
+                        }
+                        else
+                        {
+                            console.log(result.msg); 
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+               });
+              
+            }
+            else{
+                return false;
+            }
+            
+        }
+
+    });
+
 
 
     // ---------------分界线
@@ -458,6 +463,7 @@ $(function(){
     }
 
     function initThePageTea(results){
+        teaResult =results;
         console.log(results);
         $.each(results,function(index, ele){
             $("#teachResearchForm").find("tbody").append(
@@ -528,66 +534,7 @@ $(function(){
                 }
             });
         });
-        // 删除已选  多个删除
-        $("#deleteAllTeach").on("click", function(){
-            if (confirm("确认删除已选吗？")) 
-            {
-
-                var $idArrayTeas =[];
-                $(".checkTea_one").each(function(index, ele){
-                    
-                    if ($(ele).is(':checked')) 
-                    {
-                        $idArrayTeas.push((results[index].virtualId).toString());
-                        $(ele).parent().parent().remove();
-                        console.info(index);
-                        console.info((results[index].virtualId).toString());
-                    }
-                    console.info($idArrayTeas);
-                });
-                console.info($idArrayTeas);
-                //--------- 发送删除多行：
-                if($idArrayTeas.length>0){
-
-                    $.ajax({
-                        url: askTeachDel,
-                        data:JSON.stringify($idArrayTeas),
-                        contentType: "application/json; charset=UTF-8",
-                        dataType:"json",
-                        type: "post",
-                        success:function(result)
-                        {
-                         
-                            if(result.status == 0)
-                            {
-                                console.log(result.msg);
-                                alert(result.msg);
-                                location.reload();     
-                               
-                            }
-                            else
-                            {
-                                console.log(result.msg); 
-                                alert(result.msg);
-                                location.reload();  
-                            }
-                        },                                                
-                        error:function(XMLHttpRequest, textStatus, errorThrown)
-                        {
-                            console.log('错误'+errorThrown);
-                        }     
-                   });
-                  
-                }
-                else{
-                    return false;
-                }
-                
-            }
-
-        });
-
-
+       
         // 查看并修改
         $(".btnEdit").each(function(index, ele){
             $(ele).on("click", function(){
@@ -640,6 +587,61 @@ $(function(){
 
         });
     }
+
+    // 删除已选  多个删除
+    $("#deleteAllTeach").on("click", function(){
+        if (confirm("确认删除已选吗？")) 
+        {
+
+            var $idArrayTeas =[];
+            $(".checkTea_one").each(function(index, ele){
+                
+                if ($(ele).is(':checked')) 
+                {
+                    $idArrayTeas.push((teaResult[index].virtualId).toString());
+                    $(ele).parent().parent().remove();
+                }
+            });
+            //--------- 发送删除多行：
+            if($idArrayTeas.length>0){
+
+                $.ajax({
+                    url: askTeachDel,
+                    data:JSON.stringify($idArrayTeas),
+                    contentType: "application/json; charset=UTF-8",
+                    dataType:"json",
+                    type: "post",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();     
+                           
+                        }
+                        else
+                        {
+                            console.log(result.msg); 
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+               });
+              
+            }
+            else{
+                return false;
+            }
+            
+        }
+
+    });
 
 
 })

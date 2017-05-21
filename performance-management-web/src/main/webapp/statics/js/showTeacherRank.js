@@ -136,7 +136,7 @@ $(function(){
             var status ='';
            
             $(".infoPart").find("tbody").append(
-                "<tr class='info'><td align='center'>"+(index+(page-1)*3+1)+
+                "<tr class='info'><td align='center'>"+(index+(page-1)*5+1)+
                 "</td><td align='center'>"+ele.id+"</td><td align='center'>"+ele.name+
                 "</td><td align='center'>"+ele.sex+"</td> <td align='center'>"+ele.age+
                 "</td><td align='center'>"+ele.title+"</td> <td align='center'>"+getLocalTime(ele.admissionTime).substring(0,10)+

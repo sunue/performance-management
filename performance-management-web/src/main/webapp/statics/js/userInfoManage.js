@@ -11,6 +11,7 @@ $(function(){
         pageNum:1,
         pageSize:5
     }
+    var theResult ={};
     // 增加
     $("#modalAddSubBtn").on("click", function(){
         var $addData ={
@@ -153,6 +154,7 @@ $(function(){
     }
 
     function initThePage(results){
+        theResult = results;
         $.each(results,function(index, ele){
         	var status ='';
         	var age='';
@@ -253,68 +255,6 @@ $(function(){
                 }
             });
         });
-
-        // 删除已选  多个删除
-	    $("#deleteAll").on("click", function(){
-	        if (confirm("确认删除已选吗？")) 
-	        {
-
-	            var $idArray =[];
-	            $(".check_one").each(function(index, ele){
-	                
-	                if ($(ele).is(':checked')) 
-	                {
-	                    $idArray.push(results[index].id);
-	                    $(ele).parent().parent().remove();
-
-	                }
-
-	            });
-	            console.info($idArray);
-	            //--------- 发送删除多行：
-	            if($idArray.length>0){
-
-	                $.ajax({
-	                    url: askDel,
-	                    data:JSON.stringify($idArray),
-	                    contentType: "application/json; charset=UTF-8",
-	                    dataType:"json",
-	                    type: "post",
-	                    success:function(result)
-	                    {
-	                     
-	                        if(result.status == 0)
-	                        {
-	                            console.log(result.msg);
-	                            alert(result.msg);
-	                            location.reload();     
-	                           
-	                        }
-	                        else
-	                        {
-	                            console.log(result.msg); 
-	                            alert(result.msg);
-	                            location.reload();  
-	                        }
-	                    },                                                
-	                    error:function(XMLHttpRequest, textStatus, errorThrown)
-	                    {
-	                        console.log('错误'+errorThrown);
-	                    }     
-	               });
-
-
-	              
-	            }
-	            else{
-	                return false;
-	            }
-	            
-	        }
-
-	    });
-
-
         // 查看并修改
         $(".btnEdit").each(function(index, ele){
             $(ele).on("click", function(){
@@ -376,6 +316,66 @@ $(function(){
 
  
     }
+
+    // 删除已选  多个删除
+    $("#deleteAll").on("click", function(){
+        if (confirm("确认删除已选吗？")) 
+        {
+
+            var $idArray =[];
+            $(".check_one").each(function(index, ele){
+                
+                if ($(ele).is(':checked')) 
+                {
+                    $idArray.push(theResult[index].id);
+                    $(ele).parent().parent().remove();
+
+                }
+
+            });
+            console.info($idArray);
+            //--------- 发送删除多行：
+            if($idArray.length>0){
+
+                $.ajax({
+                    url: askDel,
+                    data:JSON.stringify($idArray),
+                    contentType: "application/json; charset=UTF-8",
+                    dataType:"json",
+                    type: "post",
+                    success:function(result)
+                    {
+                     
+                        if(result.status == 0)
+                        {
+                            console.log(result.msg);
+                            alert(result.msg);
+                            location.reload();     
+                           
+                        }
+                        else
+                        {
+                            console.log(result.msg); 
+                            alert(result.msg);
+                            location.reload();  
+                        }
+                    },                                                
+                    error:function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        console.log('错误'+errorThrown);
+                    }     
+               });
+
+
+              
+            }
+            else{
+                return false;
+            }
+            
+        }
+
+    });
 
 
     // 时间转换

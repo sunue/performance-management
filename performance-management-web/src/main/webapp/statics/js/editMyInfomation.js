@@ -3,7 +3,6 @@ $(function(){
     var getTeacherInfo = "http://localhost:8080/teacher/getTeacherInfo";
     var editAsk = "http://localhost:8080/teacher/updateTeacherInfo";
     var editPassword ="http://localhost:8080/teacher/updatePassword";
-// $("#myModal").modal('hide');
     // 获取信息
     $.ajax({
                 url: getTeacherInfo,
@@ -147,10 +146,14 @@ $(function(){
                     }     
                 });
             }
-            else{
-                $(".oldPassword").val('');
-                $(".newPassword").val('');
-                $(".newPassword1").val(''); 
+            else{ 
+                if (passed[0]) {
+                    $(".newPassword").val('');
+                    $(".newPassword1").val('');
+                }
+                else{
+                    $(".oldPassword").val('');
+                }
                 $(".subTip").html("<span style='color:red'><span class='glyphicon glyphicon-remove'></span>验证不通过</span>");
             }
            

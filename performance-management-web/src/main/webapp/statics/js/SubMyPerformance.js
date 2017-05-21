@@ -116,8 +116,7 @@ $(function(){
 		entrySicData.content = $("#sicContent").val();
 		entrySicData.project = $("#sicProject").val();
 		entrySicData.proGrade = $("#sicGrade").val();
-		entrySicData.upload=$("#sicUpload").val();
-		
+		entrySicData.upload=$("#sicUpload").val();	
 		sendAjax(entrySicData,entryPerformance);
 
 
@@ -257,47 +256,45 @@ $(function(){
                 "<td align='center'><button type='button' class='btn btn-danger scientificBtnDel' ><span class='glyphicon glyphicon-trash' aria-hidden='true'></span></button></td></tr>");
             
         }); 
-            // 删除待审核绩效
-            $(".scientificBtnDel").each(function(index, ele){
-                $(ele).on("click", function()
-                { 
-                    var idArray =[];
-                    idArray.push((results[index].virtualId).toString());
-                    console.info(idArray);
-                    if (confirm("确认删除吗？")) 
-                    {
-                        $.ajax({
-                                url: deleteCheckPerformance,
-                                data: JSON.stringify(idArray) ,
-                                dataType:"json",
-                                contentType: "application/json; charset=UTF-8",
-                                type: "post",
-                                success:function(result)
+        // 删除待审核绩效
+        $(".scientificBtnDel").each(function(index, ele){
+            $(ele).on("click", function()
+            { 
+                var idArray =[];
+                idArray.push((results[index].virtualId).toString());
+                console.info(idArray);
+                if (confirm("确认删除吗？")) 
+                {
+                    $.ajax({
+                            url: deleteCheckPerformance,
+                            data: JSON.stringify(idArray) ,
+                            dataType:"json",
+                            contentType: "application/json; charset=UTF-8",
+                            type: "post",
+                            success:function(result)
+                            {
+                                $(ele).parent().parent().remove();
+                                if(result.status == 0)
                                 {
-                                    $(ele).parent().parent().remove();
-                                    if(result.status == 0)
-                                    {
-                                        console.log(result.msg);
-                                        alert(result.msg);
-                                        location.reload();  
-                                    }
-                                    else
-                                    {
-                                        console.log(result.msg);
-                                        alert(result.msg);
-                                        location.reload();  
-                                    }
-                                },                                                
-                                error:function(XMLHttpRequest, textStatus, errorThrown)
+                                    console.log(result.msg);
+                                    alert(result.msg);
+                                    location.reload();  
+                                }
+                                else
                                 {
-                                    console.log('错误'+errorThrown);
-                                }     
-                        });
-                    }
-                });
+                                    console.log(result.msg);
+                                    alert(result.msg);
+                                    location.reload();  
+                                }
+                            },                                                
+                            error:function(XMLHttpRequest, textStatus, errorThrown)
+                            {
+                                console.log('错误'+errorThrown);
+                            }     
+                    });
+                }
             });
-
-        
+        });
         
         // 下载证明资料
         $(".downBtn").each(function(index, ele){
