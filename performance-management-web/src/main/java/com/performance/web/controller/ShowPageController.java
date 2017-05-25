@@ -6,12 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ShowPageController {
 
-    @RequestMapping(value = "/1")
-    public String showIndexPage() {
-        System.out.println("1233");
-        return "1";
-    }
-
     @RequestMapping("/adminLogin")
     public String adminLogin() {
         return "adminLogin";
